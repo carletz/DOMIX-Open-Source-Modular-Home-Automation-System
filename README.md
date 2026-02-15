@@ -13,14 +13,14 @@
 ## 📋 Table of Contents
 
 - [Introduction](#-introduction)
-- [The DOMIX Manifesto](#the-domix-manifesto)
-- [System Architecture](#system-architecture)
-- [Available Modules](#available-modules)
-- [Technical Specifications](#technical-specifications)
-- [Getting Started](#getting-started)
-- [Software & Programming](#software--programming)
-- [Comparison with Other Systems](#comparison-with-other-systems)
-- [License & Disclaimer](#license--disclaimer)
+- [The DOMIX Manifesto](#-the-domix-manifesto)
+- [System Architecture](#-system-architecture)
+- [Available Modules](#-available-modules)
+- [Technical Specifications](#-technical-specifications)
+- [Getting Started](#-getting-started)
+- [Software & Programming](#-software--programming)
+- [Comparison with Other Systems](#-comparison-with-other-systems)
+- [License & Disclaimer](#-license--disclaimer)
 
 ## 🎯 Introduction
 
