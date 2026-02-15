@@ -1,6 +1,6 @@
 # DOMIX - Open Source Modular Home Automation System
 
-![DOMIX Logo](Logo/domixOK.png)
+![DOMIX Logo](Logo/domixOK.png){:.centered}
 
 **Version:** 1.1  
 **Last Updated:** February 2026  
