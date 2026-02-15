@@ -17,10 +17,10 @@
 - [License & Disclaimer](#-license--disclaimer)
 - [Documentation, Contributing, Contact & Acknowledgments](#-documentation)
 
+> [!NOTE]
+> **Please read the Full Technical Manual:** [Technical Documentation PDF](docs/DOMIX_Technical_Manual.pdf) to understand the project's full potential and features, below is just a sampling of the project's features.
 
 ## 🎯 Introduction
-
-> **Please read the Full Technical Manual:** [Technical Documentation PDF](docs/DOMIX_Technical_Manual.pdf) to understand the project's full potential and features, below is just a sampling of the project's features.
 
 For several years, I have been managing the equipment in my home using automated systems that report all necessary information to a central controller, both for operational control and for data analysis.
 
@@ -204,7 +204,8 @@ The example in the Software folder is simply a basic configuration for all the m
 There's no single solution; the system must be adapted and remodeled. I've simply tried to provide a foundation, as modular as possible. 
 Again, everything can and must be adapted to use my modules.
 
-**NOTE:** ESPHome version 2026 is __not compatible__ with the external Zigbee component, so if you need to use it you must compile it with a maximum version of 2025. I used 2025.7.5. If you don't need it, you can use the latest version.
+> [!WARNING]
+> ESPHome version 2026 is **<ins>not compatible</ins>** with the external Zigbee component, so if you need to use it you must compile it with a maximum version of 2025. I used 2025.7.5. If you don't need it, you can use the latest version.
 
 ### Zigbee Setup
 
