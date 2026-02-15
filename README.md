@@ -20,7 +20,7 @@
 
 ## 🎯 Introduction
 
-**Please read the Full Technical Manual:** [Technical Documentation PDF](docs/DOMIX_Technical_Manual.pdf) to understand the project's full potential and features, below is just a sampling of the project's features.
+> **Please read the Full Technical Manual:** [Technical Documentation PDF](docs/DOMIX_Technical_Manual.pdf) to understand the project's full potential and features, below is just a sampling of the project's features.
 
 For several years, I have been managing the equipment in my home using automated systems that report all necessary information to a central controller, both for operational control and for data analysis.
 
