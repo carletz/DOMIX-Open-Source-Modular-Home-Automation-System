@@ -55,6 +55,10 @@ DOMIX is built on **10 core principles**:
 
 ## 🏗️ System Architecture
 
+<div align="center">
+    <img width="50%" src="/Images/3D Total 2.png">
+</div>
+
 ### Modular Design
 
 DOMIX uses a **centralized core (M1)** with specialized I/O expansion modules connected via **I²C bus**. All modules mount on standard 35mm DIN rail.
@@ -155,9 +159,9 @@ The system carefully manages I²C address space across three ranges:
    - Power supply + cables
 
 3. **Assembly Steps:**
-   - Flash Zigbee firmware to RF-BM-2652P2
-   - Program ESP32 via USB-C with ESPHome
    - Configure I²C addresses on expansion modules
+   - Program ESP32 via USB-C with ESPHome
+   - Flash Zigbee firmware to RF-BM-2652P2
    - Connect modules with IDC cables
    - Mount on DIN rail
 
@@ -249,7 +253,7 @@ This project is provided **as-is** for educational and experimental purposes.
 - **Full Manual:** [Technical Documentation PDF](docs/DOMIX_Technical_Manual.pdf)
 - **Schematics, Gerbers, Pick and place and Interactive BOM:** Available in each module directory
 - **BOM:** Available in `/BOM` directory
-- **3D Models:** Available in `/Print&20files` directory
+- **3D Models:** Available in `/Print files` directory
 - **ESPHome Examples:** Available in `/Software`
 
 ## 🤝 Contributing
