@@ -117,14 +117,8 @@ The system carefully manages I²C address space across three ranges:
 
 <div align="center">
     <img width="25%" src="/Images/Board/M2/M2%20-%203D%20Module.png">
-</div>
-<div align="center">
     <img width="25%" src="/Images/Board/M3/M3%20-%203D%20Module.png">
-</div>
-<div align="center">
     <img width="25%" src="/Images/Board/M7/M7%20-%203D%20Module.png">
-</div>
-<div align="center">
     <img width="25%" src="/Images/Board/M8/M8%20-%203D%20Module.png">
 </div>
 
@@ -137,9 +131,7 @@ The system carefully manages I²C address space across three ranges:
 
 <div align="center">
     <img width="25%" src="/Images/Board/M4/M4%20-%203D%20Module.png">
-</div>
-<div align="center">
-    <img width="25%" src="/Images/Board/M4/M4%20-%203D%20Module.png">
+    <img width="25%" src="/Images/Board/M5/M5%20-%203D%20Module.png">
 </div>
 
 ### Specialized Modules
@@ -151,8 +143,6 @@ The system carefully manages I²C address space across three ranges:
 
 <div align="center">
     <img width="25%" src="/Images/Board/M6/M6%20-%203D%20Module.png">
-</div>
-<div align="center">
     <img width="25%" src="/Images/Board/M9/M9%20-%203D%20Module.png">
 </div>
 
