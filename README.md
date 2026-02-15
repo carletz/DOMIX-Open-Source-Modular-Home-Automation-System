@@ -1,9 +1,7 @@
 # DOMIX - Open Source Modular Home Automation System
 
-![DOMIX Logo](Logo/domixOK.png)
-
 <div style="text-align: center;">
-    <img width="100%" src="/Logo/domixOK.png">
+    <img width="50%" src="/Logo/domixOK.png">
 </div>
 
 **Version:** 1.1  
