@@ -17,10 +17,12 @@
 - [License & Disclaimer](#-license--disclaimer)
 - [Documentation, Contributing, Contact & Acknowledgments](#-documentation)
 
+
 ---
 > [!NOTE]
-> **Please read the Full Technical Manual:** [Technical Documentation PDF](docs/DOMIX_Technical_Manual.pdf) to understand the project's full potential and features, below is just a sampling of the project's features.
+> **Please read the Full Technical Manual:** [Technical Documentation PDF](docs/DOMIX_Technical_Manual.pdf) to understand the project's full potential and features, below is just a summary of the project's features.
 ---
+
 
 ## 🎯 Introduction
 
