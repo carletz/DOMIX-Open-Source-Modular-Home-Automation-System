@@ -247,9 +247,10 @@ This project is provided **as-is** for educational and experimental purposes.
 ## 📚 Documentation
 
 - **Full Manual:** [Technical Documentation PDF](docs/DOMIX_Technical_Manual.pdf)
-- **Schematics:** Available in `/hardware` directory
-- **3D Models:** Available in `/enclosures` directory
-- **ESPHome Examples:** Available in `/software/examples`
+- **Schematics, Gerbers, Pick and place and Interactive BOM:** Available in each module directory
+- **BOM:** Available in `/BOM` directory
+- **3D Models:** Available in `/Print&20files` directory
+- **ESPHome Examples:** Available in `/Software`
 
 ## 🤝 Contributing
 
@@ -263,7 +264,7 @@ Contributions are welcome! Please:
 ## 📞 Contact & Support
 
 - **GitHub Issues:** For bug reports and feature requests
-- **Project Page:** [github.com/carletz/DOMIX](https://github.com/carletz/DOMIX)
+- **Oshwlab Stars 2026 Page:** [github.com/carletz/DOMIX](https://github.com/carletz/DOMIX)
 - **Related Projects:**
   - [POE Zigbee Coordinator](https://github.com/carletz/POE-Zigbee-Coordinator)
   - [MultiSensor](https://github.com/carletz/MultiSensor)
