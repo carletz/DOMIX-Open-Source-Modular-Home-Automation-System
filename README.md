@@ -64,7 +64,9 @@ DOMIX is built on **10 core principles**:
 9. **Fully Customizable by Design** - Firmware and logic can be freely modified
 10. **Built for People Who Want to Understand** - Transparency over abstraction
 
+> [!IMPORTANT]
 > **DOMIX exists because building things is still fun. If it teaches something, it has succeeded.**
+
 
 ## 🏗️ System Architecture
 
@@ -100,6 +102,10 @@ The system carefully manages I²C address space across three ranges:
 |--------|----------|-----------|-------------|
 | **M1** | Core/Gateway | 4 modules | ESP32-S3, Ethernet, Zigbee, RS485, I²C hub |
 
+<div align="center">
+    <img width="40%" src="/Images/Board/M1/M1 - 3D Module.png">
+</div>
+
 ### I/O Modules
 
 | Module | Function | DIN Width | I/O Count | Description |
@@ -109,6 +115,19 @@ The system carefully manages I²C address space across three ranges:
 | **M7** | Digital Output | 2 modules | 16 out | General purpose 12V outputs |
 | **M8** | Digital Input | 2 modules | 16 in | General purpose optocoupled inputs |
 
+<div align="center">
+    <img width="25%" src="/Images/Board/M2/M2 - 3D Module.png">
+</div>
+<div align="center">
+    <img width="25%" src="/Images/Board/M3/M3 - 3D Module.png">
+</div>
+<div align="center">
+    <img width="25%" src="/Images/Board/M7/M7 - 3D Module.png">
+</div>
+<div align="center">
+    <img width="25%" src="/Images/Board/M8/M8 - 3D Module.png">
+</div>
+
 ### Relay Modules
 
 | Module | Function | DIN Width | Relays | Description |
@@ -116,12 +135,26 @@ The system carefully manages I²C address space across three ranges:
 | **M4** | 6-Relay | 2 modules | 6 | 10A @ 250VAC relays |
 | **M5** | 12-Relay | 4 modules | 12 | 10A @ 250VAC relays |
 
+<div align="center">
+    <img width="25%" src="/Images/Board/M4/M4 - 3D Module.png">
+</div>
+<div align="center">
+    <img width="25%" src="/Images/Board/M4/M4 - 3D Module.png">
+</div>
+
 ### Specialized Modules
 
 | Module | Function | DIN Width | Description |
 |--------|----------|-----------|-------------|
 | **M6** | Energy Meter | 4 modules | 10-channel current clamp meter |
 | **M9** | Sprinkler Controller | 4 modules | 8-zone sprinkler control with 24VAC output |
+
+<div align="center">
+    <img width="25%" src="/Images/Board/M6/M6 - 3D Module.png">
+</div>
+<div align="center">
+    <img width="25%" src="/Images/Board/M9/M9 - 3D Module.png">
+</div>
 
 ## 🔧 Technical Specifications
 
