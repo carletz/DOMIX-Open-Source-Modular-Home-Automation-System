@@ -4,10 +4,6 @@
     <img width="50%" src="/Logo/domixOK.png">
 </div>
 
-**Version:** 1.1  
-**Last Updated:** February 2026  
-**License:** CC BY-NC-SA 4.0
-
 **Full Manual:** [Technical Documentation PDF](docs/DOMIX_Technical_Manual.pdf)
 
 ## 📋 Table of Contents
@@ -21,12 +17,29 @@
 - [Software & Programming](#-software--programming)
 - [Comparison with Other Systems](#-comparison-with-other-systems)
 - [License & Disclaimer](#-license--disclaimer)
+- [Documentation, Contributing, Contact & Acknowledgments](#-documentation)
+
 
 ## 🎯 Introduction
 
-DOMIX is an **open-source, modular, DIN-rail home automation system** designed for centralized control and monitoring. Born from years of personal experience with home automation, DOMIX combines the structured approach of industrial systems with the flexibility of DIY platforms.
+For several years, I have been managing the equipment in my home using automated systems that report all necessary information to a central controller, both for operational control and for data analysis.
+
+These tools have only recently evolved, perhaps a decade or so for the consumer sector. Logic controllers, on the other hand, have been around for decades, but I don't think they'll easily become usable by a simple enthusiast like me, both due to their cost and their architecture.
+
+As I've evolved my systems day by day, I've realized—unfortunately, too late, given that the learning curve for self-taught software is always very steep—that the best system, in my opinion, is always a centralized one.
+After experimenting with both centralized and distributed approaches, the conclusion is clear: having everything converges into a single control point offers decisive advantages.
+
+Many commercial solutions offer hybrid approaches, but excluding well-known and expensive systems, I could not find a simple solution capable of offering everything within a single device. From this need, the DOMIX project was born combining prior experience in electronics and automation into a single coherent ecosystem.
+
+The idea is to concentrate the control logic inside a dedicated electrical cabinet, interfacing with actuators and safety switches belonging to the main electrical panel. This cabinet is not a conventional electrical panel, but a control cabinet designed to host automation logic and low-voltage control devices. The electrical power panel is not part of the DOMIX project; it relies on qualified electricians to connect the DOMIX system to the real world.
+
+Yes, I know what you're thinking: who knows how many wires I have to run in my house! Or: how can I modify an existing system now? Well, I agree with you, this system is ideal if you're starting from scratch. If I don't yet have any conduit or corrugated pipes inside my walls, that's true, but in my opinion, even on a small scale, it can be adapted to many situations. On the other hand, imagination is a big part of the job of those who start thinking up similar systems on their own.
+
+By centralizing all control wiring—both inputs (buttons, switches) and outputs (actuators, relays, contactors)—the system remains organized, flexible, and ready for complex logic and future expansion.
 
 ### Key Features
+
+DOMIX is an **open-source, modular, DIN-rail home automation system** designed for centralized control and monitoring. Born from years of personal experience with home automation, DOMIX combines the structured approach of industrial systems with the flexibility of DIY platforms.
 
 - ✅ Fully modular DIN-rail design
 - ✅ Centralized logic with decentralized I/O
@@ -227,6 +240,8 @@ The RF-BM-2652P2 module requires Z-Stack firmware. See [POE Zigbee Coordinator](
 
 ## 📄 License & Disclaimer
 
+**Version:** 1.1  
+**Last Updated:** February 2026  
 **DOMIX © 2026 by carletz**  
 Licensed under [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)
 
