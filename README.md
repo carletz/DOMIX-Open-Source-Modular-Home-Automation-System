@@ -56,7 +56,7 @@ DOMIX is built on **10 core principles**:
 ## 🏗️ System Architecture
 
 <div align="center">
-    <img width="50%" src="/Images/3D Total 2.png">
+    <img width="100%" src="/Images/3D Total 2.png">
 </div>
 
 ### Modular Design
