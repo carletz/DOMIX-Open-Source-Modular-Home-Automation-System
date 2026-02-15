@@ -116,10 +116,10 @@ The system carefully manages I²C address space across three ranges:
 | **M8** | Digital Input | 2 modules | 16 in | General purpose optocoupled inputs |
 
 <div align="center">
-    <img width="25%" src="/Images/Board/M2/M2%20-%203D%20Module.png">
-    <img width="25%" src="/Images/Board/M3/M3%20-%203D%20Module.png">
-    <img width="25%" src="/Images/Board/M7/M7%20-%203D%20Module.png">
-    <img width="25%" src="/Images/Board/M8/M8%20-%203D%20Module.png">
+    <img width="22%" src="/Images/Board/M2/M2%20-%203D%20Module.png">
+    <img width="22%" src="/Images/Board/M3/M3%20-%203D%20Module.png">
+    <img width="22%" src="/Images/Board/M7/M7%20-%203D%20Module.png">
+    <img width="22%" src="/Images/Board/M8/M8%20-%203D%20Module.png">
 </div>
 
 ### Relay Modules
