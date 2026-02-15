@@ -103,7 +103,7 @@ The system carefully manages I²C address space across three ranges:
 | **M1** | Core/Gateway | 4 modules | ESP32-S3, Ethernet, Zigbee, RS485, I²C hub |
 
 <div align="center">
-    <img width="40%" src="/Images/Board/M1/M1 - 3D Module.png">
+    <img width="40%" src="/Images/Board/M1/M1%20-%203D%20Module.png">
 </div>
 
 ### I/O Modules
@@ -116,16 +116,16 @@ The system carefully manages I²C address space across three ranges:
 | **M8** | Digital Input | 2 modules | 16 in | General purpose optocoupled inputs |
 
 <div align="center">
-    <img width="25%" src="/Images/Board/M2/M2 - 3D Module.png">
+    <img width="25%" src="/Images/Board/M2/M2%20-%203D%20Module.png">
 </div>
 <div align="center">
-    <img width="25%" src="/Images/Board/M3/M3 - 3D Module.png">
+    <img width="25%" src="/Images/Board/M3/M3%20-%203D%20Module.png">
 </div>
 <div align="center">
-    <img width="25%" src="/Images/Board/M7/M7 - 3D Module.png">
+    <img width="25%" src="/Images/Board/M7/M7%20-%203D%20Module.png">
 </div>
 <div align="center">
-    <img width="25%" src="/Images/Board/M8/M8 - 3D Module.png">
+    <img width="25%" src="/Images/Board/M8/M8%20-%203D%20Module.png">
 </div>
 
 ### Relay Modules
@@ -136,10 +136,10 @@ The system carefully manages I²C address space across three ranges:
 | **M5** | 12-Relay | 4 modules | 12 | 10A @ 250VAC relays |
 
 <div align="center">
-    <img width="25%" src="/Images/Board/M4/M4 - 3D Module.png">
+    <img width="25%" src="/Images/Board/M4/M4%20-%203D%20Module.png">
 </div>
 <div align="center">
-    <img width="25%" src="/Images/Board/M4/M4 - 3D Module.png">
+    <img width="25%" src="/Images/Board/M4/M4%20-%203D%20Module.png">
 </div>
 
 ### Specialized Modules
@@ -150,10 +150,10 @@ The system carefully manages I²C address space across three ranges:
 | **M9** | Sprinkler Controller | 4 modules | 8-zone sprinkler control with 24VAC output |
 
 <div align="center">
-    <img width="25%" src="/Images/Board/M6/M6 - 3D Module.png">
+    <img width="25%" src="/Images/Board/M6/M6%20-%203D%20Module.png">
 </div>
 <div align="center">
-    <img width="25%" src="/Images/Board/M9/M9 - 3D Module.png">
+    <img width="25%" src="/Images/Board/M9/M9%20-%203D%20Module.png">
 </div>
 
 ## 🔧 Technical Specifications
