@@ -22,7 +22,7 @@
 - [Comparison with Other Systems](#comparison-with-other-systems)
 - [License & Disclaimer](#license--disclaimer)
 
-## Introduction
+## 🎯 Introduction
 
 DOMIX is an **open-source, modular, DIN-rail home automation system** designed for centralized control and monitoring. Born from years of personal experience with home automation, DOMIX combines the structured approach of industrial systems with the flexibility of DIY platforms.
 
