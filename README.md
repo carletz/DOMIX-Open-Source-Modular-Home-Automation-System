@@ -200,6 +200,12 @@ Check section 4.4 for detailed address planning guidelines.
 DOMIX uses **ESPHome** for firmware. For me, ESPHome was an obvious choice, convenient and quick. 
 I'm not a great programmer and I didn't want to get lost in a maze of lines of code, perhaps already flawed from the start, which would have wasted a lot of time.
 
+The example in the Software folder is simply a basic configuration for all the modules you've created. The correct configuration for your system is entirely up to you. 
+There's no single solution; the system must be adapted and remodeled. I've simply tried to provide a foundation, as modular as possible. 
+Again, everything can and must be adapted to use my modules.
+
+**NOTE:** ESPHome version 2026 is __not compatible__ with the external Zigbee component, so if you need to use it you must compile it with a maximum version of 2025. I used 2025.7.5. If you don't need it, you can use the latest version.
+
 ### Zigbee Setup
 
 The RF-BM-2652P2 module requires Z-Stack firmware. See [POE Zigbee Coordinator](https://github.com/carletz/POE-Zigbee-Coordinator) for flashing instructions.
