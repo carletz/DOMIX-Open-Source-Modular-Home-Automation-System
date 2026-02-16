@@ -18,8 +18,8 @@ For all possible modules the system is always the same, 3 stacked pcb that allow
 The DOMIX M3 system includes a PCA9554A integrated circuit that allows you to control the 4 switches of analog multiplexer for scan 16 analog channel, all for input purposes. Due to physical restraint on the pcb for choosing the right address there are several pads to be welded during preparation. The following summarizes the possible (but non-overlapping) addresses that can be managed by the integrated circuit itself:
 
 |PCA9554A| | | |	
-|Jumper to be welded| | | |
 |-----|-----|----|----| 
+|Jumper to be welded| | | |
 |Address|	A2|	A1|	A0|
 |0x38|	0|	0|	0|
 |0x39|	0|	0|	1|
@@ -44,7 +44,7 @@ The analog multiplexer, which reads the contact values, is a CD74HC4067PWR chip.
 
 
 > [!NOTE] 
-> only one pad have to be welded to grant the correct address on the bus. The pads that are not needed should be leave as is.
+> Only one pad have to be welded to grant the correct address on the bus. The pads that are not needed should be leave as is.
 
 It is highly recommended that you first create a sort of table where you can know how many and which modules will need to be paired so that you can correctly manage all the addresses and avoid overlaps.
 The control logic is quite simple: a BC847B NPN transistor receives the signal from the outside on the base pin. The emitter is connected to GND while on the collector I read the presence or absence of the 3V3 signal, appropriately filtered with an R-C system. The signal is then send to a channel of the multiplexer.
@@ -65,3 +65,4 @@ Keep in mind always that the screen operates on the I2C bus number 2 so the addr
 
 ## Mechanical Structure
 As like the DOMIX M1 and M2 module, the DOMIX M3 system uses a stacked PCB architecture with the lower PCB containing core electronics, a vertical PCB providing mechanical and electrical interconnect, and an upper PCB housing the human interface. This structure minimizes footprint, improves maintainability, and allows for future UI or expansion board development.
+
