@@ -1,6 +1,7 @@
 # Module M9 SPRINKLER
 
----
+
+
 <div align="center">
     <img width="70%" src="/./Images/Board/M9/M9%20-%20Pinout.png">
 </div>
@@ -9,7 +10,7 @@
     <img width="40%" src="/./Images/Board/M9/M9%20-%203D%20Board.png">
     <img width="40%" src="/./Images/Board/M9/M9%20-%203D%20Module.png">
 </div>
----
+
 
 ## Overview
 The M9 module is a special module that can drive 24VAC loads,  typically used for irrigation valve coils. This module is based on another project of mine called [SprinklerBoy](https://github.com/carletz/Sprinkler-Boy). 
@@ -72,6 +73,7 @@ The user interface designed for this module is equipped with 8 latch switches th
 
 ## Mechanical Structure
 As like the M1 module, the DOMIX M8 system uses stacked PCB architecture with the lower PCB containing core electronics, a vertical PCB providing mechanical and electrical interconnect, and an upper PCB housing the human interface. This structure minimizes footprint, improves maintainability, and allows for future UI or expansion board development.
+
 
 
 
