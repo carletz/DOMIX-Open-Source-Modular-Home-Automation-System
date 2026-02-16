@@ -1,5 +1,15 @@
 # Module M5 12 RELAY
 
+<div align="center">
+    <img width="70%" src="/./Images/Board/M5/M5%20-%20Pinout.png">
+</div>
+
+<div align="center">
+    <img width="40%" src="/./Images/Board/M5/M5%20-%203D%20Board.png">
+    <img width="40%" src="/./Images/Board/M5/M5%20-%203D%20Module.png">
+</div>
+
+
 ## Overview
 The DOMIX M5 module is conceptually identical to the DOMIX M4 module, with the difference in the number of outputs which in this case is equal to 12. Also, the characteristics of the designed relays are the same, in order to try to standardize the components to be purchase.
 
@@ -43,3 +53,4 @@ A user interface made with a display exactly identical to the DOMIX M1 module is
 
 ## Mechanical Structure
 As like all the other DOMIX module, the DOMIX M5 system uses a stacked PCB architecture with the lower PCB containing core electronics, a vertical PCB providing mechanical and electrical interconnect, and an upper PCB housing the human interface. This structure minimizes footprint, improves maintainability, and allows for future UI or expansion board development.
+
