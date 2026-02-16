@@ -23,7 +23,7 @@ The DOMIX M4 system includes a PCA9554A integrated circuit that allows you to co
 
 |PCA9554A| | | |	
 |-----|-----|----|----| 
-|Jumper to be welded| | | |
+|Position of SW1 pins| | | |
 |Address|	A2|	A1|	A0|
 |0x38|	0|	0|	0|
 |0x39|	0|	0|	1|
@@ -54,5 +54,6 @@ A user interface made with a display exactly identical to the DOMIX M3 module is
 
 ## Mechanical Structure
 As like all the other DOMIX module, the DOMIX M4 system uses a stacked PCB architecture with the lower PCB containing core electronics, a vertical PCB providing mechanical and electrical interconnect, and an upper PCB housing the human interface. This structure minimizes footprint, improves maintainability, and allows for future UI or expansion board development.
+
 
 
