@@ -218,7 +218,7 @@ M4: 0x38
 M3: 0x39 + ADS1115 @ 0x48
 ```
 
-Check section 4.4 for detailed address planning guidelines.
+Check section 4.4 of manual for detailed address planning guidelines.
 
 ## 💻 Software & Programming
 
@@ -274,7 +274,7 @@ The RF-BM-2652P2 module requires Z-Stack firmware. See [POE Zigbee Coordinator](
 
 ## 📄 License & Disclaimer
 
-**Version:** 1.1  
+**Version:** 1.2  
 **Last Updated:** March 2026  
 **DOMIX © 2026 by carletz**  
 Licensed under [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)
@@ -299,11 +299,11 @@ This project is provided **as-is** for educational and experimental purposes.
 
 ## 📚 Documentation
 
-- **Full Manual:** [Technical Documentation PDF](docs/DOMIX_Technical_Manual.pdf)
+- **Full Manual:** [Technical Documentation PDF](https://github.com/carletz/DOMIX-Open-Source-Modular-Home-Automation-System/tree/main/Docs/DOMIX_Technical_Documentation_EN.pdf)
 - **Schematics, Gerbers, Pick and place and Interactive BOM:** Available in each module directory
-- **BOM:** Available in `/BOM` directory
-- **3D Models:** Available in `/Print files` directory
-- **ESPHome Examples:** Available in `/Software`
+- **BOM:** Available in [BOM](https://github.com/carletz/DOMIX-Open-Source-Modular-Home-Automation-System/tree/main/BOM) directory
+- **3D Models:** Available in [3D Print files](https://github.com/carletz/DOMIX-Open-Source-Modular-Home-Automation-System/tree/main/3D%20Print%20files) directory
+- **ESPHome Examples:** Available in [Software](https://github.com/carletz/DOMIX-Open-Source-Modular-Home-Automation-System/tree/main/Software)
 
 ## 🤝 Contributing
 
@@ -317,10 +317,11 @@ Contributions are welcome! Please:
 ## 📞 Contact & Support
 
 - **GitHub Issues:** For bug reports and feature requests
-- **Oshwlab Stars 2026 Page:** [github.com/carletz/DOMIX](https://github.com/carletz/DOMIX)
+- **Oshwlab Stars 2026 Page:** [DOMIX](https://github.com/carletz/DOMIX)
 - **Related Projects:**
   - [POE Zigbee Coordinator](https://github.com/carletz/POE-Zigbee-Coordinator)
   - [MultiSensor](https://github.com/carletz/MultiSensor)
+  - [Sprinkler Boy](https://github.com/carletz/Sprinkler-Boy)
 
 ## 🙏 Acknowledgments
 
