@@ -70,8 +70,10 @@ Serial connection is forever... you can connect anything here, communicate with 
 
 ## I2C Expansion Bus
 DOMIX M1 exposes 2 I2C buses designed for expansion and modularity. The central PCB have two board configurations that lead to the following possibilities:
-•	keep only the two I2C buses originating from the ESP32 (board version 1.0);
-•	increase the possible number of buses using the TCA9548APWR chip (board version 1.2);
+
+- keep only the two I2C buses originating from the ESP32 (board version 1.0);
+- increase the possible number of buses using the TCA9548APWR chip (board version 1.2);
+
 The TCA9548APWR is an 8-channel I2C multiplexer/switch that allows you to create 8 I2C buses with non-overlapping addresses. Each channel is addressed via the main I2C bus, allowing you to activate/deactivate channels individually to avoid address conflicts. It is configurable via pins A0, A1, and A2, and in our case, its address is 0x70.
 If you use V1.0 the addresses are confined within the possibilities reported in the previous chapter. If, however, you choose to use the V1.2 with the I2C switch, you must first configure its use in ESPHome and then configure the network addresses of the connected components accordingly. Each of them will then be seen by the system as a separate bus, but which can still easily communicate with the microcontroller.
 
@@ -81,6 +83,7 @@ The display module, as with all other upper PCB configurations, is not necessary
 
 ## Mechanical Structure
 The system uses a stacked PCB architecture with the lower PCB containing core electronics, a vertical PCB providing mechanical and electrical interconnect, and an upper PCB housing the human interface. This structure minimizes footprint, improves maintainability, and allows for future UI or expansion board development.
+
 
 
 
