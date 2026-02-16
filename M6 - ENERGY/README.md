@@ -1,5 +1,15 @@
 # Module M6 ENERGY METER
 
+<div align="center">
+    <img width="70%" src="/./Images/Board/M6/M6%20-%20Pinout.png">
+</div>
+
+<div align="center">
+    <img width="40%" src="/./Images/Board/M6/M6%20-%203D%20Board.png">
+    <img width="40%" src="/./Images/Board/M6/M6%20-%203D%20Module.png">
+</div>
+
+
 ## Overview
 The DOMIX M6 module measures electrical consumption using clamp meters. It also measures the current mains voltage to accurately calculate the power used at the measurement points.
 
@@ -55,3 +65,4 @@ A user interface made with a display exactly identical to the DOMIX M1 module is
 
 ## Mechanical Structure
 As like all the other DOMIX module, the DOMIX M6 system uses a stacked PCB architecture with the lower PCB containing core electronics, a vertical PCB providing mechanical and electrical interconnect, and an upper PCB housing the human interface. This structure minimizes footprint, improves maintainability, and allows for future UI or expansion board development.
+
