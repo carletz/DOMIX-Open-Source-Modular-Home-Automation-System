@@ -3,7 +3,7 @@
 ## Overview
 The DOMIX M4 module is intended to be a relay module with a very generic use.
 
-|Main info|	M4|  |
+|Main info|	| M4 |
 |------|--------|-----|
 |Lower module|	Dimension|	32 x 84.4 mm|
 |	|Layer	|2|
@@ -54,4 +54,5 @@ A user interface made with a display exactly identical to the DOMIX M3 module is
 
 ## Mechanical Structure
 As like all the other DOMIX module, the DOMIX M4 system uses a stacked PCB architecture with the lower PCB containing core electronics, a vertical PCB providing mechanical and electrical interconnect, and an upper PCB housing the human interface. This structure minimizes footprint, improves maintainability, and allows for future UI or expansion board development.
+
 
