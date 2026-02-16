@@ -1,5 +1,15 @@
 # Module M4 6 RELAY
 
+<div align="center">
+    <img width="70%" src="/./Images/Board/M4/M4%20-%20Pinout.png">
+</div>
+
+<div align="center">
+    <img width="40%" src="/./Images/Board/M4/M4%20-%203D%20Board.png">
+    <img width="40%" src="/./Images/Board/M4/M4%20-%203D%20Module.png">
+</div>
+
+
 ## Overview
 The DOMIX M4 module is intended to be a relay module with a very generic use.
 
@@ -54,6 +64,7 @@ A user interface made with a display exactly identical to the DOMIX M3 module is
 
 ## Mechanical Structure
 As like all the other DOMIX module, the DOMIX M4 system uses a stacked PCB architecture with the lower PCB containing core electronics, a vertical PCB providing mechanical and electrical interconnect, and an upper PCB housing the human interface. This structure minimizes footprint, improves maintainability, and allows for future UI or expansion board development.
+
 
 
 
