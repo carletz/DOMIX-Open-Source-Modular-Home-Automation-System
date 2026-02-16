@@ -4,15 +4,16 @@
 
 DOMIX M1 is the heart of the DOMIX ecosystem: a modular and expandable core controller for smart home and building automation systems. It is designed as the central processing and communication hub, capable of bridging Ethernet, Zigbee, RS485, and I2C-based expansion modules within a single, compact hardware platform. The project focuses on reliability, modularity, and protocol interoperability.
 
-| Main info	| M1 ||
+| Main info	| M1 |  |
+|--------|----------|-----------|
 | Lower module | Dimension	| 67 x 84.4 mm|
-||	Layer	4|
-Upper module	Dimension	67 x 41 mm
-	Layer	2
-Middle module V1.0	Dimension	67.5 x 59.6 mm
-	Layer	2
-Middle module V1.1	Dimension	67.5 x 59.6 mm
-	Layer	2
+|              | Layer	4   |             |
+| Upper module | Dimension	| 67 x 41 mm|
+|              | Layer	2   |             |
+| Middle module V1.0 | Dimension	| 67.5 x 59.6 mm |
+|              | Layer	2   |             |
+| Middle module V1.1 | Dimension | 67.5 x 59.6 mm |
+|              | Layer	2   |             |
 
 
 ## Design Philosophy
@@ -65,3 +66,4 @@ The display module, as with all other upper PCB configurations, is not necessary
 
 ## Mechanical Structure
 The system uses a stacked PCB architecture with the lower PCB containing core electronics, a vertical PCB providing mechanical and electrical interconnect, and an upper PCB housing the human interface. This structure minimizes footprint, improves maintainability, and allows for future UI or expansion board development.
+
