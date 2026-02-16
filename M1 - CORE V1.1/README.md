@@ -5,8 +5,9 @@
 </div>
 
 <div align="center">
-    <img width="40%" src="/./Images/Board/M1/M1%20-%203D%20Board.png">
-    <img width="40%" src="/./Images/Board/M1/M1%20-%203D%20Module.png">
+    <img width="30%" src="/./Images/Board/M1/M1%20-%203D%20Board%20V1.0.png">
+    <img width="30%" src="/./Images/Board/M1/M1%20-%203D%20Board%20V1.2.png">
+    <img width="30%" src="/./Images/Board/M1/M1%20-%203D%20Module.png">
 </div>
 
 
@@ -76,6 +77,7 @@ The display module, as with all other upper PCB configurations, is not necessary
 
 ## Mechanical Structure
 The system uses a stacked PCB architecture with the lower PCB containing core electronics, a vertical PCB providing mechanical and electrical interconnect, and an upper PCB housing the human interface. This structure minimizes footprint, improves maintainability, and allows for future UI or expansion board development.
+
 
 
 
