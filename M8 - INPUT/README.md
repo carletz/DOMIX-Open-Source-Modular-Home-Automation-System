@@ -1,5 +1,15 @@
 # Module M8 INPUT
 
+
+<div align="center">
+    <img width="70%" src="/./Images/Board/M8/M8%20-%20Pinout.png">
+</div>
+
+<div align="center">
+    <img width="40%" src="/./Images/Board/M8/M8%20-%203D%20Board.png">
+    <img width="40%" src="/./Images/Board/M8/M8%20-%203D%20Module.png">
+</div>
+
 ## Overview
 The DOMIX M8 module is intended to be a generic Input module, useful for normal commands and controls.
 
@@ -42,3 +52,4 @@ For simplicity's sake, in this case, we chose to simply display LEDs at the top 
 
 ## Mechanical Structure
 As like the M1 module, the DOMIX M8 system uses a stacked PCB architecture with the lower PCB containing core electronics, a vertical PCB providing mechanical and electrical interconnect, and an upper PCB housing the human interface. This structure minimizes footprint, improves maintainability, and allows for future UI or expansion board development.
+
