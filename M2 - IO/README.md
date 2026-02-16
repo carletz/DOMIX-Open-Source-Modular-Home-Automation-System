@@ -16,7 +16,7 @@ The DOMIX M2 module is intended to be a generic I/O module, useful for normal co
 For all possible modules the system is always the same, 3 stacked pcb that allows for modularity and easy maintenance if necessary. See DOMIX M1 module for more information.
 The DOMIX M2 system includes a PCA9535 integrated circuit that allows you to control 16 channels, in this case 8 input channels and 8 output channels. SW1 is a dip switch that manages the correct I2C address on channel 1 of the M1 module's control bus. The following summarizes the possible (but non-overlapping) addresses that can be managed by the integrated circuit itself:
 
-|PCA9535	|Position of SW1 pins|
+|PCA9535	|Position of SW1 pins|||
 |------|------|------|--------|
 |Address	|A2	|A1	|A0|
 |0x20	|0|	0|	0|
@@ -43,3 +43,4 @@ For simplicity's sake, in this case, we chose to simply display LEDs at the top 
 
 ## Mechanical Structure
 As like the M1 module, the DOMIX M2 system uses a stacked PCB architecture with the lower PCB containing core electronics, a vertical PCB providing mechanical and electrical interconnect, and an upper PCB housing the human interface. This structure minimizes footprint, improves maintainability, and allows for future UI or expansion board development.
+
