@@ -1,5 +1,15 @@
 # Module M1 CORE
 
+<div align="center">
+    <img width="70%" src="/./Images/Board/M1/M1%20-%20Pinout.png">
+</div>
+
+<div align="center">
+    <img width="40%" src="/./Images/Board/M1/M1%20-%203D%20Board.png">
+    <img width="40%" src="/./Images/Board/M1/M1%20-%203D%20Module.png">
+</div>
+
+
 ## Overview
 
 DOMIX M1 is the heart of the DOMIX ecosystem: a modular and expandable core controller for smart home and building automation systems. It is designed as the central processing and communication hub, capable of bridging Ethernet, Zigbee, RS485, and I2C-based expansion modules within a single, compact hardware platform. The project focuses on reliability, modularity, and protocol interoperability.
@@ -66,5 +76,6 @@ The display module, as with all other upper PCB configurations, is not necessary
 
 ## Mechanical Structure
 The system uses a stacked PCB architecture with the lower PCB containing core electronics, a vertical PCB providing mechanical and electrical interconnect, and an upper PCB housing the human interface. This structure minimizes footprint, improves maintainability, and allows for future UI or expansion board development.
+
 
 
