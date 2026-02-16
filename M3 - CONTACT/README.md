@@ -1,5 +1,15 @@
 # Module M3 CONTACT
 
+<div align="center">
+    <img width="70%" src="/./Images/Board/M3/M3%20-%20Pinout.png">
+</div>
+
+<div align="center">
+    <img width="40%" src="/./Images/Board/M3/M3%20-%203D%20Board.png">
+    <img width="40%" src="/./Images/Board/M3/M3%20-%203D%20Module.png">
+</div>
+
+
 ##	Overview
 The DOMIX M3 module is intended to be an analogic contact input module, useful for door, windows, and similar reed or switch contact reading.
 
@@ -65,5 +75,6 @@ Keep in mind always that the screen operates on the I2C bus number 2 so the addr
 
 ## Mechanical Structure
 As like the DOMIX M1 and M2 module, the DOMIX M3 system uses a stacked PCB architecture with the lower PCB containing core electronics, a vertical PCB providing mechanical and electrical interconnect, and an upper PCB housing the human interface. This structure minimizes footprint, improves maintainability, and allows for future UI or expansion board development.
+
 
 
