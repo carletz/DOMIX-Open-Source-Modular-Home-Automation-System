@@ -1,4 +1,4 @@
-# ESPHOME SOFTWARE
+# ESPHome software
 
 For me, ESPHome was an obvious choice, convenient and quick. I'm not a great programmer and I didn't want to get lost in a maze of lines of code, perhaps already flawed from the start, which would have wasted a lot of time. I've already used ESPHome in many other projects with excellent results, so I'd like to repeat the same approach in this project.
 You're all familiar with ESPHome, so this isn't the section to explain how it works or how to use it. For that, I refer you to the application's excellent website, located at https://esphome.io/.
@@ -49,3 +49,4 @@ This setting allows you to automatically load the firmware. If that doesn't work
 
 > [!WARNING]
 > ESPHome version 2026, at the time this guide was written, is not compatible with the external Zigbee component, so if you need to use it you must compile it with a maximum version of 2025. I used 2025.7.5. If you don't need it, you can use the latest version.
+
