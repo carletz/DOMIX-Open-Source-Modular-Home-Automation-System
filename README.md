@@ -317,7 +317,7 @@ Contributions are welcome! Please:
 ## 📞 Contact & Support
 
 - **GitHub Issues:** For bug reports and feature requests
-- **Oshwlab Stars 2026 Page:** [DOMIX](https://github.com/carletz/DOMIX)
+- **Oshwlab Stars 2026 Page:** [DOMIX](oshwlab.com/carletz.slug/domix-domotic-module-for-smart-home-co)
 - **Related Projects:**
   - [POE Zigbee Coordinator](https://github.com/carletz/POE-Zigbee-Coordinator)
   - [MultiSensor](https://github.com/carletz/MultiSensor)
