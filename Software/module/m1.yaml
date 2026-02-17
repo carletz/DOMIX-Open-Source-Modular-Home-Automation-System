@@ -1,0 +1,336 @@
+# ============================================================================
+#
+# M1 MODULE BASIC DESIGN FOR DISPLAY
+#
+# Adapt the configurations, names and other to your needs
+#
+# ============================================================================
+
+globals:
+  - id: menu_active
+    type: bool
+    restore_value: no
+    initial_value: 'false'
+
+  - id: menu_level
+    type: int
+    initial_value: '0'
+    # 0 = main menu
+    # 1 = module submenu
+    # 2 = component detail
+
+  - id: menu_index
+    type: int
+    initial_value: '0'
+
+  - id: submenu_index
+    type: int
+    initial_value: '0'
+
+  - id: menu_edit
+    type: bool
+    restore_value: no
+    initial_value: 'false'
+
+  - id: main_menu_items
+    type: int
+    initial_value: '7'
+
+  - id: m2_pages
+    type: int
+    initial_value: '2'   # 0 = input, 1 = output
+
+  - id: output_index
+    type: int
+    initial_value: '0'
+
+  - id: last_activity_time
+    type: unsigned long
+    restore_value: no
+    initial_value: '0'
+
+ads1115:
+  - id: screen_button
+    address: ${m1_screen_button_address}
+    i2c_id: ${m1_i2c_id}
+
+sensor:
+  - platform: ads1115
+    ads1115_id: screen_button
+    name: "Screen Button Level"
+    id: analog_button
+    multiplexer: 'A0_GND'
+    gain: 6.144
+    update_interval: 100ms
+    internal: true  
+
+font:
+  - file: "gfonts://Roboto"
+    id: font_normal
+    size: 12
+
+  - file: "gfonts://Roboto"
+    id: font_small
+    size: 10
+
+display:
+  - platform: ssd1306_i2c
+    id: "${m1_name}_screen"
+    i2c_id: bus_screen
+    address: ${m1_screen_address}
+    model: "SH1106 128x64"
+    update_interval: 0.5s
+    contrast: 70%    
+    lambda: |-
+      if (!id(menu_active)) {
+        // HEADER
+        it.printf(0, 0, id(font_normal), "DOMIX");
+        if (id(myclock).now().is_valid()) {
+            it.strftime(90, 0, id(font_normal), "%H:%M", id(myclock).now());
+        }
+        it.line(0, 10, 127, 10);
+        return;
+      } else if (id(menu_level) == 0) {
+        /* ============== MAIN MENU ================= */
+        if (!id(menu_active) || id(menu_level) != 0)
+          return;
+        const char* main_menu[8] = {
+          "M2 I/O",
+          "M3 Contacts",
+          "M4 6 Relays",
+          "M5 12 Relays",
+          "M6 Energy",
+          "M7 Output",      
+          "M8 Input", 
+          "M9 Sprinkler"
+        };
+        for (int i = 0; i < 8; i++) {
+          int y = 14 + i * 6;
+          if (i == id(menu_index)) {
+            it.printf(0, y, id(font_small), ">");
+            it.printf(8, y, id(font_small), "%s", main_menu[i]);
+          } else {
+            it.printf(8, y, id(font_small), "%s", main_menu[i]);
+          }
+        }
+        /* ================= FOOTER ================= */
+        it.line(0, 56, 127, 56);
+        it.printf(40, 58, id(font_small), "↑ ↓  OK");
+
+      } else if (id(menu_active) && id(menu_level) == 1 && id(menu_index) == 0) {
+
+        /* ============ SUBMENU HEADER ================= */
+        it.printf(0, 14, id(font_small), "M2 STATUS");
+        
+        if (id(submenu_index) < 0) id(submenu_index) = 0;
+        if (id(submenu_index) >= id(m2_pages)) id(submenu_index) = id(m2_pages) - 1;
+        /* ============ INPUT ================= */
+        if (id(submenu_index) == 0) {
+            it.printf(90, 14, id(font_small), "INPUT");
+
+            it.printf(0, 24, id(font_small), "I1:%s  I2:%s",
+            id(m2${m2_number_1}_I_channel_1).state ? "ON" : "OFF",
+            id(m2${m2_number_1}_I_channel_2).state ? "ON" : "OFF");
+
+            it.printf(0, 34, id(font_small), "I3:%s  I4:%s",
+            id(m2${m2_number_1}_I_channel_3).state ? "ON" : "OFF",
+            id(m2${m2_number_1}_I_channel_4).state ? "ON" : "OFF");
+
+            it.printf(0, 44, id(font_small), "I5:%s  I6:%s",
+            id(m2${m2_number_1}_I_channel_5).state ? "ON" : "OFF",
+            id(m2${m2_number_1}_I_channel_6).state ? "ON" : "OFF");
+
+            it.printf(0, 54, id(font_small), "I7:%s  I8:%s",
+            id(m2${m2_number_1}_I_channel_7).state ? "ON" : "OFF",
+            id(m2${m2_number_1}_I_channel_8).state ? "ON" : "OFF");
+        }
+        /* ============ OUTPUT ================= */
+        if (id(submenu_index) == 1) {
+            it.printf(90, 14, id(font_small), "OUTPUT");
+
+            it.printf(0, 24, id(font_small), "O1:%s  O2:%s",
+            id(m2${m2_number_1}_O_channel_1).state ? "ON" : "OFF",
+            id(m2${m2_number_1}_O_channel_2).state ? "ON" : "OFF");
+
+            it.printf(0, 34, id(font_small), "O3:%s  O4:%s",
+            id(m2${m2_number_1}_O_channel_3).state ? "ON" : "OFF",
+            id(m2${m2_number_1}_O_channel_4).state ? "ON" : "OFF");
+
+            it.printf(0, 44, id(font_small), "O5:%s  O6:%s",
+            id(m2${m2_number_1}_O_channel_5).state ? "ON" : "OFF",
+            id(m2${m2_number_1}_O_channel_6).state ? "ON" : "OFF");
+
+            it.printf(0, 54, id(font_small), "O7:%s  O8:%s",
+            id(m2${m2_number_1}_O_channel_7).state ? "ON" : "OFF",
+            id(m2${m2_number_1}_O_channel_8).state ? "ON" : "OFF");
+        }
+        /* ============ FOOTER ================= */
+        it.line(0, 56, 127, 56);
+        it.printf(32, 58, id(font_small), "UP/DOWN  OK=BACK");
+
+      } else if (id(menu_level) == 2 && id(submenu_index) == 1) {
+
+        it.printf(0, 14, id(font_small), "EDIT OUTPUT");
+        for (int i = 0; i < 8; i++) {
+            int row = i / 2;
+            int col = i % 2;
+            int x = (col == 0) ? 0 : 64;
+            int y = 26 + row * 10;
+            bool selected = (i == id(output_index));
+            if (selected)
+            it.printf(x, y, id(font_small), ">O%d:%s",
+                i + 1,
+                (i == 0 ? id(m2${m2_number_1}_O_channel_1).state :
+                i == 1 ? id(m2${m2_number_1}_O_channel_2).state :
+                i == 2 ? id(m2${m2_number_1}_O_channel_3).state :
+                i == 3 ? id(m2${m2_number_1}_O_channel_4).state :
+                i == 4 ? id(m2${m2_number_1}_O_channel_5).state :
+                i == 5 ? id(m2${m2_number_1}_O_channel_6).state :
+                i == 6 ? id(m2${m2_number_1}_O_channel_7).state :
+                        id(m2${m2_number_1}_O_channel_8).state) ? "ON" : "OFF");
+            else
+            it.printf(x, y, id(font_small), " O%d:%s",
+                i + 1,
+                (i == 0 ? id(m2${m2_number_1}_O_channel_1).state :
+                i == 1 ? id(m2${m2_number_1}_O_channel_2).state :
+                i == 2 ? id(m2${m2_number_1}_O_channel_3).state :
+                i == 3 ? id(m2${m2_number_1}_O_channel_4).state :
+                i == 4 ? id(m2${m2_number_1}_O_channel_5).state :
+                i == 5 ? id(m2${m2_number_1}_O_channel_6).state :
+                i == 6 ? id(m2${m2_number_1}_O_channel_7).state :
+                        id(m2${m2_number_1}_O_channel_8).state) ? "ON" : "OFF");
+        }
+        it.line(0, 56, 127, 56);
+        it.printf(10, 58, id(font_small), "UP/DN SEL  OK=TOGGLE");
+      }
+
+binary_sensor:
+  - platform: template
+    name: "Botton Up"
+    internal: true 
+    lambda: |-
+      return (id(analog_button).state > 2.5 && id(analog_button).state < 2.9);
+    filters:
+      - delayed_on: 20ms
+      - delayed_off: 20ms
+    on_press:
+      - lambda: |-
+          id(last_activity_time) = millis();
+          if (!id(menu_active)) {
+              id(menu_active) = true;
+              id(menu_level) = 0;
+              id(menu_index) = 0;
+              return;
+          }
+          if (id(menu_level) == 0) {
+              id(menu_index)--;
+              if (id(menu_index) < 0) {
+                id(menu_index) = id(main_menu_items) - 1;
+              }
+              return;
+          }
+          if (id(menu_level) == 1 && id(menu_index) == 0 && id(submenu_index) == 1) {
+              if (!id(menu_edit)) {
+              id(output_index)--;
+              if (id(output_index) < 0)
+                  id(output_index) = 7;
+              }
+              return;
+          }          
+          if (id(menu_level) >= 1) {
+              id(submenu_index)--;
+              if (id(submenu_index) < 0) {
+                id(submenu_index) = 0;
+              }
+              return;
+          }
+
+  - platform: template
+    name: "Button Down"
+    internal: true 
+    lambda: |-
+      return (id(analog_button).state > 0.4 && id(analog_button).state < 0.65);
+    filters:
+      - delayed_on: 20ms
+      - delayed_off: 20ms
+    on_press:
+      - lambda: |-
+          id(last_activity_time) = millis();
+          if (!id(menu_active)) return;
+          if (id(menu_level) == 0) {
+              id(menu_index)++;
+              if (id(menu_index) >= id(main_menu_items)) {
+                id(menu_index) = 0;
+              }
+              return;
+          }
+          if (id(menu_level) == 1 && id(menu_index) == 0 && id(submenu_index) == 1) {
+              if (!id(menu_edit)) {
+              id(output_index)++;
+              if (id(output_index) > 7)
+                  id(output_index) = 0;
+              }
+              return;
+          }          
+          if (id(menu_level) >= 1) {
+              id(submenu_index)++;
+          }
+
+  - platform: template
+    name: "Button OK"
+    internal: true
+    lambda: |-
+      return (id(analog_button).state > 1.5 && id(analog_button).state < 1.75);
+    filters:
+      - delayed_on: 20ms
+      - delayed_off: 20ms
+    on_press:
+      - lambda: |-
+          id(last_activity_time) = millis();
+          if (!id(menu_active)) {
+              id(menu_active) = true;
+              id(menu_level) = 0;
+              return;
+          }
+          if (id(menu_level) == 0) {
+              id(menu_level) = 1;
+              id(submenu_index) = 0;
+              return;
+          }
+          if (id(menu_level) == 1) {
+              id(menu_level) = 2;
+              return;
+          }
+          if (id(menu_level) == 1 && id(menu_index) == 0 && id(submenu_index) == 1) {
+              // Primo OK → entra in edit
+              if (!id(menu_edit)) {
+              id(menu_edit) = true;
+              return;
+              }
+              // OK in edit → TOGGLE output
+              switch (id(output_index)) {
+              case 0: id(m2${m2_number_1}_O_channel_1).toggle(); break;
+              case 1: id(m2${m2_number_1}_O_channel_2).toggle(); break;
+              case 2: id(m2${m2_number_1}_O_channel_3).toggle(); break;
+              case 3: id(m2${m2_number_1}_O_channel_4).toggle(); break;
+              case 4: id(m2${m2_number_1}_O_channel_5).toggle(); break;
+              case 5: id(m2${m2_number_1}_O_channel_6).toggle(); break;
+              case 6: id(m2${m2_number_1}_O_channel_7).toggle(); break;
+              case 7: id(m2${m2_number_1}_O_channel_8).toggle(); break;
+              }
+              return;
+          }
+          // OK fuori → BACK
+          id(menu_edit) = false;
+          id(menu_level) = 1;          
+          // livello 2 → BACK
+
+interval:
+  - interval: 1s
+    then:
+      - lambda: |-
+          if (id(menu_active) &&
+              (millis() - id(last_activity_time) > 10000)) {
+            id(menu_active) = false;
+            id(menu_level) = 0;
+          }

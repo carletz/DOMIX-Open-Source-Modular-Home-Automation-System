@@ -1,0 +1,14 @@
+ads1115:
+  - id: screen_button
+    address: ${m1_screen_address}
+    i2c_id: bus_screen
+
+sensor:
+  - platform: ads1115
+    ads1115_id: screen_button
+    name: "Screen Button Level"
+    id: analog_button
+    multiplexer: 'A0_GND'
+    gain: 6.144
+    update_interval: 100ms
+    internal: true  

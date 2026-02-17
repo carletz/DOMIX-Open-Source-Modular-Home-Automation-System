@@ -1,0 +1,70 @@
+# ============================================================================
+#   DOMIX Configuration
+# ============================================================================
+# This is the base configuration file for DOMIX modular system.
+# The user can adapt and modify at his use the following code and the 
+# connected packages.
+#
+# 
+# ============================================================================
+
+
+# ----------------------------------------------------------------------------
+# PACKAGES
+# Users can modify, remove or add packages considering the configuration
+# ----------------------------------------------------------------------------
+packages:
+  - !include hardware/esp.yaml
+
+  # === Base System Configuration ===
+  - !include hardware/data.yaml
+  - !include hardware/ethernet.yaml
+  - !include hardware/web_server.yaml
+  - !include hardware/mqtt.yaml
+
+  # WARNING: if you use the middle module V1.0 use this package
+  # and leave the i2c_switch.yaml package commented, otherwise use the 
+  # i2c_switch.yaml package and comment this one
+  - !include hardware/i2c.yaml
+
+  # WARNING: if you use the middle module V1.2 use this package
+  # and leave the i2c.yaml package commented, otherwise use the 
+  # i2c.yaml package and comment this one
+  #- !include hardware/i2c_switch.yaml
+
+  # === System Add-on ===
+  - !include hardware/zigbee.yaml
+  - !include hardware/serial.yaml
+  - !include hardware/restart.yaml
+  - !include hardware/info.yaml
+  - !include hardware/log.yaml
+
+  # === M1 Screen and Button ===
+  - !include module/m1.yaml
+
+  # === M1 1-wire sensor ===
+  - !include sensor/wire.yaml
+
+  # === M2 module configuration ===
+  - !include module/m2.yaml
+
+  # === M3 module configuration ===
+  - !include module/m3.yaml
+
+  # === M4 module configuration ===
+  - !include module/m4_shutters.yaml
+
+  # === M5 module configuration ===
+  - !include module/m5_shutters.yaml
+
+  # === M6 module configuration ===
+  - !include module/m6.yaml
+
+  # === M7 module configuration ===
+  - !include module/m7.yaml
+
+  # === M8 module configuration ===
+  - !include module/m8.yaml
+
+  # === M9 module configuration ===
+  - !include module/m9.yaml

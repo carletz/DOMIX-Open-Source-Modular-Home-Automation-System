@@ -1,0 +1,602 @@
+# ============================================================================
+#
+# M3 MODULE BASIC DESIGN FOR BASIC FUNCTIONS
+#
+# Adapt the configurations, names and other to your needs
+#
+# ============================================================================
+
+# PCA9554A I/O Expander (for multiplexing of CD74HC4067 chip channel S0-S3)
+pca9554:
+  - id: domix_m3${m3_number_1}_busi2c
+    address: ${m3_i2c_1} 
+    i2c_id: ${m3_i2c_id}    
+
+# ADS1115 ADC
+ads1115:
+  - id: domix_m3${m3_number_1}_ads1115_hub
+    address: ${m3_ads_1} 
+    continuous_mode: off
+    i2c_id: ${m3_i2c_id}              # Bus for comunication with DOMIX M1 module
+
+# Configurazione multiplexer CD74HC4067
+cd74hc4067:
+  - id: m3${m3_number_1}_mux
+    delay: 15ms
+    pin_s0:
+      pca9554: domix_m3${m3_number_1}_busi2c
+      number: 3
+      mode: OUTPUT
+      inverted: false
+    pin_s1:
+      pca9554: domix_m3${m3_number_1}_busi2c
+      number: 2
+      mode: OUTPUT
+      inverted: false
+    pin_s2:
+      pca9554: domix_m3${m3_number_1}_busi2c
+      number: 1
+      mode: OUTPUT
+      inverted: false
+    pin_s3:
+      pca9554: domix_m3${m3_number_1}_busi2c
+      number: 0
+      mode: OUTPUT
+      inverted: false
+
+# Custom component per multiplexer
+sensor:
+  # Channel 0
+  - platform: ads1115
+    multiplexer: 'A1_GND'
+    gain: 1.024
+    id: domix_m3${m3_number_1}_clamp_ch0
+    ads1115_id: domix_m3${m3_number_1}_ads1115_hub
+    internal: true
+    update_interval: never
+
+  - platform: cd74hc4067
+    id: clamp_ch0_m3${m3_number_1}
+    number: 0
+    cd74hc4067_id: m3${m3_number_1}_mux
+    sensor: domix_m3${m3_number_1}_clamp_ch0
+
+  - platform: cd74hc4067
+    id: clamp_ch1_m3${m3_number_1}
+    number: 1
+    cd74hc4067_id: m3${m3_number_1}_mux
+    sensor: domix_m3${m3_number_1}_clamp_ch0 
+
+  - platform: cd74hc4067
+    id: clamp_ch2_m3${m3_number_1}
+    number: 2
+    cd74hc4067_id: m3${m3_number_1}_mux
+    sensor: domix_m3${m3_number_1}_clamp_ch0 
+
+  - platform: cd74hc4067
+    id: clamp_ch3_m3${m3_number_1}
+    number: 3
+    cd74hc4067_id: m3${m3_number_1}_mux
+    sensor: domix_m3${m3_number_1}_clamp_ch0 
+
+  - platform: cd74hc4067
+    id: clamp_ch4_m3${m3_number_1}
+    number: 4
+    cd74hc4067_id: m3${m3_number_1}_mux
+    sensor: domix_m3${m3_number_1}_clamp_ch0 
+
+  - platform: cd74hc4067
+    id: clamp_ch5_m3${m3_number_1}
+    number: 5
+    cd74hc4067_id: m3${m3_number_1}_mux
+    sensor: domix_m3${m3_number_1}_clamp_ch0 
+
+  - platform: cd74hc4067
+    id: clamp_ch6_m3${m3_number_1}
+    number: 6
+    cd74hc4067_id: m3${m3_number_1}_mux
+    sensor: domix_m3${m3_number_1}_clamp_ch0 
+
+  - platform: cd74hc4067
+    id: clamp_ch7_m3${m3_number_1}
+    number: 7
+    cd74hc4067_id: m3${m3_number_1}_mux
+    sensor: domix_m3${m3_number_1}_clamp_ch0
+
+  - platform: cd74hc4067
+    id: clamp_ch8_m3${m3_number_1}
+    number: 8
+    cd74hc4067_id: m3${m3_number_1}_mux
+    sensor: domix_m3${m3_number_1}_clamp_ch0 
+
+  - platform: cd74hc4067
+    id: clamp_ch9_m3${m3_number_1}
+    number: 9
+    cd74hc4067_id: m3${m3_number_1}_mux
+    sensor: domix_m3${m3_number_1}_clamp_ch0
+
+  - platform: cd74hc4067
+    id: clamp_ch10_m3${m3_number_1}
+    number: 10
+    cd74hc4067_id: m3${m3_number_1}_mux
+    sensor: domix_m3${m3_number_1}_clamp_ch0
+
+  - platform: cd74hc4067
+    id: clamp_ch11_m3${m3_number_1}
+    number: 11
+    cd74hc4067_id: m3${m3_number_1}_mux
+    sensor: domix_m3${m3_number_1}_clamp_ch0
+
+  - platform: cd74hc4067
+    id: clamp_ch12_m3${m3_number_1}
+    number: 12
+    cd74hc4067_id: m3${m3_number_1}_mux
+    sensor: domix_m3${m3_number_1}_clamp_ch0
+
+  - platform: cd74hc4067
+    id: clamp_ch13_m3${m3_number_1}
+    number: 13
+    cd74hc4067_id: m3${m3_number_1}_mux
+    sensor: domix_m3${m3_number_1}_clamp_ch0
+
+  - platform: cd74hc4067
+    id: clamp_ch14_m3${m3_number_1}
+    number: 14
+    cd74hc4067_id: m3${m3_number_1}_mux
+    sensor: domix_m3${m3_number_1}_clamp_ch0
+
+  - platform: cd74hc4067
+    id: clamp_ch15_m3${m3_number_1}
+    number: 15
+    cd74hc4067_id: m3${m3_number_1}_mux
+    sensor: domix_m3${m3_number_1}_clamp_ch0
+
+# Binary sensors for open and closed state
+binary_sensor:
+  - platform: template
+    name: "${m3_name}${m3_number_1} ${m3_channel_name} 1"
+    id: domix_m3${m3_number_1}_ch0_state
+    icon: "mdi:door-sensor"
+    device_class: opening
+    lambda: |-
+      float v = id(clamp_ch0_m3${m3_number_1}).state;
+      if (v > 2.5) return false;  // Closed
+      if (v < 0.8) return true;   // Open
+      return {};
+    # Filter to avoid false trigger
+    filters:
+      - delayed_on: 50ms       # Should stay ON for 50ms
+      - delayed_off: 50ms      # Should stay OFF for 50ms      
+    on_press:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m3_name}${m3_number_1}/${m3_channel_name} 1/state"
+          payload: "ON"
+          retain: True
+    on_release:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m3_name}${m3_number_1}/${m3_channel_name} 1/state"
+          payload: "OFF"
+          retain: True       
+    web_server:
+      sorting_group_id: domix_m3_web
+      sorting_weight: 1
+
+  - platform: template
+    name: "${m3_name}${m3_number_1} ${m3_channel_name} 2"
+    id: domix_m3${m3_number_1}_ch1_state
+    icon: "mdi:door-sensor"
+    device_class: opening
+    lambda: |-
+      float v = id(clamp_ch1_m3${m3_number_1}).state;
+      if (v > 2.5) return false;
+      if (v < 0.8) return true;
+      return {};
+    # Filter to avoid false trigger
+    filters:
+      - delayed_on: 50ms       # Should stay ON for 50ms
+      - delayed_off: 50ms      # Should stay OFF for 50ms      
+    on_press:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m3_name}${m3_number_1}/${m3_channel_name} 2/state"
+          payload: "ON"
+          retain: True
+    on_release:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m3_name}${m3_number_1}/${m3_channel_name} 2/state"
+          payload: "OFF"
+          retain: True       
+    web_server:
+      sorting_group_id: domix_m3_web
+      sorting_weight: 2
+
+  - platform: template
+    name: "${m3_name}${m3_number_1} ${m3_channel_name} 3"
+    id: domix_m3${m3_number_1}_ch2_state
+    icon: "mdi:door-sensor"
+    device_class: opening
+    lambda: |-
+      float v = id(clamp_ch2_m3${m3_number_1}).state;
+      if (v > 2.5) return false;
+      if (v < 0.8) return true;
+      return {};
+    # Filter to avoid false trigger
+    filters:
+      - delayed_on: 50ms       # Should stay ON for 50ms
+      - delayed_off: 50ms      # Should stay OFF for 50ms      
+    on_press:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m3_name}${m3_number_1}/${m3_channel_name} 3/state"
+          payload: "ON"
+          retain: True
+    on_release:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m3_name}${m3_number_1}/${m3_channel_name} 3/state"
+          payload: "OFF"
+          retain: True       
+    web_server:
+      sorting_group_id: domix_m3_web
+      sorting_weight: 3
+
+  - platform: template
+    name: "${m3_name}${m3_number_1} ${m3_channel_name} 4"
+    id: domix_m3${m3_number_1}_ch3_state
+    icon: "mdi:door-sensor"
+    device_class: opening
+    lambda: |-
+      float v = id(clamp_ch3_m3${m3_number_1}).state;
+      if (v > 2.5) return false;
+      if (v < 0.8) return true;
+      return {};
+    # Filter to avoid false trigger
+    filters:
+      - delayed_on: 50ms       # Should stay ON for 50ms
+      - delayed_off: 50ms      # Should stay OFF for 50ms      
+    on_press:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m3_name}${m3_number_1}/${m3_channel_name} 4/state"
+          payload: "ON"
+          retain: True
+    on_release:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m3_name}${m3_number_1}/${m3_channel_name} 4/state"
+          payload: "OFF"
+          retain: True       
+    web_server:
+      sorting_group_id: domix_m3_web
+      sorting_weight: 4
+
+  - platform: template
+    name: "${m3_name}${m3_number_1} ${m3_channel_name} 5"
+    id: domix_m3${m3_number_1}_ch4_state
+    icon: "mdi:door-sensor"
+    device_class: opening
+    lambda: |-
+      float v = id(clamp_ch4_m3${m3_number_1}).state;
+      if (v > 2.5) return false;
+      if (v < 0.8) return true;
+      return {};
+    # Filter to avoid false trigger
+    filters:
+      - delayed_on: 50ms       # Should stay ON for 50ms
+      - delayed_off: 50ms      # Should stay OFF for 50ms      
+    on_press:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m3_name}${m3_number_1}/${m3_channel_name} 5/state"
+          payload: "ON"
+          retain: True
+    on_release:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m3_name}${m3_number_1}/${m3_channel_name} 5/state"
+          payload: "OFF"
+          retain: True       
+    web_server:
+      sorting_group_id: domix_m3_web
+      sorting_weight: 5
+
+  - platform: template
+    name: "${m3_name}${m3_number_1} ${m3_channel_name} 6"
+    id: domix_m3${m3_number_1}_ch5_state
+    icon: "mdi:door-sensor"
+    device_class: opening
+    lambda: |-
+      float v = id(clamp_ch5_m3${m3_number_1}).state;
+      if (v > 2.5) return false;
+      if (v < 0.8) return true;
+      return {};
+    # Filter to avoid false trigger
+    filters:
+      - delayed_on: 50ms       # Should stay ON for 50ms
+      - delayed_off: 50ms      # Should stay OFF for 50ms      
+    on_press:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m3_name}${m3_number_1}/${m3_channel_name} 6/state"
+          payload: "ON"
+          retain: True
+    on_release:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m3_name}${m3_number_1}/${m3_channel_name} 6/state"
+          payload: "OFF"
+          retain: True       
+    web_server:
+      sorting_group_id: domix_m3_web
+      sorting_weight: 6
+
+  - platform: template
+    name: "${m3_name}${m3_number_1} ${m3_channel_name} 7"
+    id: domix_m3${m3_number_1}_ch6_state
+    icon: "mdi:door-sensor"
+    device_class: opening
+    lambda: |-
+      float v = id(clamp_ch6_m3${m3_number_1}).state;
+      if (v > 2.5) return false;
+      if (v < 0.8) return true;
+      return {};
+    # Filter to avoid false trigger
+    filters:
+      - delayed_on: 50ms       # Should stay ON for 50ms
+      - delayed_off: 50ms      # Should stay OFF for 50ms      
+    on_press:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m3_name}${m3_number_1}/${m3_channel_name} 7/state"
+          payload: "ON"
+          retain: True
+    on_release:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m3_name}${m3_number_1}/${m3_channel_name} 7/state"
+          payload: "OFF"
+          retain: True       
+    web_server:
+      sorting_group_id: domix_m3_web
+      sorting_weight: 7
+
+  - platform: template
+    name: "${m3_name}${m3_number_1} ${m3_channel_name} 8"
+    id: domix_m3${m3_number_1}_ch7_state
+    icon: "mdi:door-sensor"
+    device_class: opening
+    lambda: |-
+      float v = id(clamp_ch7_m3${m3_number_1}).state;
+      if (v > 2.5) return false;
+      if (v < 0.8) return true;
+      return {};
+    # Filter to avoid false trigger
+    filters:
+      - delayed_on: 50ms       # Should stay ON for 50ms
+      - delayed_off: 50ms      # Should stay OFF for 50ms      
+    on_press:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m3_name}${m3_number_1}/${m3_channel_name} 8/state"
+          payload: "ON"
+          retain: True
+    on_release:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m3_name}${m3_number_1}/${m3_channel_name} 8/state"
+          payload: "OFF"
+          retain: True       
+    web_server:
+      sorting_group_id: domix_m3_web
+      sorting_weight: 8
+
+  - platform: template
+    name: "${m3_name}${m3_number_1} ${m3_channel_name} 9"
+    id: domix_m3${m3_number_1}_ch8_state
+    icon: "mdi:door-sensor"
+    device_class: opening
+    lambda: |-
+      float v = id(clamp_ch8_m3${m3_number_1}).state;
+      if (v > 2.5) return false;
+      if (v < 0.8) return true;
+      return {};
+    # Filter to avoid false trigger
+    filters:
+      - delayed_on: 50ms       # Should stay ON for 50ms
+      - delayed_off: 50ms      # Should stay OFF for 50ms      
+    on_press:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m3_name}${m3_number_1}/${m3_channel_name} 9/state"
+          payload: "ON"
+          retain: True
+    on_release:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m3_name}${m3_number_1}/${m3_channel_name} 9/state"
+          payload: "OFF"
+          retain: True       
+    web_server:
+      sorting_group_id: domix_m3_web
+      sorting_weight: 9
+
+  - platform: template
+    name: "${m3_name}${m3_number_1} ${m3_channel_name} 10"
+    id: domix_m3${m3_number_1}_ch9_state
+    icon: "mdi:door-sensor"
+    device_class: opening
+    lambda: |-
+      float v = id(clamp_ch9_m3${m3_number_1}).state;
+      if (v > 2.5) return false;
+      if (v < 0.8) return true;
+      return {};
+    # Filter to avoid false trigger
+    filters:
+      - delayed_on: 50ms       # Should stay ON for 50ms
+      - delayed_off: 50ms      # Should stay OFF for 50ms      
+    on_press:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m3_name}${m3_number_1}/${m3_channel_name} 10/state"
+          payload: "ON"
+          retain: True
+    on_release:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m3_name}${m3_number_1}/${m3_channel_name} 10/state"
+          payload: "OFF"
+          retain: True       
+    web_server:
+      sorting_group_id: domix_m3_web
+      sorting_weight: 10
+
+  - platform: template
+    name: "${m3_name}${m3_number_1} ${m3_channel_name} 11"
+    id: domix_m3${m3_number_1}_ch10_state
+    icon: "mdi:door-sensor"
+    device_class: opening
+    lambda: |-
+      float v = id(clamp_ch10_m3${m3_number_1}).state;
+      if (v > 2.5) return false;
+      if (v < 0.8) return true;
+      return {};
+    # Filter to avoid false trigger
+    filters:
+      - delayed_on: 50ms       # Should stay ON for 50ms
+      - delayed_off: 50ms      # Should stay OFF for 50ms      
+    on_press:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m3_name}${m3_number_1}/${m3_channel_name} 11/state"
+          payload: "ON"
+          retain: True
+    on_release:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m3_name}${m3_number_1}/${m3_channel_name} 11/state"
+          payload: "OFF"
+          retain: True       
+    web_server:
+      sorting_group_id: domix_m3_web
+      sorting_weight: 11
+
+  - platform: template
+    name: "${m3_name}${m3_number_1} ${m3_channel_name} 12"
+    id: domix_m3${m3_number_1}_ch11_state
+    icon: "mdi:door-sensor"
+    device_class: opening
+    lambda: |-
+      float v = id(clamp_ch11_m3${m3_number_1}).state;
+      if (v > 2.5) return false;
+      if (v < 0.8) return true;
+      return {};
+    # Filter to avoid false trigger
+    filters:
+      - delayed_on: 50ms       # Should stay ON for 50ms
+      - delayed_off: 50ms      # Should stay OFF for 50ms      
+    on_press:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m3_name}${m3_number_1}/${m3_channel_name} 12/state"
+          payload: "ON"
+          retain: True
+    on_release:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m3_name}${m3_number_1}/${m3_channel_name} 12/state"
+          payload: "OFF"
+          retain: True       
+    web_server:
+      sorting_group_id: domix_m3_web
+      sorting_weight: 12
+
+  - platform: template
+    name: "${m3_name}${m3_number_1} ${m3_channel_name} 13"
+    id: domix_m3${m3_number_1}_ch12_state
+    icon: "mdi:door-sensor"
+    device_class: opening
+    lambda: |-
+      float v = id(clamp_ch12_m3${m3_number_1}).state;
+      if (v > 2.5) return false;
+      if (v < 0.8) return true;
+      return {};
+    # Filter to avoid false trigger
+    filters:
+      - delayed_on: 50ms       # Should stay ON for 50ms
+      - delayed_off: 50ms      # Should stay OFF for 50ms      
+    on_press:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m3_name}${m3_number_1}/${m3_channel_name} 13/state"
+          payload: "ON"
+          retain: True
+    on_release:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m3_name}${m3_number_1}/${m3_channel_name} 13/state"
+          payload: "OFF"
+          retain: True       
+    web_server:
+      sorting_group_id: domix_m3_web      
+      sorting_weight: 13
+      
+  - platform: template
+    name: "${m3_name}${m3_number_1} ${m3_channel_name} 14"
+    id: domix_m3${m3_number_1}_ch13_state
+    icon: "mdi:door-sensor"
+    device_class: opening
+    lambda: |-
+      float v = id(clamp_ch13_m3${m3_number_1}).state;
+      if (v > 2.5) return false;
+      if (v < 0.8) return true;
+      return {};
+    # Filter to avoid false trigger
+    filters:
+      - delayed_on: 50ms       # Should stay ON for 50ms
+      - delayed_off: 50ms      # Should stay OFF for 50ms      
+    on_press:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m3_name}${m3_number_1}/${m3_channel_name} 14/state"
+          payload: "ON"
+          retain: True
+    on_release:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m3_name}${m3_number_1}/${m3_channel_name} 14/state"
+          payload: "OFF"
+          retain: True       
+    web_server:
+      sorting_group_id: domix_m3_web    
+      sorting_weight: 14  
+
+  - platform: template
+    name: "${m3_name}${m3_number_1} ${m3_channel_name} 15"
+    id: domix_m3${m3_number_1}_ch14_state
+    icon: "mdi:door-sensor"
+    device_class: opening
+    lambda: |-
+      float v = id(clamp_ch14_m3${m3_number_1}).state;
+      if (v > 2.5) return false;
+      if (v < 0.8) return true;
+      return {};
+    # Filter to avoid false trigger
+    filters:
+      - delayed_on: 50ms       # Should stay ON for 50ms
+      - delayed_off: 50ms      # Should stay OFF for 50ms      
+    on_press:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m3_name}${m3_number_1}/${m3_channel_name} 15/state"
+          payload: "ON"
+          retain: True
+    on_release:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m3_name}${m3_number_1}/${m3_channel_name} 15/state"
+          payload: "OFF"
+          retain: True       
+    web_server:
+      sorting_group_id: domix_m3_web
+      sorting_weight: 15
+
+  - platform: template
+    name: "${m3_name}${m3_number_1} ${m3_channel_name} 16"
+    id: domix_m3${m3_number_1}_ch15_state
+    icon: "mdi:door-sensor"
+    device_class: opening
+    lambda: |-
+      float v = id(clamp_ch15_m3${m3_number_1}).state;
+      if (v > 2.5) return false;
+      if (v < 0.8) return true;
+      return {};
+    # Filter to avoid false trigger
+    filters:
+      - delayed_on: 50ms       # Should stay ON for 50ms
+      - delayed_off: 50ms      # Should stay OFF for 50ms      
+    on_press:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m3_name}${m3_number_1}/${m3_channel_name} 16/state"
+          payload: "ON"
+          retain: True
+    on_release:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m3_name}${m3_number_1}/${m3_channel_name} 16/state"
+          payload: "OFF"
+          retain: True       
+    web_server:
+      sorting_group_id: domix_m3_web   
+      sorting_weight: 16   

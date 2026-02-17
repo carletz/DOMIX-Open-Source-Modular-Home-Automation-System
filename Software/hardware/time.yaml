@@ -1,0 +1,8 @@
+time:
+  - platform: sntp
+    id: myclock
+    timezone: ${timezone}
+    servers:
+     - pool.ntp.org
+     - time.google.com
+    update_interval: 1s
