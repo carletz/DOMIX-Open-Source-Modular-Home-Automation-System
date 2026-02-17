@@ -15,6 +15,7 @@ Software/
 │   ├── esp.yaml
 │   ├── ethernet.yaml
 │   ├── i2c.yaml
+│   ├── i2c_switch.yaml
 │   ├── info.yaml
 │   ├── log.yaml
 │   ├── mqtt.yaml
@@ -30,7 +31,9 @@ Software/
 │   ├── m2.yaml
 │   ├── m3.yaml
 │   ├── m4.yaml
+│   ├── m4_shutters.yaml
 │   ├── m5.yaml
+│   ├── m5_shutters.yaml
 │   ├── m6.yaml
 │   ├── m7.yaml
 │   ├── m8.yaml
@@ -49,4 +52,5 @@ This setting allows you to automatically load the firmware. If that doesn't work
 
 > [!WARNING]
 > ESPHome version 2026, at the time this guide was written, is not compatible with the external Zigbee component, so if you need to use it you must compile it with a maximum version of 2025. I used 2025.7.5. If you don't need it, you can use the latest version.
+
 
