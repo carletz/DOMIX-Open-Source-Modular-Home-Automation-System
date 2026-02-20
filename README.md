@@ -351,7 +351,7 @@ Contributions are welcome! Please:
 ## 🙏 Acknowledgments
 
 - ESPHome community
-- [Zigbee2MQTT](https://github.com/Koenkk/zigbee2mqtt) / [Z-Stack firmware](https://github.com/Koenkk/Z-Stack-firmware) by (@Koenkk)
+- [Zigbee2MQTT](https://github.com/Koenkk/zigbee2mqtt) / [Z-Stack firmware](https://github.com/Koenkk/Z-Stack-firmware) by Koenkk
 - [Zig Star](https://zig-star.com) for Zigbee tools
 
 ---
