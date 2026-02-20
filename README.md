@@ -317,7 +317,7 @@ This project is provided **as-is** for educational and experimental purposes.
 - **BOM:** Available in [BOM](https://github.com/carletz/DOMIX-Open-Source-Modular-Home-Automation-System/tree/main/BOM) directory
 - **3D Models:** Available in [3D Print files](https://github.com/carletz/DOMIX-Open-Source-Modular-Home-Automation-System/tree/main/3D%20Print%20files) directory
 - **ESPHome Examples:** Available in [Software](https://github.com/carletz/DOMIX-Open-Source-Modular-Home-Automation-System/tree/main/Software)
-- **Sensor Schematics (S, S1, S2):** Available in the [Sensor](https://github.com/carletz/DOMIX-Open-Source-Modular-Home-Automation-System/tree/main/Sensor) directory
+
 
 ## 🤝 Contributing
 
