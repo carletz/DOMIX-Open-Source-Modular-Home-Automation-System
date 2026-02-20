@@ -160,7 +160,7 @@ The DOMIX sensor family consists of a shared **S - Core Sensor Module** (the mai
 | **S1** | Ceiling Sensor | Ceiling enclosure | LD2410C radar, BME280, BH1750, SCD41, SGP41, IR TX/RX, PIR HC-SR501 |
 | **S2** | Wall Sensor | 503-box enclosure | LD2410C radar, BME280, BH1750, SCD41, SGP41, IR TX/RX, rotary encoder, OLED screen |
 
-The S Core board connects to the S1 or S2 daughter board via a 20-pin header. The same S Core PCB is used in both installations; only the sensor board and the 3D-printed enclosure change. Communication with the DOMIX M1 is handled via RS485 (and optionally I²C when mounted close to the cabinet).
+The S Core board connects to the S1 or S2 daughter board via a 20-pin header. The same S Core PCB is used in both installations; only the sensor board and the 3D-printed enclosure change. Communication with the DOMIX M1 is handled via RS485.
 
 ## 🔧 Technical Specifications
 
