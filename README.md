@@ -80,17 +80,17 @@ DOMIX is built on **10 core principles**:
 
 ### Modular Design
 
-DOMIX uses a **centralized core (M1)** with specialized I/O expansion modules connected via **I²C bus**. All modules mount on standard 35mm DIN rail.
+DOMIX uses a **centralized core (M1)** with specialized I/O expansion modules connected via **I2C bus**. All modules mount on standard 35mm DIN rail.
 
 ### Connection System
 
 - **Power & Data:** 8-pin IDC flat cables
-- **I²C Bus:** Two independent buses (expandable to 8 with M1 v1.1)
+- **I2C Bus:** Two independent buses (expandable to 8 with M1 v1.1)
 - **Communications:** Ethernet (primary), Zigbee, RS485
 
-### I²C Address Management
+### I2C Address Management
 
-The system carefully manages I²C address space across three ranges:
+The system carefully manages I2C address space across three ranges:
 
 | Range | Used For | Max Devices |
 |-------|----------|-------------|
@@ -104,7 +104,7 @@ The system carefully manages I²C address space across three ranges:
 
 | Module | Function | DIN Width | Description |
 |--------|----------|-----------|-------------|
-| **M1** | Core/Gateway | 4 modules | ESP32-S3, Ethernet, Zigbee, RS485, I²C hub |
+| **M1** | Core/Gateway | 4 modules | ESP32-S3, Ethernet, Zigbee, RS485, I2C hub |
 
 <div align="center">
     <img width="40%" src="/Images/Board/M1/M1%20-%203D%20Module.png">
@@ -152,15 +152,26 @@ The system carefully manages I²C address space across three ranges:
 
 ### Sensor Modules
 
-The DOMIX sensor family consists of a shared **S - Core Sensor Module** (the main PCB with RP2040, power supply, and RS485) combined with interchangeable **sensor daughter boards** designed for different installation scenarios.
+The DOMIX sensor family consists of a shared **S Core board** combined with interchangeable **sensor daughter boards** designed for different installation scenarios and use cases. The S Core is always required and is identical across all configurations; only the daughter board and the 3D-printed enclosure change. Not all sensors need to be populated on any given board — every component is independently optional and the final build is entirely up to the user.
 
-| Module | Function | Form Factor | Description |
-|--------|----------|-------------|-------------|
-| **S Core** | Base board | Common to both | RP2040, USB-C, RS485, 12V power supply, I2C + GPIO expansion header |
-| **S Core + S1** | Ceiling Node | Ceiling enclosure | LD2410C radar, BME280, BH1750, SCD41, SGP41, IR TX/RX, PIR HC-SR501 |
-| **S Core + S2** | Wall Node | 503-box enclosure | LD2410C radar, BME280, BH1750, SCD41, SGP41, IR TX/RX, OLED display, rotary encoder |
+There are four possible configurations arising from two independent choices: installation type (ceiling or wall 503-box) and sensor/interface trade-off within each form factor.
 
-The S Core is always required and connects to either the S1 or S2 daughter board via a 20-pin header. The same S Core PCB is used in both installations; only the sensor board and the enclosure change. Communication with the DOMIX M1 is handled via RS485.
+| Configuration | Installation | LD2410C | PIR | BME280 | SCD41 | SGP41 | BH1750 | OLED + Encoder | IR TX/RX |
+|---|---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| **S Core + S1a** | Ceiling – mmWave | ✓ | – | ✓ | ✓ | ✓ | ✓ | – | ✓ |
+| **S Core + S1b** | Ceiling – PIR | – | ✓ | ✓ | ✓ | ✓ | ✓ | – | ✓ |
+| **S Core + S2a** | Wall 503 – Display | ✓ | – | ✓ | – | ✓ | – | ✓ | ✓ |
+| **S Core + S2b** | Wall 503 – Sensors | ✓ | – | ✓ | ✓ | ✓ | ✓ | – | ✓ |
+
+✓ = included in this variant &nbsp;&nbsp; – = not available in this variant
+
+**Choosing the right variant:**
+- **S1a / S2a (mmWave)** — best for living rooms and bedrooms where detecting stationary presence matters (e.g. someone sitting and reading). The LD2410C radar detects static occupancy reliably where PIR cannot.
+- **S1b (PIR)** — simpler and lower cost, adequate for corridors, entrances, or secondary rooms where motion detection is sufficient.
+- **S2a (Display)** — ideal when local interaction is needed, such as a wall-mounted thermostat or a room controller with manual input via the rotary encoder. Trades SCD41 and BH1750 for the OLED + encoder interface.
+- **S2b (Sensors)** — best for rooms where air quality monitoring is the priority (bedroom, home office, kitchen): adds CO₂ (SCD41) and light (BH1750) on top of temperature, humidity, and VOC.
+
+All configurations share the same S Core: RP2040 microcontroller, USB-C programming, 12V power input, and RS485 communication back to the DOMIX M1.
 
 ## 🔧 Technical Specifications
 
@@ -171,7 +182,7 @@ The S Core is always required and connects to either the S1 or S2 daughter board
 - **Zigbee:** RF-BM-2652P2 (TI CC2652, external antenna)
 - **RS485:** MAX13487E transceiver with TVS protection
 - **Power:** 9-12V DC input, 5V/3.3V internal rails
-- **I²C:** 2 buses (expandable to 8 with TCA9548A)
+- **I2C:** 2 buses (expandable to 8 with TCA9548A)
 - **Display:** Optional 1.3" OLED (128×64, SH1106)
 
 ### Power Requirements
@@ -211,13 +222,13 @@ The S Core is always required and connects to either the S1 or S2 daughter board
    - Power supply + cables
 
 3. **Assembly Steps:**
-   - Configure I²C addresses on expansion modules
+   - Configure I2C addresses on expansion modules
    - Program ESP32 via USB-C with ESPHome
    - Flash Zigbee firmware to RF-BM-2652P2
    - Connect modules with IDC cables
    - Mount on DIN rail
 
-### I²C Address Planning
+### I2C Address Planning
 
 **Critical:** Plan addresses before assembly to avoid conflicts.
 
@@ -340,9 +351,8 @@ Contributions are welcome! Please:
 ## 🙏 Acknowledgments
 
 - ESPHome community
-- Home Assistant project
-- Zigbee2MQTT / Z-Stack firmware by Koenkk
-- zig-star.com for Zigbee tools
+- Zigbee2MQTT / Z-Stack firmware by @Koenkk
+- [Zig Star](https://zig-star.com) for Zigbee tools
 
 ---
 
