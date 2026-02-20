@@ -150,6 +150,18 @@ The system carefully manages I²C address space across three ranges:
     <img width="25%" src="/Images/Board/M9/M9%20-%203D%20Module.png">
 </div>
 
+### Sensor Modules
+
+The DOMIX sensor family consists of a shared **S - Core Sensor Module** (the main PCB with RP2040, power supply, and RS485) combined with interchangeable **sensor daughter boards** designed for different installation scenarios.
+
+| Module | Function | Form Factor | Description |
+|--------|----------|-------------|-------------|
+| **S** | Core Sensor | Standalone PCB | RP2040, USB-C, RS485, 3V3/5V power, I²C + GPIO expansion header |
+| **S1** | Ceiling Sensor | Ceiling enclosure | LD2410C radar, BME280, BH1750, SCD41, SGP41, IR TX/RX, PIR HC-SR501 |
+| **S2** | Wall Sensor | 503-box enclosure | LD2410C radar, BME280, BH1750, SCD41, SGP41, IR TX/RX, rotary encoder, OLED screen |
+
+The S Core board connects to the S1 or S2 daughter board via a 20-pin header. The same S Core PCB is used in both installations; only the sensor board and the 3D-printed enclosure change. Communication with the DOMIX M1 is handled via RS485 (and optionally I²C when mounted close to the cabinet).
+
 ## 🔧 Technical Specifications
 
 ### M1 Core Module
@@ -264,6 +276,7 @@ The RF-BM-2652P2 module requires Z-Stack firmware. See [POE Zigbee Coordinator](
 ✅ You need clean DIN-rail cabinet integration  
 ✅ You want to understand and customize your system  
 ✅ Energy monitoring is important  
+✅ You need multi-sensor room monitoring (air quality, presence, light, IR) in a single node  
 
 ### Where DOMIX Is NOT Suitable
 
@@ -304,6 +317,7 @@ This project is provided **as-is** for educational and experimental purposes.
 - **BOM:** Available in [BOM](https://github.com/carletz/DOMIX-Open-Source-Modular-Home-Automation-System/tree/main/BOM) directory
 - **3D Models:** Available in [3D Print files](https://github.com/carletz/DOMIX-Open-Source-Modular-Home-Automation-System/tree/main/3D%20Print%20files) directory
 - **ESPHome Examples:** Available in [Software](https://github.com/carletz/DOMIX-Open-Source-Modular-Home-Automation-System/tree/main/Software)
+- **Sensor Schematics (S, S1, S2):** Available in the [Sensor](https://github.com/carletz/DOMIX-Open-Source-Modular-Home-Automation-System/tree/main/Sensor) directory
 
 ## 🤝 Contributing
 
