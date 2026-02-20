@@ -156,7 +156,7 @@ The DOMIX sensor family consists of a shared **S - Core Sensor Module** (the mai
 
 | Module | Function | Form Factor | Description |
 |--------|----------|-------------|-------------|
-| **S Core** | Base board | Common to both | RP2040, USB-C, RS485, 12V power supply, I²C + GPIO expansion header |
+| **S Core** | Base board | Common to both | RP2040, USB-C, RS485, 12V power supply, I2C + GPIO expansion header |
 | **S Core + S1** | Ceiling Node | Ceiling enclosure | LD2410C radar, BME280, BH1750, SCD41, SGP41, IR TX/RX, PIR HC-SR501 |
 | **S Core + S2** | Wall Node | 503-box enclosure | LD2410C radar, BME280, BH1750, SCD41, SGP41, IR TX/RX, OLED display, rotary encoder |
 
