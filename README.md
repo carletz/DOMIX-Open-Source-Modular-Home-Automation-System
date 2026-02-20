@@ -156,12 +156,12 @@ The DOMIX sensor family consists of a shared **S Core board** combined with inte
 
 There are four possible configurations arising from two independent choices: installation type (ceiling or wall 503-box) and sensor/interface trade-off within each form factor.
 
-| Configuration | Installation | LD2410C | PIR | BME280 | SCD41 | SGP41 | BH1750 | OLED + Encoder | IR TX/RX |
-|---|---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
-| **S Core + S1a** | Ceiling – mmWave | ✓ | – | ✓ | ✓ | ✓ | ✓ | – | ✓ |
-| **S Core + S1b** | Ceiling – PIR | – | ✓ | ✓ | ✓ | ✓ | ✓ | – | ✓ |
-| **S Core + S2a** | Wall 503 – Display | ✓ | – | ✓ | – | ✓ | – | ✓ | ✓ |
-| **S Core + S2b** | Wall 503 – Sensors | ✓ | – | ✓ | ✓ | ✓ | ✓ | – | ✓ |
+| Configuration | Installation | LD2410C | PIR | BME280 | SCD41 | SGP41 | BH1750 | OLED + Encoder | IR TX | IR RX |
+|---|---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| **S Core + S1a** | Ceiling – mmWave | ✓ | – | ✓ | ✓ | ✓ | ✓ | – | ✓ | ✓ |
+| **S Core + S1b** | Ceiling – PIR | – | ✓ | ✓ | ✓ | ✓ | ✓ | – | ✓ | ✓ |
+| **S Core + S2a** | Wall 503 – Display | ✓ | – | ✓ | – | ✓ | – | ✓ | – | ✓ |
+| **S Core + S2b** | Wall 503 – Sensors | ✓ | – | ✓ | ✓ | ✓ | ✓ | – | – | ✓ |
 
 ✓ = included in this variant &nbsp;&nbsp; – = not available in this variant
 
@@ -351,7 +351,7 @@ Contributions are welcome! Please:
 ## 🙏 Acknowledgments
 
 - ESPHome community
-- Zigbee2MQTT / Z-Stack firmware by @Koenkk
+- [Zigbee2MQTT](https://github.com/Koenkk/zigbee2mqtt) / [Z-Stack firmware](https://github.com/Koenkk/Z-Stack-firmware) by (@Koenkk)
 - [Zig Star](https://zig-star.com) for Zigbee tools
 
 ---
