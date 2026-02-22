@@ -165,6 +165,12 @@ There are four possible configurations arising from two independent choices: ins
 
 ✓ = included in this variant &nbsp;&nbsp; – = not available in this variant
 
+
+<div align="center">
+    <img width="25%" src="/Images/Board/S/S1%20-%203D%20Explode.png">
+    <img width="25%" src="/Images/Board/S/S2%20-%203D%20Explode.png">
+</div>
+
 **Choosing the right variant:**
 - **S1a / S2a (mmWave)** — best for living rooms and bedrooms where detecting stationary presence matters (e.g. someone sitting and reading). The LD2410C radar detects static occupancy reliably where PIR cannot.
 - **S1b (PIR)** — simpler and lower cost, adequate for corridors, entrances, or secondary rooms where motion detection is sufficient.
