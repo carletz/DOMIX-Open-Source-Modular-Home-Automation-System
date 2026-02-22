@@ -169,7 +169,7 @@ There are four possible configurations arising from two independent choices: ins
 <div align="center">
     <img width="30%" src="/Images/Board/S/S1%20-%203D%20Module.png">
     <img width="30%" src="/Images/Board/S/S1a%20-%203D%20Module.png">    
-    <img width="40%" src="/Images/Board/S/S2%20-%203D%20Explode.png">
+    <img width="60%" src="/Images/Board/S/S2%20-%203D%20Explode.png">
 </div>
 
 **Choosing the right variant:**
