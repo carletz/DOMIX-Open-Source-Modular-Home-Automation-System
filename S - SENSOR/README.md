@@ -28,6 +28,10 @@ The **DOMIX S Core** board is the shared intelligence of all DOMIX sensor nodes.
 - RS485 communication
 - 20-pin expansion header for S1 or S2 daughter boards
 
+<div align="center">
+    <img width="40%" src="/./Images/Board/S/S%20-%20CORE%20SENSOR%20PCB.png">
+</div>
+
 The same PCB is used regardless of installation type; only the daughter board and 3D-printed enclosure change.
 
 ### System Architecture
@@ -68,6 +72,11 @@ The board connects to the S Core via the 20-pin header and receives a supplement
 
 > **Note:** The S1 comes in two sub-variants: **S1a** (mmWave radar) and **S1b** (PIR sensor). Only one presence sensor can be mounted at a time due to physical constraints.
 
+<div align="center">
+    <img width="40%" src="/./Images/Board/S/S1a%20-%203D%20Board.png">
+    <img width="40%" src="/./Images/Board/S/S1b%20-%203D%20Board.png">
+</div>
+
 ### Sensors and Peripherals
 
 | Sensor / Component | Interface | Function |
@@ -87,6 +96,9 @@ All I2C devices share the SDA/SCL bus from the S Core.
 
 The S1 assembly is housed in a **custom 3D-printed ceiling enclosure**, flush-mounted with openings for each sensor and the IR window. The S Core sits inside and connects to the S1 via the 20-pin header.
 
+<div align="center">
+    <img width="40%" src="/./Images/Board/S/S1%20-%203D%20Explode.png">
+</div>
 ---
 
 ## S2 – Wall Daughter Board (503-box)
@@ -98,6 +110,11 @@ The **S2** daughter board carries the same core sensor suite as S1, but is desig
 Compared to S1, S2 adds a local user interface option (OLED + rotary encoder), but trades off the **SCD41**, **BH1750**, and **TSOP31240 IR receiver** due to space constraints.
 
 > **Note:** The S2 comes in two sub-variants: **S2a** (display + encoder) and **S2b** (extended sensors).
+
+<div align="center">
+    <img width="40%" src="/./Images/Board/S/S2a%20-%203D%20Board.png">
+    <img width="40%" src="/./Images/Board/S/S2b%20-%203D%20Board.png">
+</div>
 
 ### Sensors and Peripherals
 
@@ -130,6 +147,15 @@ All variants are built on the same principle: **one S Core board + one of four d
 | **S Core + S1b** | Ceiling – PIR | – | ✓ | ✓ | ✓ | ✓ | ✓ | – | ✓ | ✓ |
 | **S Core + S2a** | Wall 503 – Display | ✓ | – | ✓ | – | ✓ | – | ✓ | – | ✓ |
 | **S Core + S2b** | Wall 503 – Sensors | ✓ | – | ✓ | ✓ | ✓ | ✓ | – | – | ✓ |
+
+<div align="center">
+    <img width="40%" src="/./Images/Board/S/S1a%20-%203D%20Module.png">
+    <img width="40%" src="/./Images/Board/S/S1b%20-%203D%20Module.png">
+</div>
+<div align="center">
+    <img width="40%" src="/./Images/Board/S/S2a%20-%203D%20Module.png">
+    <img width="40%" src="/./Images/Board/S/S2b%20-%203D%20Module.png">
+</div>
 
 > All variants include the S Core with RP2040, RS485, USB-C, and 12V power supply.  
 > ✓ = included · – = not available in this variant  
