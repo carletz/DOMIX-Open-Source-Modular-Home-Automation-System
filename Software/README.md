@@ -247,6 +247,7 @@ DOMIX/M2_1/Input 1/state     → "ON" / "OFF"
 ```
 
 All names can be changed in data.yaml file.
+
 ---
 
 ## M1 Display & Button Menu
