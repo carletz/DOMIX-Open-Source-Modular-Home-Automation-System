@@ -1,9 +1,0 @@
-uart:
-  - id: uart_rs                     # UART settings for RS485 comunications
-    baud_rate: 9600
-    tx_pin: 16
-    rx_pin: 15
-
-# NOTE: for RS485 incoming data readings, the typology of data should be decided time after time.
-# In this configuration I just foresee the rx and tx comunication with microcontroller.
-# Each individual data shoul be defined in terms of specific configuration.
