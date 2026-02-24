@@ -12,7 +12,7 @@
 - [Available Modules](#-available-modules)
 - [Technical Specifications](#-technical-specifications)
 - [Getting Started](#-getting-started)
-- [Software & Programming](#-software--programming)
+- [DOMIX ESPHome Software](#-domix-esphome-software)
 - [Comparison with Other Systems](#-comparison-with-other-systems)
 - [License & Disclaimer](#-license--disclaimer)
 - [Documentation, Contributing, Contact & Acknowledgments](#-documentation)
@@ -250,16 +250,50 @@ M3: 0x39 + ADS1115 @ 0x48
 
 Check section 4.4 of manual for detailed address planning guidelines.
 
-## 💻 Software & Programming
+## 💻 DOMIX ESPHome Software
 
-### ESPHome Configuration
+> ESPHome firmware for the DOMIX modular home automation system.
 
-DOMIX uses **ESPHome** for firmware. For me, ESPHome was an obvious choice, convenient and quick. 
-I'm not a great programmer and I didn't want to get lost in a maze of lines of code, perhaps already flawed from the start, which would have wasted a lot of time.
+DOMIX is split into two independent firmware targets:
 
-The example in the Software folder is simply a basic configuration for all the modules you've created. The correct configuration for your system is entirely up to you. 
-There's no single solution; the system must be adapted and remodeled. I've simply tried to provide a foundation, as modular as possible. 
-Again, everything can and must be adapted to use my modules.
+- **M** — Cabinet controller (ESP32), manages I/O modules, relays, shutters, energy metering and communicates with sensor nodes via RS485/Modbus RTU.
+- **S** — Room sensor node (RP2040), collects environmental data (temperature, humidity, CO₂, VOC, presence…) and exposes it to the M controller over Modbus RTU.
+
+## Getting Started
+
+Both targets follow the same workflow:
+
+1. **Edit `hardware/data.yaml`** — set your device name, network/MQTT credentials, I2C addresses and Modbus address. This is the only file you need to touch before compiling.
+2. **Edit `main.yaml`** — comment out any hardware module or sensor not physically present.
+3. **Flash via USB-C**: `esphome run M/main.yaml` or `esphome run S/main.yaml`. Subsequent updates can be done OTA.
+
+## Key Features
+
+- Modular architecture — include only what you install.
+- Wired Ethernet (W5500), MQTT, OTA updates, OLED display and button menu on the M1.
+- Room sensors: BME280, BH1750, SCD41 (CO₂), SGP41 (VOC/NOx), LD2410 mmWave radar, PIR, IR transceiver.
+- RS485/Modbus RTU link between M and S nodes (one `modbus_master.yaml` include per room).
+- Optional Zigbee coordinator (CC2652) — requires ESPHome ≤ 2025.x.
+
+## Repository Layout
+
+```
+Software/
+├── M/          # Cabinet controller firmware (ESP32)
+│   ├── hardware/   # Board, Ethernet, MQTT, I2C, OTA, screen…
+│   ├── module/     # One file per expansion module (M1–M9)
+│   └── sensor/     # DS18B20 wire sensor + Modbus master template
+└── S/          # Room sensor node firmware (RP2040)
+    ├── hardware/   # Board, I2C, Modbus slave…
+    ├── sensor/     # BME280, BH1750, SCD41, SGP41, LD2410, PIR, IR…
+    └── font/       # OLED fonts
+```
+
+Full wiring, register map, MQTT topic convention and menu reference are documented in the [extended README](docs/README.md).
+
+## Requirements
+
+- For Zigbee coordinator flashing, see [POE-Zigbee-Coordinator](https://github.com/carletz/POE-Zigbee-Coordinator)
 
 > [!WARNING]
 > ESPHome version 2026 is **<ins>not compatible</ins>** with the external Zigbee component, so if you need to use it you must compile it with a maximum version of 2025. I used 2025.7.5. If you don't need it, you can use the latest version.
