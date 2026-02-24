@@ -265,7 +265,7 @@ Both targets follow the same workflow:
 
 1. **Edit `hardware/data.yaml`** — set your device name, network/MQTT credentials, I2C addresses and Modbus address. This is the only file you need to touch before compiling.
 2. **Edit `main.yaml`** — comment out any hardware module or sensor not physically present.
-3. **Flash via USB-C**: `esphome run M/main.yaml` or `esphome run S/main.yaml`. Subsequent updates can be done OTA.
+3. **Flash via USB-C**: `esphome run M/main.yaml` or `esphome run S/main.yaml`. Subsequent updates of M1 module can be done OTA, S module have to be programmed only via USB-C.
 
 ### Key Features
 
