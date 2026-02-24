@@ -259,7 +259,7 @@ DOMIX is split into two independent firmware targets:
 - **M** — Cabinet controller (ESP32), manages I/O modules, relays, shutters, energy metering and communicates with sensor nodes via RS485/Modbus RTU.
 - **S** — Room sensor node (RP2040), collects environmental data (temperature, humidity, CO₂, VOC, presence…) and exposes it to the M controller over Modbus RTU.
 
-## Getting Started
+### Getting Started
 
 Both targets follow the same workflow:
 
@@ -267,7 +267,7 @@ Both targets follow the same workflow:
 2. **Edit `main.yaml`** — comment out any hardware module or sensor not physically present.
 3. **Flash via USB-C**: `esphome run M/main.yaml` or `esphome run S/main.yaml`. Subsequent updates can be done OTA.
 
-## Key Features
+### Key Features
 
 - Modular architecture — include only what you install.
 - Wired Ethernet (W5500), MQTT, OTA updates, OLED display and button menu on the M1.
@@ -275,7 +275,7 @@ Both targets follow the same workflow:
 - RS485/Modbus RTU link between M and S nodes (one `modbus_master.yaml` include per room).
 - Optional Zigbee coordinator (CC2652) — requires ESPHome ≤ 2025.x.
 
-## Repository Layout
+### Repository Layout
 
 ```
 Software/
@@ -291,14 +291,10 @@ Software/
 
 Full wiring, register map, MQTT topic convention and menu reference are documented in the [extended README](docs/README.md).
 
-## Requirements
-
-- For Zigbee coordinator flashing, see [POE-Zigbee-Coordinator](https://github.com/carletz/POE-Zigbee-Coordinator)
+### Zigbee Setup
 
 > [!WARNING]
 > ESPHome version 2026 is **<ins>not compatible</ins>** with the external Zigbee component, so if you need to use it you must compile it with a maximum version of 2025. I used 2025.7.5. If you don't need it, you can use the latest version.
-
-### Zigbee Setup
 
 The RF-BM-2652P2 module requires Z-Stack firmware. See [POE Zigbee Coordinator](https://github.com/carletz/POE-Zigbee-Coordinator) for flashing instructions.
 
