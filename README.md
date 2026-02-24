@@ -10,6 +10,7 @@
 - [The DOMIX Manifesto](#-the-domix-manifesto)
 - [System Architecture](#-system-architecture)
 - [Available Modules](#-available-modules)
+- [PCB Composition](#-pcb-composition)
 - [Technical Specifications](#-technical-specifications)
 - [Getting Started](#-getting-started)
 - [DOMIX ESPHome Software](#-domix-esphome-software)
@@ -179,6 +180,46 @@ There are four possible configurations arising from two independent choices: ins
 - **S2b (Sensors)** — best for rooms where air quality monitoring is the priority (bedroom, home office, kitchen): adds CO₂ (SCD41) and light (BH1750) on top of temperature, humidity, and VOC.
 
 All configurations share the same S Core: RP2040 microcontroller, USB-C programming, 12V power input, and RS485 communication back to the DOMIX M1.
+
+## 🧱 PCB Composition
+
+Each DOMIX module is not a single PCB but a **stack of multiple boards** that snap together via IDC flat cables. Understanding which boards make up each module helps you know what to order, build, and assemble.
+
+The boards are divided into three roles:
+
+- **Vertical Module** — carries power and I2C bus connectors.
+- **Display Module** — an optional front-facing board with the OLED screen and encoder/button interface.
+- **Functional Module** — the core board specific to each module's purpose (I/O, relay, energy metering, etc.).
+
+Some boards are shared between multiple module numbers to reduce design complexity and PCB variants.
+
+### Cabinet Modules (M-series)
+
+| Module | Vertical | Display | Functional Board(s) | Notes |
+|--------|----------|---------|----------------------|-------|
+| **M1** | Middle Module v1.0 + v1.1 | Display Module | Core Module | Middle module acts as mid-layer between core and vertical; v1.1 adds second I2C multiplexer |
+| **M2** | Vertical Module | Display Module | I-O Module | 8 in / 8 out general I/O |
+| **M3** | Vertical Module | Display Module | Contact Module | 16-channel analog contact reader |
+| **M4** | *(shared M3-4)* | *(shared M3-4)* | 6 Relay Module | Vertical and display boards are shared with M3 |
+| **M5** | *(shared M3-4-5-6)* | *(shared M5-6)* | 12 Relay Module | Vertical shared across M3/M4/M5/M6; display shared with M6 |
+| **M6** | *(shared M3-4-5-6)* | *(shared M5-6)* | Energy Meter Module | Same vertical and display as M5 |
+| **M7** | Vertical Module | Display Module | Output Module | 16 digital outputs |
+| **M8** | Vertical Module | Display Module | I-O Module | 16 digital inputs (same I-O board as M2, different config) |
+| **M9** | Vertical Module | Upper Module | Sprinkler Module | Upper Module replaces the display, handles 24VAC switching |
+
+> **Shared boards explained:** The label `M3-4` on a board means that PCB is used in both M3 and M4. Similarly `M3-4-5-6` is a single vertical design that fits M3 through M6, and `M5-6` is a display shared between M5 and M6. This reduces the number of unique PCB designs without limiting functionality.
+
+### Sensor Modules (S-series)
+
+The sensor family follows a **core + daughter board** approach. The S Core is always present; the S1 or S2 board changes depending on installation type.
+
+| Board | Role | Description |
+|-------|------|-------------|
+| **S Core** | Main board | RP2040 MCU, RS485, USB-C, 12V input — identical in every sensor node |
+| **S1** | Daughter board | Ceiling form factor — fits LD2410C (mmWave) or PIR depending on variant |
+| **S2** | Daughter board | Wall 503-box form factor — fits OLED+encoder or additional sensors depending on variant |
+
+Each sensor node = **1× S Core + 1× S1 or S2 daughter board**, housed in a dedicated 3D-printed enclosure.
 
 ## 🔧 Technical Specifications
 
