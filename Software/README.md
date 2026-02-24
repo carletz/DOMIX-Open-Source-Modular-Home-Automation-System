@@ -90,7 +90,7 @@ This is the **only file you must edit** before compiling. It contains all substi
 | OTA | `ota_password` |
 | Module addresses | `m1_screen_address`, `m2_i2c_1`, `m3_i2c_1`, … (one block per module) |
 
-> ⚠️ **Every I2C address must be unique on the bus.** Failing to set correct addresses will prevent the system from starting.
+> ⚠️ **Every I2C address must be unique on the bus.** Failing to set correct addresses will prevent the system from starting. Check the manual for the examples.
 
 ### 2. Edit `main.yaml` — select your modules
 
@@ -176,7 +176,7 @@ packages:
   - !include sensor/ld2410.yaml     # mmWave presence
   - !include sensor/pir.yaml        # PIR motion
   - !include sensor/remote_tran.yaml # IR transmitter
-  # - !include sensor/remote_rec.yaml  # IR receiver (optional)
+  # - !include sensor/remote_rec.yaml  # IR receiver (not supported on ESPHome and RP2040 unfortunately)
   - !include sensor/screen.yaml     # OLED display
 ```
 
