@@ -246,6 +246,7 @@ DOMIX/M2_1/Output 1/command  → "ON" / "OFF"
 DOMIX/M2_1/Input 1/state     → "ON" / "OFF"
 ```
 
+All names can be changed in data.yaml file.
 ---
 
 ## M1 Display & Button Menu
@@ -279,9 +280,4 @@ The Zigbee module (CC2652) requires its own dedicated firmware to act as a Zigbe
 
 The `M/module/.esphome/external_components/` directory contains a cached copy of the **ZMPT101B** voltage sensor ESPHome component (used by the M6 energy meter module). This is automatically referenced during compilation and does not require manual installation.
 
----
 
-## License
-
-DOMIX © 2026 by carletz — licensed under [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/).  
-For educational and experimental use. Validate thoroughly before any production deployment.
