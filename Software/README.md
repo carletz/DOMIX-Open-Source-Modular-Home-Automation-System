@@ -236,7 +236,7 @@ Example for sensor node `Living`:
 ```
 DOMIX/Living sensor/Temperature/state    → "22.4"
 DOMIX/Living sensor/CO2/state            → "612"
-DOMIX/Living sensor/IR/command           → "MUTE" | "1" | "34" | "O"
+DOMIX/Living sensor/IR/command           → "MUTE" | "1" | "34" | "OK"
 ```
 
 Example for M2 I/O module:
