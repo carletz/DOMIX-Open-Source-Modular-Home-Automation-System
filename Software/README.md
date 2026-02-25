@@ -15,8 +15,8 @@ Software/
 │   │   ├── data.yaml           # ⭐ Master substitutions file (IP, MQTT, I2C addresses…)
 │   │   ├── esp.yaml            # ESP32 board definition
 │   │   ├── ethernet.yaml       # Wired Ethernet (W5500 or similar)
-│   │   ├── i2c.yaml            # I²C bus — use with M1 v1.0
-│   │   ├── i2c_switch.yaml     # I²C bus with switch — use with M1 v1.2 (mutually exclusive with i2c.yaml)
+│   │   ├── i2c.yaml            # I2C bus — use with M1 v1.0
+│   │   ├── i2c_switch.yaml     # I2C bus with switch — use with M1 v1.2 (mutually exclusive with i2c.yaml)
 │   │   ├── mqtt.yaml           # MQTT broker connection
 │   │   ├── web_server.yaml     # Built-in ESPHome web server
 │   │   ├── ota.yaml            # Over-the-air update support
@@ -48,7 +48,7 @@ Software/
     ├── hardware/               # Hardware abstraction packages
     │   ├── data.yaml           # ⭐ Master substitutions file (Modbus address, sensor I2C addresses, IR codes…)
     │   ├── rp2040.yaml         # RP2040 board definition
-    │   ├── i2c.yaml            # I²C bus for sensors
+    │   ├── i2c.yaml            # I2C bus for sensors
     │   ├── modbus.yaml         # Modbus RTU slave (RS485 to M1)
     │   ├── modbus_interval.yaml# Modbus polling interval
     │   ├── modbus_slave.h      # C++ helper for Modbus slave register mapping
@@ -236,7 +236,7 @@ Example for sensor node `Living`:
 ```
 DOMIX/Living sensor/Temperature/state    → "22.4"
 DOMIX/Living sensor/CO2/state            → "612"
-DOMIX/Living sensor/IR/command           → "MUTO" | "1" | "34" | "ACCENDI"
+DOMIX/Living sensor/IR/command           → "MUTE" | "1" | "34" | "O"
 ```
 
 Example for M2 I/O module:
