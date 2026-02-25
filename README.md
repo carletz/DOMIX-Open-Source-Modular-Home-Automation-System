@@ -21,7 +21,7 @@
 
 ---
 > [!NOTE]
-> **Please read the Full Technical Manual:** [Technical Documentation PDF](docs/DOMIX_Technical_Documentation_EN.pdf) to understand the project's full potential and features, below is just a summary of the project's features.
+> **Please read the Full Technical Manual:** [Technical Documentation PDF](Docs/DOMIX_Technical_Documentation_EN.pdf) to understand the project's full potential and features, below is just a summary of the project's features.
 ---
 
 
