@@ -401,7 +401,7 @@ This project is provided **as-is** for educational and experimental purposes.
 
 ## 📚 Documentation
 
-- **Full Manual:** [Technical Documentation PDF](https://github.com/carletz/DOMIX-Open-Source-Modular-Home-Automation-System/tree/main/Docs/DOMIX_Technical_Documentation_EN.pdf)
+- **Full Manual:** [Technical Documentation PDF](https://github.com/carletz/DOMIX-Open-Source-Modular-Home-Automation-System/blob/main/Docs/DOMIX_Technical_Documentation_EN.pdf)
 - **Schematics, Gerbers, Pick and place and Interactive BOM:** Available in each module directory
 - **BOM:** Available in [BOM](https://github.com/carletz/DOMIX-Open-Source-Modular-Home-Automation-System/tree/main/BOM) directory
 - **3D Models:** Available in [3D Print files](https://github.com/carletz/DOMIX-Open-Source-Modular-Home-Automation-System/tree/main/3D%20Print%20files) directory
