@@ -1,0 +1,18 @@
+one_wire:
+  - platform: gpio
+    pin: GPIO14
+
+sensor:
+  - platform: dallas_temp
+    name: "${mqtt_name} Temperature"
+    id: temperature
+    update_interval: 60s
+    qos: 1
+    retain: true
+    availability:
+      topic: ${mqtt_name}/External Temperature
+      payload_available: online
+      payload_not_available: offline
+    state_topic: ${mqtt_name}/External Temperature/state
+    web_server:
+      sorting_group_id: external_sensor

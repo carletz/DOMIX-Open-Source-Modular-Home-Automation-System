@@ -1,0 +1,1210 @@
+# ============================================================================
+#
+# M9 MODULE BASIC DESIGN FOR BASIC FUNCTIONS
+#
+# Adapt the configurations, names and other to your needs
+#
+# ============================================================================
+esphome:
+  on_boot:
+    priority: -100
+    then:
+      - text_sensor.template.publish:
+          id: valve_status
+          state: "Idle"
+      - sprinkler.set_multiplier:
+          id: m9${m9_number_1}_sprinkler
+          multiplier: 60
+
+mqtt:
+  on_message:
+    - topic: ${mqtt_name}/${m9_name}${m9_number_1}/${m9_description_upper}/${m9_valve_description} 1/command
+      then:
+        - if:
+            condition:
+              lambda: 'return x == "ON";'
+            then:
+              - switch.turn_on: m9${m9_number_1}_valve_1
+            else:
+              - switch.turn_off: m9${m9_number_1}_valve_1
+    - topic: ${mqtt_name}/${m9_name}${m9_number_1}/${m9_description_upper}/${m9_valve_description} 2/command
+      then:
+        - if:
+            condition:
+              lambda: 'return x == "ON";'
+            then:
+              - switch.turn_on: m9${m9_number_1}_valve_2
+            else:
+              - switch.turn_off: m9${m9_number_1}_valve_2
+    - topic: ${mqtt_name}/${m9_name}${m9_number_1}/${m9_description_upper}/${m9_valve_description} 3/command
+      then:
+        - if:
+            condition:
+              lambda: 'return x == "ON";'
+            then:
+              - switch.turn_on: m9${m9_number_1}_valve_3
+            else:
+              - switch.turn_off: m9${m9_number_1}_valve_3       
+    - topic: ${mqtt_name}/${m9_name}${m9_number_1}/${m9_description_upper}/${m9_valve_description} 4/command
+      then:
+        - if:
+            condition:
+              lambda: 'return x == "ON";'
+            then:
+              - switch.turn_on: m9${m9_number_1}_valve_4
+            else:
+              - switch.turn_off: m9${m9_number_1}_valve_4    
+    - topic: ${mqtt_name}/${m9_name}${m9_number_1}/${m9_description_upper}/${m9_valve_description} 5/command
+      then:
+        - if:
+            condition:
+              lambda: 'return x == "ON";'
+            then:
+              - switch.turn_on: m9${m9_number_1}_valve_5
+            else:
+              - switch.turn_off: m9${m9_number_1}_valve_5                               
+    - topic: ${mqtt_name}/${m9_name}${m9_number_1}/${m9_description_upper}/${m9_valve_description} 6/command
+      then:
+        - if:
+            condition:
+              lambda: 'return x == "ON";'
+            then:
+              - switch.turn_on: m9${m9_number_1}_valve_6
+            else:
+              - switch.turn_off: m9${m9_number_1}_valve_6
+    - topic: ${mqtt_name}/${m9_name}${m9_number_1}/${m9_description_upper}/${m9_valve_description} 7/command
+      then:
+        - if:
+            condition:
+              lambda: 'return x == "ON";'
+            then:
+              - switch.turn_on: m9${m9_number_1}_valve_7
+            else:
+              - switch.turn_off: m9${m9_number_1}_valve_7
+    - topic: ${mqtt_name}/${m9_name}${m9_number_1}/${m9_description_upper}/${m9_valve_description} 8/command
+      then:
+        - if:
+            condition:
+              lambda: 'return x == "ON";'
+            then:
+              - switch.turn_on: m9${m9_number_1}_valve_8
+            else:
+              - switch.turn_off: m9${m9_number_1}_valve_8
+    - topic: ${mqtt_name}/${m9_name}${m9_number_1}/${m9_description_upper}/Pause/command
+      then:
+        - if:
+            condition:
+              lambda: 'return x == "ON";'
+            then:
+              - button.press: irrigation_pause
+    - topic: "${mqtt_name}/${m9_name}${m9_number_1}/${m9_description_upper}/${m9_valve_description} 1/Duration/command"
+      then:
+        - number.set:
+            id: valve_1
+            value: !lambda |-
+              float v = atof(x.c_str());
+              if (v < id(valve_time_min))
+                  v = id(valve_time_min);
+              if (v > id(valve_time_max))
+                  v = id(valve_time_max);
+              return v;
+    - topic: "${mqtt_name}/${m9_name}${m9_number_1}/${m9_description_upper}/${m9_valve_description} 2/Duration/command"
+      then:
+        - number.set:
+            id: valve_2
+            value: !lambda |-
+              float v = atof(x.c_str());
+              if (v < id(valve_time_min))
+                  v = id(valve_time_min);
+              if (v > id(valve_time_max))
+                  v = id(valve_time_max);
+              return v;
+    - topic: "${mqtt_name}/${m9_name}${m9_number_1}/${m9_description_upper}/${m9_valve_description} 3/Duration/command"
+      then:
+        - number.set:
+            id: valve_3
+            value: !lambda |-
+              float v = atof(x.c_str());
+              if (v < id(valve_time_min))
+                  v = id(valve_time_min);
+              if (v > id(valve_time_max))
+                  v = id(valve_time_max);
+              return v;
+    - topic: "${mqtt_name}/${m9_name}${m9_number_1}/${m9_description_upper}/${m9_valve_description} 4/Duration/command"
+      then:
+        - number.set:
+            id: valve_4
+            value: !lambda |-
+              float v = atof(x.c_str());
+              if (v < id(valve_time_min))
+                  v = id(valve_time_min);
+              if (v > id(valve_time_max))
+                  v = id(valve_time_max);
+              return v;
+    - topic: "${mqtt_name}/${m9_name}${m9_number_1}/${m9_description_upper}/${m9_valve_description} 5/Duration/command"
+      then:
+        - number.set:
+            id: valve_5
+            value: !lambda |-
+              float v = atof(x.c_str());
+              if (v < id(valve_time_min))
+                  v = id(valve_time_min);
+              if (v > id(valve_time_max))
+                  v = id(valve_time_max);
+              return v;
+    - topic: "${mqtt_name}/${m9_name}${m9_number_1}/${m9_description_upper}/${m9_valve_description} 6/Duration/command"
+      then:
+        - number.set:
+            id: valve_6
+            value: !lambda |-
+              float v = atof(x.c_str());
+              if (v < id(valve_time_min))
+                  v = id(valve_time_min);
+              if (v > id(valve_time_max))
+                  v = id(valve_time_max);
+              return v;
+    - topic: "${mqtt_name}/${m9_name}${m9_number_1}/${m9_description_upper}/${m9_valve_description} 7/Duration/command"
+      then:
+        - number.set:
+            id: valve_7
+            value: !lambda |-
+              float v = atof(x.c_str());
+              if (v < id(valve_time_min))
+                  v = id(valve_time_min);
+              if (v > id(valve_time_max))
+                  v = id(valve_time_max);
+              return v;
+    - topic: "${mqtt_name}/${m9_name}${m9_number_1}/${m9_description_upper}/${m9_valve_description} 8/Duration/command"
+      then:
+        - number.set:
+            id: valve_8
+            value: !lambda |-
+              float v = atof(x.c_str());
+              if (v < id(valve_time_min))
+                  v = id(valve_time_min);
+              if (v > id(valve_time_max))
+                  v = id(valve_time_max);
+              return v;
+    - topic: "${mqtt_name}/${m9_name}${m9_number_1}/${m9_description_upper}/Repeat Cycles/command"
+      then:
+        - number.set:
+            id: ${m9_description}_repeat_cycles
+            value: !lambda |-
+              float v = atof(x.c_str());
+              if (v < id(repeat_cycle_min))
+                  v = id(repeat_cycle_min);
+              if (v > id(repeat_cycle_max)) 
+                  v = id(repeat_cycle_max);
+              return v;
+
+    - topic: ${mqtt_name}/${m9_name}${m9_number_1}/${m9_description_upper}/Rain Delay 24h/command
+      then:
+        - if:
+            condition:
+              lambda: 'return x == "ON";'
+            then:
+              - switch.turn_on: ${m9_description}_raindelay_24h_enabled
+            else:
+              - switch.turn_off: ${m9_description}_raindelay_24h_enabled
+
+    - topic: ${mqtt_name}/${m9_name}${m9_number_1}/${m9_description_upper}/Rain Delay 48h/command
+      then:
+        - if:
+            condition:
+              lambda: 'return x == "ON";'
+            then:
+              - switch.turn_on: ${m9_description}_raindelay_48h_enabled
+            else:
+              - switch.turn_off: ${m9_description}_raindelay_48h_enabled
+
+
+
+globals:
+  - id: valve_time_min
+    type: float
+    initial_value: '1'
+  - id: valve_time_max
+    type: float
+    initial_value: '15'
+  - id: repeat_cycle_min
+    type: float
+    initial_value: '0'
+  - id: repeat_cycle_max
+    type: float
+    initial_value: '4'
+
+pca9554:
+  - id: domix_m9${m9_number_1}_busi2c
+    address: ${m9_i2c_1}
+    i2c_id: ${m9_i2c_id}              # Bus for comunication with DOMIX M1 module
+
+number:
+  - platform: template
+    id: valve_1
+    name: "${m9_description_upper} ${m9_valve_description} Duration 1"
+    icon: "mdi:time-auto"
+    min_value: 1
+    max_value: 15
+    step: 1
+    unit_of_measurement: Min
+    mode: box # Defines how the number should be displayed in the UI
+    lambda: "return id(m9${m9_number_1}_sprinkler).valve_run_duration(0);"
+    set_action:
+      - sprinkler.set_valve_run_duration:
+          id: m9${m9_number_1}_sprinkler
+          valve_number: 0
+          run_duration: !lambda 'return x;'
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m9_name}${m9_number_1}/${m9_description_upper}/${m9_valve_description} 1/Duration/state"
+          payload: !lambda |-
+            char buf[8];
+            sprintf(buf, "%.0f", x);
+            return std::string(buf);
+          retain: True
+    web_server:
+      sorting_group_id: domix_m9_web
+      sorting_weight: 23
+
+  - platform: template
+    id: valve_2
+    name: "${m9_description_upper} ${m9_valve_description} Duration 2"
+    icon: "mdi:time-auto"
+    min_value: 1
+    max_value: 15
+    step: 1
+    unit_of_measurement: Min
+    mode: box # Defines how the number should be displayed in the UI
+    lambda: "return id(m9${m9_number_1}_sprinkler).valve_run_duration(1);"
+    set_action:
+      - sprinkler.set_valve_run_duration:
+          id: m9${m9_number_1}_sprinkler
+          valve_number: 1
+          run_duration: !lambda 'return x;'
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m9_name}${m9_number_1}/${m9_description_upper}/${m9_valve_description} 2/Duration/state"
+          payload: !lambda |-
+            char buf[8];
+            sprintf(buf, "%.0f", x);
+            return std::string(buf);
+          retain: True          
+    web_server:
+      sorting_group_id: domix_m9_web
+      sorting_weight: 26
+
+  - platform: template
+    id: valve_3
+    name: "${m9_description_upper} ${m9_valve_description} Duration 3"
+    icon: "mdi:time-auto"
+    min_value: 1
+    max_value: 15
+    step: 1
+    unit_of_measurement: Min
+    mode: box # Defines how the number should be displayed in the UI
+    lambda: "return id(m9${m9_number_1}_sprinkler).valve_run_duration(2);"
+    set_action:
+      - sprinkler.set_valve_run_duration:
+          id: m9${m9_number_1}_sprinkler
+          valve_number: 2
+          run_duration: !lambda 'return x;'
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m9_name}${m9_number_1}/${m9_description_upper}/${m9_valve_description} 3/Duration/state"
+          payload: !lambda |-
+            char buf[8];
+            sprintf(buf, "%.0f", x);
+            return std::string(buf);
+          retain: True          
+    web_server:
+      sorting_group_id: domix_m9_web
+      sorting_weight: 29
+
+  - platform: template
+    id: valve_4
+    name: "${m9_description_upper} ${m9_valve_description} Duration 4"
+    icon: "mdi:time-auto"
+    min_value: 1
+    max_value: 15
+    step: 1
+    unit_of_measurement: Min
+    mode: box # Defines how the number should be displayed in the UI
+    lambda: "return id(m9${m9_number_1}_sprinkler).valve_run_duration(3);"
+    set_action:
+      - sprinkler.set_valve_run_duration:
+          id: m9${m9_number_1}_sprinkler
+          valve_number: 3
+          run_duration: !lambda 'return x;'
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m9_name}${m9_number_1}/${m9_description_upper}/${m9_valve_description} 4/Duration/state"
+          payload: !lambda |-
+            char buf[8];
+            sprintf(buf, "%.0f", x);
+            return std::string(buf);
+          retain: True          
+    web_server:
+      sorting_group_id: domix_m9_web
+      sorting_weight: 32
+
+  - platform: template
+    id: valve_5
+    name: "${m9_description_upper} ${m9_valve_description} Duration 5"
+    icon: "mdi:time-auto"
+    min_value: 1
+    max_value: 15
+    step: 1
+    unit_of_measurement: Min
+    mode: box # Defines how the number should be displayed in the UI
+    lambda: "return id(m9${m9_number_1}_sprinkler).valve_run_duration(4);"
+    set_action:
+      - sprinkler.set_valve_run_duration:
+          id: m9${m9_number_1}_sprinkler
+          valve_number: 4
+          run_duration: !lambda 'return x;'
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m9_name}${m9_number_1}/${m9_description_upper}/${m9_valve_description} 5/Duration/state"
+          payload: !lambda |-
+            char buf[8];
+            sprintf(buf, "%.0f", x);
+            return std::string(buf);
+          retain: True          
+    web_server:
+      sorting_group_id: domix_m9_web
+      sorting_weight: 35
+
+  - platform: template
+    id: valve_6
+    name: "${m9_description_upper} ${m9_valve_description} Duration 6"
+    icon: "mdi:time-auto"
+    min_value: 1
+    max_value: 15
+    step: 1
+    unit_of_measurement: Min
+    mode: box # Defines how the number should be displayed in the UI
+    lambda: "return id(m9${m9_number_1}_sprinkler).valve_run_duration(5);"
+    set_action:
+      - sprinkler.set_valve_run_duration:
+          id: m9${m9_number_1}_sprinkler
+          valve_number: 5
+          run_duration: !lambda 'return x;'
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m9_name}${m9_number_1}/${m9_description_upper}/${m9_valve_description} 6/Duration/state"
+          payload: !lambda |-
+            char buf[8];
+            sprintf(buf, "%.0f", x);
+            return std::string(buf);
+          retain: True          
+    web_server:
+      sorting_group_id: domix_m9_web
+      sorting_weight: 38
+
+  - platform: template
+    id: valve_7
+    name: "${m9_description_upper} ${m9_valve_description} Duration 7"
+    icon: "mdi:time-auto"
+    min_value: 1
+    max_value: 15
+    step: 1
+    unit_of_measurement: Min
+    mode: box # Defines how the number should be displayed in the UI
+    lambda: "return id(m9${m9_number_1}_sprinkler).valve_run_duration(6);"
+    set_action:
+      - sprinkler.set_valve_run_duration:
+          id: m9${m9_number_1}_sprinkler
+          valve_number: 6
+          run_duration: !lambda 'return x;'
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m9_name}${m9_number_1}/${m9_description_upper}/${m9_valve_description} 7/Duration/state"
+          payload: !lambda |-
+            char buf[8];
+            sprintf(buf, "%.0f", x);
+            return std::string(buf);
+          retain: True          
+    web_server:
+      sorting_group_id: domix_m9_web
+      sorting_weight: 41
+
+  - platform: template
+    id: valve_8
+    name: "${m9_description_upper} ${m9_valve_description} Duration 8"
+    icon: "mdi:time-auto"
+    min_value: 1
+    max_value: 15
+    step: 1
+    unit_of_measurement: Min
+    mode: box # Defines how the number should be displayed in the UI
+    lambda: "return id(m9${m9_number_1}_sprinkler).valve_run_duration(7);"
+    set_action:
+      - sprinkler.set_valve_run_duration:
+          id: m9${m9_number_1}_sprinkler
+          valve_number: 7
+          run_duration: !lambda 'return x;'
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m9_name}${m9_number_1}/${m9_description_upper}/${m9_valve_description} 8/Duration/state"
+          payload: !lambda |-
+            char buf[8];
+            sprintf(buf, "%.0f", x);
+            return std::string(buf);
+          retain: True          
+    web_server:
+      sorting_group_id: domix_m9_web
+      sorting_weight: 44
+
+  - platform: template
+    id: ${m9_description}_repeat_cycles
+    name: "${m9_description_upper} Repeat Cycles"
+    icon: "mdi:repeat"
+    min_value: 0
+    max_value: 4
+    step: 1
+    mode: box
+    lambda: "return id(m9${m9_number_1}_sprinkler).repeat().value_or(0);"
+    set_action:
+      - sprinkler.set_repeat:
+          id: m9${m9_number_1}_sprinkler
+          repeat: !lambda 'return x;'
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m9_name}${m9_number_1}/${m9_description_upper}/Repeat Cycles/state"
+          payload: !lambda |-
+            char buf[4];
+            sprintf(buf, "%.0f", x);
+            return std::string(buf);
+          retain: true          
+    web_server:
+      sorting_group_id: domix_m9_web
+      sorting_weight: 45
+
+text_sensor: 
+  - platform: template
+    id: valve_status
+    name: "${m9_description_upper} Status"
+    icon: "mdi:check-circle"
+    update_interval: never
+    on_value:
+      then:
+        - mqtt.publish:
+            topic: "${mqtt_name}/${m9_name}${m9_number_1}/${m9_description_upper}/Status/state"
+            payload: !lambda 'return x;'
+            retain: True          
+    web_server:
+      sorting_group_id: domix_m9_web
+      sorting_weight: 4
+
+  - platform: template
+    id: progress_percent
+    name: "${m9_description_upper} Progress %"
+    update_interval: 1s
+    icon: "mdi:percent"
+    lambda: |-
+      auto active = id(m9${m9_number_1}_sprinkler).active_valve();
+      if (!active.has_value()) {
+        return std::string("0%");
+      }
+      int valve = active.value();
+      int total = id(m9${m9_number_1}_sprinkler).valve_run_duration_adjusted(valve);
+      if (total <= 0) {
+        return std::string("0%");
+      }
+      int remaining = id(m9${m9_number_1}_sprinkler).time_remaining_active_valve().value_or(0);
+      int progress = round(((total - remaining) * 100.0) / total);
+      if (progress < 0)   progress = 0;
+      if (progress > 100) progress = 100;
+      return std::to_string(progress) + "%";
+    on_value:
+      then:
+        - mqtt.publish:
+            topic: "${mqtt_name}/${m9_name}${m9_number_1}/${m9_description_upper}/Progress Percent/state"
+            payload: !lambda 'return x;'
+            retain: True          
+    web_server:
+      sorting_group_id: domix_m9_web
+      sorting_weight: 6
+
+  - platform: template
+    id: total_time
+    name: "${m9_description_upper} Total Time"
+    icon: "mdi:timer"
+    update_interval: 1s
+    lambda: |-
+      auto total_time = id(m9${m9_number_1}_sprinkler).total_cycle_time_all_valves();
+      if (!total_time) {
+        return std::string("0s");
+      }
+      int seconds = round(total_time);
+      int days = seconds / 86400;
+      seconds %= 86400;
+      int hours = seconds / 3600;
+      seconds %= 3600;
+      int minutes = seconds / 60;
+      seconds %= 60;
+      std::string result;
+      if (days)    result += std::to_string(days) + "d ";
+      if (hours)  result += std::to_string(hours) + "h ";
+      if (minutes)result += std::to_string(minutes) + "m ";
+      result += std::to_string(seconds) + "s";
+      return result;
+    on_value:
+      then:
+        - mqtt.publish:
+            topic: "${mqtt_name}/${m9_name}${m9_number_1}/${m9_description_upper}/Total Time/state"
+            payload: !lambda 'return x;'
+            retain: True
+    web_server:
+      sorting_group_id: domix_m9_web
+      sorting_weight: 7
+
+  - platform: template
+    id: time_remaining
+    name: "${m9_description_upper} Time Remaining"
+    icon: "mdi:timer-outline"
+    update_interval: 1s
+    lambda: |-
+      auto remaining_opt =
+        id(m9${m9_number_1}_sprinkler).time_remaining_active_valve();
+      if (!remaining_opt.has_value() || remaining_opt.value() <= 0) {
+        return std::string("0s");
+      }
+      int seconds = round(remaining_opt.value());
+      int days = seconds / 86400;
+      seconds %= 86400;
+      int hours = seconds / 3600;
+      seconds %= 3600;
+      int minutes = seconds / 60;
+      seconds %= 60;
+      std::string result;
+      if (days)    result += std::to_string(days) + "d ";
+      if (hours)  result += std::to_string(hours) + "h ";
+      if (minutes)result += std::to_string(minutes) + "m ";
+      result += std::to_string(seconds) + "s";
+      return result;
+    on_value:
+      then:
+        - mqtt.publish:
+            topic: "${mqtt_name}/${m9_name}${m9_number_1}/${m9_description_upper}/Time Remaining/state"
+            payload: !lambda 'return x;' 
+            retain: True         
+    web_server:
+      sorting_group_id: domix_m9_web
+      sorting_weight: 8
+
+sprinkler:
+  - id: m9${m9_number_1}_sprinkler
+    main_switch: 
+      name: "Program Start - Stop - Resume"
+      id: main_irrigation
+      web_server:
+        sorting_group_id: domix_m9_web
+        sorting_weight: 1
+    auto_advance_switch: 
+      name: "${m9_description_upper} ${m9_valve_description} Auto Advance"
+      web_server:
+        sorting_group_id: domix_m9_web
+        sorting_weight: 60
+    reverse_switch: 
+      name: "${m9_description_upper} ${m9_valve_description} Reverse"
+      web_server:
+        sorting_group_id: domix_m9_web
+        sorting_weight: 61
+    valve_open_delay: 2s
+    repeat_number: 
+      name: "Repeat"
+      web_server:
+        sorting_group_id: domix_m9_web
+        sorting_weight: 46
+    valves:
+      - valve_switch: 
+          name: "${m9_valve_description} 1"
+          web_server:
+            sorting_group_id: domix_m9_web
+            sorting_weight: 21
+        enable_switch: 
+          name: "Enable ${m9_valve_description} 1"
+          web_server:
+            sorting_group_id: domix_m9_web
+            sorting_weight: 22
+        run_duration: 60s
+        valve_switch_id: m9${m9_number_1}_valve_1  
+      - valve_switch: 
+          name: "${m9_valve_description} 2"
+          web_server:
+            sorting_group_id: domix_m9_web
+            sorting_weight: 24
+        enable_switch: 
+          name: "Enable ${m9_valve_description} 2"
+          web_server:
+            sorting_group_id: domix_m9_web
+            sorting_weight: 25
+        run_duration: 60s
+        valve_switch_id: m9${m9_number_1}_valve_2
+      - valve_switch: 
+          name: "${m9_valve_description} 3"
+          web_server:
+            sorting_group_id: domix_m9_web
+            sorting_weight: 27
+        enable_switch: 
+          name: "Enable ${m9_valve_description} 3"
+          web_server:
+            sorting_group_id: domix_m9_web
+            sorting_weight: 28
+        run_duration: 60s
+        valve_switch_id: m9${m9_number_1}_valve_3
+      - valve_switch: 
+          name: "${m9_valve_description} 4"
+          web_server:
+            sorting_group_id: domix_m9_web
+            sorting_weight: 30
+        enable_switch: 
+          name: "Enable ${m9_valve_description} 4"
+          web_server:
+            sorting_group_id: domix_m9_web
+            sorting_weight: 31
+        run_duration: 60s
+        valve_switch_id: m9${m9_number_1}_valve_4
+      - valve_switch: 
+          name: "${m9_valve_description} 5"
+          web_server:
+            sorting_group_id: domix_m9_web
+            sorting_weight: 33
+        enable_switch: 
+          name: "Enable ${m9_valve_description} 5"
+          web_server:
+            sorting_group_id: domix_m9_web
+            sorting_weight: 34
+        run_duration: 60s
+        valve_switch_id: m9${m9_number_1}_valve_5
+      - valve_switch: 
+          name: "${m9_valve_description} 6"
+          web_server:
+            sorting_group_id: domix_m9_web
+            sorting_weight: 36
+        enable_switch: 
+          name: "Enable ${m9_valve_description} 6"
+          web_server:
+            sorting_group_id: domix_m9_web
+            sorting_weight: 37
+        run_duration: 60s
+        valve_switch_id: m9${m9_number_1}_valve_6
+      - valve_switch: 
+          name: "${m9_valve_description} 7"
+          web_server:
+            sorting_group_id: domix_m9_web
+            sorting_weight: 39
+        enable_switch: 
+          name: "Enable ${m9_valve_description} 7"
+          web_server:
+            sorting_group_id: domix_m9_web
+            sorting_weight: 40
+        run_duration: 60s
+        valve_switch_id: m9${m9_number_1}_valve_7
+      - valve_switch: 
+          name: "${m9_valve_description} 8"
+          web_server:
+            sorting_group_id: domix_m9_web
+            sorting_weight: 42
+        enable_switch: 
+          name: "Enable ${m9_valve_description} 8"
+          web_server:
+            sorting_group_id: domix_m9_web
+            sorting_weight: 43
+        run_duration: 60s
+        valve_switch_id: m9${m9_number_1}_valve_8                                               
+
+button:
+  - platform: template
+    id: irrigation_pause
+    name: "Irrigation Pause"
+    icon: "mdi:pause-circle"
+    on_press:
+      then:
+        - text_sensor.template.publish:
+            id: valve_status
+            state: "Paused"
+        - sprinkler.pause: m9${m9_number_1}_sprinkler
+        - mqtt.publish:
+            topic: "${mqtt_name}/${m9_name}${m9_number_1}/${m9_description_upper}/Pause/state"
+            payload: "ON"
+            retain: True          
+    web_server:
+      sorting_group_id: domix_m9_web
+      sorting_weight: 5
+
+switch:
+  - platform: template
+    id: ${m9_description}_sunday
+    name: "Irrigate Sunday"
+    icon: "mdi:calendar-today"
+    entity_category: config
+    restore_mode: RESTORE_DEFAULT_ON
+    optimistic: true
+    on_turn_on:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m9_name}${m9_number_1}/${m9_description_upper}/Weekdays/Sunday/state"
+          payload: "ON"
+          retain: True
+    on_turn_off:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m9_name}${m9_number_1}/${m9_description_upper}/Weekdays/Sunday/state"
+          payload: "OFF"
+          retain: True              
+    web_server:
+      sorting_group_id: domix_m9_web
+      sorting_weight: 16
+
+  - platform: template
+    id: ${m9_description}_monday
+    name: "Irrigate Monday"
+    icon: "mdi:calendar-today"
+    entity_category: config
+    restore_mode: RESTORE_DEFAULT_ON
+    optimistic: true
+    on_turn_on:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m9_name}${m9_number_1}/${m9_description_upper}/Weekdays/Monday/state"
+          payload: "ON"
+          retain: True
+    on_turn_off:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m9_name}${m9_number_1}/${m9_description_upper}/Weekdays/Monday/state"
+          payload: "OFF"
+          retain: True              
+    web_server:
+      sorting_group_id: domix_m9_web
+      sorting_weight: 10
+
+  - platform: template
+    id: ${m9_description}_tuesday
+    name: "Irrigate Tuesday"
+    icon: "mdi:calendar-today"
+    entity_category: config
+    restore_mode: RESTORE_DEFAULT_ON
+    optimistic: true
+    on_turn_on:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m9_name}${m9_number_1}/${m9_description_upper}/Weekdays/Tuesday/state"
+          payload: "ON"
+          retain: True
+    on_turn_off:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m9_name}${m9_number_1}/${m9_description_upper}/Weekdays/Tuesday/state"
+          payload: "OFF"
+          retain: True              
+    web_server:
+      sorting_group_id: domix_m9_web
+      sorting_weight: 11
+
+  - platform: template
+    id: ${m9_description}_wednesday
+    name: "Irrigate Wednesday"
+    icon: "mdi:calendar-today"
+    entity_category: config
+    restore_mode: RESTORE_DEFAULT_ON
+    optimistic: true
+    on_turn_on:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m9_name}${m9_number_1}/${m9_description_upper}/Weekdays/Wednesday/state"
+          payload: "ON"
+          retain: True
+    on_turn_off:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m9_name}${m9_number_1}/${m9_description_upper}/Weekdays/Wednesday/state"
+          payload: "OFF"
+          retain: True              
+    web_server:
+      sorting_group_id: domix_m9_web
+      sorting_weight: 12
+
+  - platform: template
+    id: ${m9_description}_thursday
+    name: "Irrigate Thursday"
+    icon: "mdi:calendar-today"
+    entity_category: config
+    restore_mode: RESTORE_DEFAULT_ON
+    optimistic: true
+    on_turn_on:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m9_name}${m9_number_1}/${m9_description_upper}/Weekdays/Thursday/state"
+          payload: "ON"
+          retain: True
+    on_turn_off:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m9_name}${m9_number_1}/${m9_description_upper}/Weekdays/Thursday/state"
+          payload: "OFF"
+          retain: True              
+    web_server:
+      sorting_group_id: domix_m9_web
+      sorting_weight: 13
+
+  - platform: template
+    id: ${m9_description}_friday
+    name: "Irrigate Friday"
+    icon: "mdi:calendar-today"
+    entity_category: config
+    restore_mode: RESTORE_DEFAULT_ON
+    optimistic: true
+    on_turn_on:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m9_name}${m9_number_1}/${m9_description_upper}/Weekdays/Friday/state"
+          payload: "ON"
+          retain: True
+    on_turn_off:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m9_name}${m9_number_1}/${m9_description_upper}/Weekdays/Friday/state"
+          payload: "OFF"
+          retain: True              
+    web_server:
+      sorting_group_id: domix_m9_web
+      sorting_weight: 14
+
+  - platform: template
+    id: ${m9_description}_saturday
+    name: "Irrigate Saturday"
+    icon: "mdi:calendar-today"
+    entity_category: config
+    restore_mode: RESTORE_DEFAULT_ON
+    optimistic: true
+    on_turn_on:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m9_name}${m9_number_1}/${m9_description_upper}/Weekdays/Saturday/state"
+          payload: "ON"
+          retain: True
+    on_turn_off:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m9_name}${m9_number_1}/${m9_description_upper}/Weekdays/Saturday/state"
+          payload: "OFF"
+          retain: True              
+    web_server:
+      sorting_group_id: domix_m9_web
+      sorting_weight: 15
+  
+  - platform: gpio
+    name: "${m9_description_upper} Sprinkler ${m9_valve_description} 1"
+    id: m9${m9_number_1}_valve_1
+    internal: true
+    icon: "mdi:sprinkler"
+    restore_mode: RESTORE_DEFAULT_OFF
+    pin:
+      pca9554: domix_m9${m9_number_1}_busi2c
+      number: 0
+      mode: OUTPUT
+      inverted: false
+    on_turn_on:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m9_name}${m9_number_1}/${m9_description_upper}/${m9_valve_description} 1/state"
+          payload: "ON"
+          retain: True
+    on_turn_off:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m9_name}${m9_number_1}/${m9_description_upper}/${m9_valve_description} 1/state"
+          payload: "OFF"
+          retain: True       
+    # web_server:
+    #   sorting_group_id: domix_m9_web
+    #   sorting_weight: 20
+
+  - platform: gpio
+    name: "${m9_description_upper} Sprinkler ${m9_valve_description} 2"
+    id: m9${m9_number_1}_valve_2
+    internal: true
+    icon: "mdi:sprinkler"
+    restore_mode: RESTORE_DEFAULT_OFF
+    pin:
+      pca9554: domix_m9${m9_number_1}_busi2c
+      number: 1
+      mode: OUTPUT
+      inverted: false
+    on_turn_on:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m9_name}${m9_number_1}/${m9_description_upper}/${m9_valve_description} 2/state"
+          payload: "ON"
+          retain: True
+    on_turn_off:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m9_name}${m9_number_1}/${m9_description_upper}/${m9_valve_description} 2/state"
+          payload: "OFF"
+          retain: True       
+    # web_server:
+    #   sorting_group_id: domix_m9_web
+    #   sorting_weight: 21
+
+  - platform: gpio
+    name: "${m9_description_upper} Sprinkler ${m9_valve_description} 3"
+    id: m9${m9_number_1}_valve_3
+    internal: true
+    icon: "mdi:sprinkler"
+    restore_mode: RESTORE_DEFAULT_OFF
+    pin:
+      pca9554: domix_m9${m9_number_1}_busi2c
+      number: 2
+      mode: OUTPUT
+      inverted: false
+    on_turn_on:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m9_name}${m9_number_1}/${m9_description_upper}/${m9_valve_description} 3/state"
+          payload: "ON"
+          retain: True
+    on_turn_off:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m9_name}${m9_number_1}/${m9_description_upper}/${m9_valve_description} 3/state"
+          payload: "OFF"
+          retain: True       
+    # web_server:
+    #   sorting_group_id: domix_m9_web
+    #   sorting_weight: 22
+
+  - platform: gpio
+    name: "${m9_description_upper} Sprinkler ${m9_valve_description} 4"
+    id: m9${m9_number_1}_valve_4
+    internal: true
+    icon: "mdi:sprinkler"
+    restore_mode: RESTORE_DEFAULT_OFF
+    pin:
+      pca9554: domix_m9${m9_number_1}_busi2c
+      number: 3
+      mode: OUTPUT
+      inverted: false
+    on_turn_on:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m9_name}${m9_number_1}/${m9_description_upper}/${m9_valve_description} 4/state"
+          payload: "ON"
+          retain: True
+    on_turn_off:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m9_name}${m9_number_1}/${m9_description_upper}/${m9_valve_description} 4/state"
+          payload: "OFF"
+          retain: True       
+    # web_server:
+    #   sorting_group_id: domix_m9_web
+    #   sorting_weight: 23
+
+  - platform: gpio
+    name: "${m9_description_upper} Sprinkler ${m9_valve_description} 5"
+    id: m9${m9_number_1}_valve_5
+    internal: true
+    icon: "mdi:sprinkler"
+    restore_mode: RESTORE_DEFAULT_OFF
+    pin:
+      pca9554: domix_m9${m9_number_1}_busi2c
+      number: 4
+      mode: OUTPUT
+      inverted: false
+    on_turn_on:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m9_name}${m9_number_1}/${m9_description_upper}/${m9_valve_description} 5/state"
+          payload: "ON"
+          retain: True
+    on_turn_off:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m9_name}${m9_number_1}/${m9_description_upper}/${m9_valve_description} 5/state"
+          payload: "OFF"
+          retain: True       
+    # web_server:
+    #   sorting_group_id: domix_m9_web
+    #   sorting_weight: 24
+
+  - platform: gpio
+    name: "${m9_description_upper} Sprinkler ${m9_valve_description} 6"
+    id: m9${m9_number_1}_valve_6
+    internal: true
+    icon: "mdi:sprinkler"
+    restore_mode: RESTORE_DEFAULT_OFF
+    pin:
+      pca9554: domix_m9${m9_number_1}_busi2c
+      number: 5
+      mode: OUTPUT
+      inverted: false
+    on_turn_on:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m9_name}${m9_number_1}/${m9_description_upper}/${m9_valve_description} 6/state"
+          payload: "ON"
+          retain: True
+    on_turn_off:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m9_name}${m9_number_1}/${m9_description_upper}/${m9_valve_description} 6/state"
+          payload: "OFF"
+          retain: True       
+    # web_server:
+    #   sorting_group_id: domix_m9_web
+    #   sorting_weight: 25
+
+  - platform: gpio
+    name: "${m9_description_upper} Sprinkler ${m9_valve_description} 7"
+    id: m9${m9_number_1}_valve_7
+    internal: true
+    icon: "mdi:sprinkler"
+    restore_mode: RESTORE_DEFAULT_OFF
+    pin:
+      pca9554: domix_m9${m9_number_1}_busi2c
+      number: 6
+      mode: OUTPUT
+      inverted: false
+    on_turn_on:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m9_name}${m9_number_1}/${m9_description_upper}/${m9_valve_description} 7/state"
+          payload: "ON"
+          retain: True
+    on_turn_off:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m9_name}${m9_number_1}/${m9_description_upper}/${m9_valve_description} 7/state"
+          payload: "OFF"
+          retain: True       
+    # web_server:
+    #   sorting_group_id: domix_m9_web
+    #   sorting_weight: 26
+
+  - platform: gpio
+    name: "${m9_description_upper} Sprinkler ${m9_valve_description} 8"
+    id: m9${m9_number_1}_valve_8
+    internal: true
+    icon: "mdi:sprinkler"
+    restore_mode: RESTORE_DEFAULT_OFF
+    pin:
+      pca9554: domix_m9${m9_number_1}_busi2c
+      number: 7
+      mode: OUTPUT
+      inverted: false
+    on_turn_on:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m9_name}${m9_number_1}/${m9_description_upper}/${m9_valve_description} 8/state"
+          payload: "ON"
+          retain: True
+    on_turn_off:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m9_name}${m9_number_1}/${m9_description_upper}/${m9_valve_description} 8/state"
+          payload: "OFF"
+          retain: True       
+    # web_server:
+    #   sorting_group_id: domix_m9_web
+    #   sorting_weight: 27
+
+  # scheduled time enable switches
+  - platform: template
+    id: ${m9_description}_schedule1_enabled
+    name: "Enable Automatic Irrigation"
+    icon: "mdi:autoplay"
+    entity_category: config
+    restore_mode: RESTORE_DEFAULT_ON
+    optimistic: true
+    on_turn_on:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m9_name}${m9_number_1}/${m9_description_upper}/Automatic/state"
+          payload: "ON"
+          retain: True
+    on_turn_off:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m9_name}${m9_number_1}/${m9_description_upper}/Automatic/state"
+          payload: "OFF"
+          retain: True                
+    web_server:
+      sorting_group_id: domix_m9_web
+      sorting_weight: 2
+
+  # rain delay switches (can be cancelled, auto-resetting)
+  - platform: template
+    id: ${m9_description}_raindelay_24h_enabled
+    name: "Enable 24h Rain Delay"
+    icon: "mdi:rainy"
+    restore_mode: RESTORE_DEFAULT_OFF
+    optimistic: true
+    turn_on_action:
+      then:
+        - delay: 
+            hours: 24
+        - switch.turn_off: ${m9_description}_raindelay_24h_enabled
+    on_turn_on:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m9_name}${m9_number_1}/${m9_description_upper}/Rain Delay 24h/state"
+          payload: "ON"
+          retain: True
+    on_turn_off:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m9_name}${m9_number_1}/${m9_description_upper}/Rain Delay 24h/state"
+          payload: "OFF"
+          retain: True                 
+    web_server:
+      sorting_group_id: domix_m9_web
+      sorting_weight: 8.5
+
+  - platform: template
+    id: ${m9_description}_raindelay_48h_enabled
+    name: "Enable 48h Rain Delay"
+    icon: "mdi:rainy"
+    restore_mode: RESTORE_DEFAULT_OFF
+    optimistic: true
+    turn_on_action:
+      then:
+        - delay: 
+            hours: 48
+        - switch.turn_off: ${m9_description}_raindelay_48h_enabled
+    on_turn_on:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m9_name}${m9_number_1}/${m9_description_upper}/Rain Delay 48h/state"
+          payload: "ON"
+          retain: True
+    on_turn_off:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m9_name}${m9_number_1}/${m9_description_upper}/Rain Delay 48h/state"
+          payload: "OFF"
+          retain: True            
+    web_server:
+      sorting_group_id: domix_m9_web
+      sorting_weight: 9
+
+datetime:
+  - platform: template
+    name: "Irrigation Start Time"
+    icon: "mdi:alarm"    
+    entity_category: config
+    id: ${m9_description}_s1t
+    type: time
+    restore_value: true
+    initial_value: "22:00"
+    optimistic: True
+    on_value:
+      then:
+        - mqtt.publish:
+            topic: "${mqtt_name}/${m9_name}${m9_number_1}/${m9_description_upper}/Start Time/state"
+            payload: !lambda |-
+                char buf[5];
+                sprintf(buf,"%02d:%02d", id(${m9_description}_s1t).hour, id(${m9_description}_s1t).minute);
+                return std::string(buf);   
+            retain: True          
+    web_server:
+      sorting_group_id: domix_m9_web
+      sorting_weight: 3
+
+time:
+  - platform: sntp
+    id: myclock
+    on_time:
+      # Every 1 minute
+      - seconds: 0
+        minutes: /1
+        then:
+        - script.execute: ${m9_description}_script1
+
+script:
+    # check what day of the week it is currently, and if we have the schedule enabled today
+    - id: ${m9_description}_script1 
+      then:
+        lambda: |-
+          int dow = id(myclock).now().day_of_week;
+          if      ((dow == 1 && id(${m9_description}_sunday).state == true)
+          ||       (dow == 2 && id(${m9_description}_monday).state == true)
+          ||       (dow == 3 && id(${m9_description}_tuesday).state == true)
+          ||       (dow == 4 && id(${m9_description}_wednesday).state == true)
+          ||       (dow == 5 && id(${m9_description}_thursday).state == true)
+          ||       (dow == 6 && id(${m9_description}_friday).state == true)
+          ||       (dow == 7 && id(${m9_description}_saturday).state == true)) {
+            id(${m9_description}_script2).execute();
+          }
+    # if current time is equal to any of the scheduled start times, start the sprinkler cycle
+    - id: ${m9_description}_script2
+      then:
+        lambda: |-
+          int hour = id(myclock).now().hour;
+          int minute = id(myclock).now().minute;
+          if      ((hour == id(${m9_description}_s1t).hour && minute == id(${m9_description}_s1t).minute && id(${m9_description}_schedule1_enabled).state == true && id(${m9_description}_raindelay_24h_enabled).state == false && id(${m9_description}_raindelay_48h_enabled).state == false)) {
+            id(${m9_description}_script3).execute();
+          }
+    # start the sprinkler cycle
+    - id: ${m9_description}_script3
+      then:
+        - sprinkler.start_full_cycle: m9${m9_number_1}_sprinkler
+        - lambda: ESP_LOGI("main", "Irrigation cycle of ${m9_description_upper} has begun!");

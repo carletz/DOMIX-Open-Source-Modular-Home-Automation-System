@@ -1,0 +1,42 @@
+substitutions: 
+# ----------------------------------------------------------------------------
+# DEFAULT SUBSTITUTIONS
+# Users can override any of these in their main config file
+# ----------------------------------------------------------------------------
+  # === Board Name ===
+  device_name: my-sensor-domix            
+  friendly_name: "My SENSOR DOMIX"
+
+# ----------------------------------------------------------------------------
+# SENSOR module
+# ----------------------------------------------------------------------------
+  modbus_address: 0x01    # UNIQUE BOARD SLAVE MODBUS ADDRESS REMEMBER TO SET!
+
+  bh1750_addr: 0x23       # or 0x5C if ADDR=HIGH
+  bme280_addr: 0x76       # or 0x77 depending on the SDO pin
+  sdc41_addr: 0x62
+  screen_addr: 0x3C
+  # sgp41_addr:  FIXED at 0x59. No need to specify it
+
+  nec_address: "0xBF00"                 # NEC address of the controlled device
+  inter_digit_delay: "500"              # pause between IR digits in ms
+
+  # NEC codes digits 0-9 — varies for each type of device
+  nec_digit_0: "0xFF00"
+  nec_digit_1: "0xFE01"
+  nec_digit_2: "0xFD02"
+  nec_digit_3: "0xFC03"
+  nec_digit_4: "0xFB04"
+  nec_digit_5: "0xFA05"
+  nec_digit_6: "0xF906"
+  nec_digit_7: "0xF807"
+  nec_digit_8: "0xF708"
+  nec_digit_9: "0xF609"
+
+  # NEC codes for special commands — varies for each type of device
+  nec_mute:            "0xF10E"
+  nec_guide:           "0xC53A"
+  nec_back:            "0xB748"
+  nec_channel_fw:      "0xB54A"
+  nec_channel_bk:      "0xB44B"
+  nec_power:           "0xF20D"  

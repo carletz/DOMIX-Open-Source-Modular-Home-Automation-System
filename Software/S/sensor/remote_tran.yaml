@@ -1,0 +1,115 @@
+# ══════════════════════════════════════════════════════════════
+#  IR Transmitter RP2040 — NEC and Samsung
+# Replaces remote_transmitter: (not supported on RP2040)
+#
+# SLAVE — RP2040 + IR Transmitter
+# Receives commands via Modbus RTU (RS485) and emits IR signals.
+#
+# This file is GENERIC: change only the substitutions
+# for each physical sensor you want to flash.
+#
+# Holding register convention 0:
+# 0 → idle (auto-reset after execution)
+# 1–999 → numeric channel (digits sent sequentially)
+# 1001 → MUTE
+# 1002 → HELP
+# 1003 → BACK
+# 1004 → CHANNEL FORWARD
+# 1005 → CHANNEL BACK
+# 1006 → TOGGLE
+# ══════════════════════════════════════════════════════════════
+esphome:
+  includes:
+    - sensor/ir_transmitter_rp2040.h
+    - hardware/modbus_slave.h
+  platformio_options:
+    build_flags:
+      - "-DMODBUS_SLAVE_ADDRESS=${modbus_address}"   # pass the slave ID to the .h
+  on_boot:
+    priority: 600
+    then:
+      - lambda: |-
+          ir_tx = new IRTransmitterRP2040(3);     // GPIO3
+          ir_tx->setup();
+
+# ──────────────────────────────────────────────────────────────
+#  Globals: NEC code map for digits 0-9
+#  (address always 0xBF00 on my remote)
+#  Please adapt all the commands to your remote controller!
+# ──────────────────────────────────────────────────────────────
+globals:
+  - id: digit_commands
+    type: uint16_t[10]
+    restore_value: no
+    initial_value: >
+      {
+        ${nec_digit_0},
+        ${nec_digit_1},
+        ${nec_digit_2},
+        ${nec_digit_3},
+        ${nec_digit_4},
+        ${nec_digit_5},
+        ${nec_digit_6},
+        ${nec_digit_7},
+        ${nec_digit_8},
+        ${nec_digit_9}
+      }
+
+# ──────────────────────────────────────────────────────────────
+#  INTERVAL — Polling Modbus e lettura comandi IR
+# ──────────────────────────────────────────────────────────────
+interval:
+  - interval: 100ms       # Reading IR commands from modbus_regs[0] — every 100ms
+    then:
+      - lambda: |-
+          uint16_t cmd = modbus_regs[0];
+          if (cmd == 0) return;
+
+          uint16_t addr = ${nec_address};
+
+          // ── Special Commands (1001+) ──────────────────────
+          if (cmd >= 1001) {
+            uint16_t nec_cmd = 0;
+            switch (cmd) {
+              case 1001: nec_cmd = ${nec_mute};            break;
+              case 1002: nec_cmd = ${nec_guide};           break;
+              case 1003: nec_cmd = ${nec_back};            break;
+              case 1004: nec_cmd = ${nec_channel_fw};      break;
+              case 1005: nec_cmd = ${nec_channel_bk};      break;
+              case 1006: nec_cmd = ${nec_power};           break;
+              default: break;
+            }
+            if (nec_cmd) ir_tx->send_nec(addr, nec_cmd);
+          }
+
+          // ── Numeric channel (1–999) ───────────────────────
+          else {
+            std::vector<int> digits;
+            if (cmd >= 100) digits.push_back(cmd / 100);
+            if (cmd >= 10)  digits.push_back((cmd / 10) % 10);
+            digits.push_back(cmd % 10);
+
+            for (int d : digits) {
+              ir_tx->send_nec(addr, id(digit_commands)[d]);
+              delay(${inter_digit_delay});
+            }
+          }
+
+          // ── Auto-reset register to 0 after execution ───────
+          modbus_regs[0] = 0;
+
+# ──────────────────────────────────────────────────────────────
+# HOW TO CREATE A NEW SLAVE FOR A DIFFERENT DEVICE
+#
+# Copy this file and change only the substitutions:
+#
+# device_name: "rp2040-ir-hifi-salotto"
+# friendly_name: "IR HiFi Salotto"
+# modbus_slave_id: "0x02" ← unique slave ID (hex or decimal)
+# nec_address: "0x4AB5" ← NEC address of your HiFi
+# nec_digit_0: "0x..." ← digit codes of your HiFi
+# ...
+# nec_power: "0x..."
+#
+# The rest of the file should not be touched.
+# ──────────────────────────────────────────────────────────────

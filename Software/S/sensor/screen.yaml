@@ -1,0 +1,239 @@
+font:
+  - file: "font/Roboto-Regular.ttf"
+    id: font_small
+    size: 10
+
+  - file: "font/Roboto-Regular.ttf"
+    id: font_medium
+    size: 14
+
+  - file: "font/Roboto-Medium.ttf"
+    id: font_large
+    size: 22
+
+  - file: "font/materialdesignicons-webfont.ttf"
+    id: font_icons
+    size: 14
+    glyphs:
+      - "\U000F0510"  # mdi:thermometer
+      - "\U000F058E"  # mdi:water-percent
+      - "\U000F059D"  # mdi:gauge
+      - "\U000F0335"  # mdi:lightbulb
+      - "\U000F1898"  # mdi:molecule-co2
+      - "\U000F0F37"  # mdi:air-filter
+      - "\U000F0208"  # mdi:walk
+      - "\U000F0004"  # mdi:alert
+      - "\U000F042F"  # mdi:eye
+      - "\U000F0769"  # mdi:smoke-detector
+
+globals:
+  - id: display_page
+    type: int
+    initial_value: '0'
+
+  - id: alarm_active
+    type: bool
+    initial_value: 'false'
+
+  - id: auto_rotate_pause
+    type: uint32_t
+    initial_value: '0'
+
+display:
+  - platform: ssd1306_i2c
+    model: "SSD1306 128x64"
+    address: ${screen_addr}
+    id: oled
+    update_interval: 1s
+    lambda: |-
+      // ── Alarm ─────────────────────────────
+      bool co2_alarm  = id(sens_co2).state  > 1000;
+      bool voc_alarm  = id(sens_voc).state  > 200;
+      bool temp_alarm = id(sens_temp).state > 30.0;
+      id(alarm_active) = co2_alarm || voc_alarm || temp_alarm;
+
+      int page = id(alarm_active) ? 4 : id(display_page);
+
+      // ══════════════════════════════════════
+      // PAGE 0 — Temperature, Humidity, Pressure
+      // ══════════════════════════════════════
+      if (page == 0) {
+        it.print(0, 0, id(font_small), "AMBIENT");
+        it.line(0, 11, 128, 11);
+
+        it.print(0, 14, id(font_icons), "\U000F0510");
+        it.printf(16, 14, id(font_medium), "%.1f C", id(sens_temp).state);
+
+        it.print(0, 32, id(font_icons), "\U000F058E");
+        it.printf(16, 32, id(font_medium), "%.1f %%", id(sens_hum).state);
+
+        it.print(0, 50, id(font_icons), "\U000F059D");
+        it.printf(16, 50, id(font_small), "%.1f hPa", id(sens_pres).state);
+
+        it.print(110, 56, id(font_small), "1/5");
+      }
+
+      // ══════════════════════════════════════
+      // PAGE 1 — Air Quality
+      // ══════════════════════════════════════
+      else if (page == 1) {
+        it.print(0, 0, id(font_small), "AIR QUALITY");
+        it.line(0, 11, 128, 11);
+
+        it.print(0, 14, id(font_icons), "\U000F1898");
+        it.printf(16, 14, id(font_medium), "%d ppm", (int)id(sens_co2).state);
+        int co2_bar = min((int)(id(sens_co2).state / 20), 108);
+        it.filled_rectangle(0, 30, co2_bar, 3);
+        it.rectangle(0, 30, 108, 3);
+
+        it.print(0, 36, id(font_icons), "\U000F0F37");
+        it.printf(16, 36, id(font_small), "VOC:%d  NOx:%d",
+          (int)id(sens_voc).state,
+          (int)id(sens_nox).state);
+
+        it.print(0, 50, id(font_icons), "\U000F0335");
+        it.printf(16, 50, id(font_small), "%d lux", (int)id(sens_lux).state);
+
+        it.print(110, 56, id(font_small), "2/5");
+      }
+
+      // ══════════════════════════════════════
+      // PAGE 2 — Presence and movement
+      // ══════════════════════════════════════
+      else if (page == 2) {
+        it.print(0, 0, id(font_small), "PRESENCE");
+        it.line(0, 11, 128, 11);
+
+        it.print(0, 14, id(font_icons), "\U000F0208");
+        it.printf(16, 14, id(font_medium), "PIR: %s",
+          id(pir_sensor).state ? "MOTION" : "----");
+
+        it.print(0, 32, id(font_icons), "\U000F042F");
+        it.printf(16, 32, id(font_medium), "%s",
+          id(ld2410_presence).state ? "PRESENCE" : "----");
+
+        it.printf(0, 50, id(font_small), "Dist: %s%d cm",
+          id(ld2410_presence).state ? "" : "--- ",
+          id(ld2410_presence).state ? (int)id(ld2410_det_dist).state : 0);
+
+        it.print(110, 56, id(font_small), "3/5");
+      }
+
+      // ══════════════════════════════════════
+      // PAGE 3 — Modbus Master Data
+      // ══════════════════════════════════════
+      else if (page == 3) {
+        it.print(0, 0, id(font_small), "FROM MASTER");
+        it.line(0, 11, 128, 11);
+
+        it.printf(0, 14, id(font_small), "Setpoint T: %.1f C",
+          modbus_regs[10] / 10.0f);
+
+        it.printf(0, 26, id(font_small), "Setpoint CO2: %d ppm",
+          modbus_regs[11]);
+
+        it.printf(0, 38, id(font_small), "Time: %02d:%02d",
+          modbus_regs[12] / 100,
+          modbus_regs[12] % 100);
+
+        const char* msgs[] = {"OK", "VENT", "HEAT", "COOL"};
+        uint16_t msg_idx = modbus_regs[13] < 4 ? modbus_regs[13] : 0;
+        it.printf(0, 50, id(font_medium), ">>> %s", msgs[msg_idx]);
+
+        it.print(110, 56, id(font_small), "4/5");
+      }
+
+      // ══════════════════════════════════════
+      // PAGE 4 — ALLARM
+      // ══════════════════════════════════════
+      else if (page == 4) {
+        if ((millis() / 500) % 2 == 0)
+          it.rectangle(0, 0, 128, 64);
+
+        it.print(20, 2, id(font_small), "!!!  ALARM  !!!");
+        it.line(0, 13, 128, 13);
+
+        int y = 16;
+        if (co2_alarm) {
+          it.printf(0, y, id(font_small), "HIGH CO2: %d ppm",
+            (int)id(sens_co2).state);
+          y += 12;
+        }
+        if (voc_alarm) {
+          it.printf(0, y, id(font_small), "HIGH VOC: %d",
+            (int)id(sens_voc).state);
+          y += 12;
+        }
+        if (temp_alarm) {
+          it.printf(0, y, id(font_small), "HIGH TEMP: %.1f C",
+            id(sens_temp).state);
+          y += 12;
+        }
+
+        modbus_discrete[7] = true;
+        it.print(110, 56, id(font_small), "5/5");
+      }
+
+sensor:
+  - platform: rotary_encoder
+    id: encoder
+    pin_a:
+      number: GPIO16
+      mode:
+        input: true
+        pullup: true
+    pin_b:
+      number: GPIO17
+      mode:
+        input: true
+        pullup: true
+    resolution: 1
+    on_value:
+      then:
+        - lambda: |-
+            int val = (int)x;
+            // Wrap around between 0 and 3
+            if (val < 0) val = 3;
+            if (val > 3) val = 0;
+            id(display_page) = val;
+            id(encoder).publish_state(val);
+            id(auto_rotate_pause) = millis();
+
+binary_sensor:
+  - platform: gpio
+    name: "Encoder Button"
+    id: encoder_button
+    pin:
+      number: GPIO18
+      mode:
+        input: true
+        pullup: true
+      inverted: true
+    filters:
+      - delayed_on: 10ms
+    on_press:
+      then:
+        - lambda: |-
+            // Single click → next page
+            id(display_page) = (id(display_page) + 1) % 4;
+            id(encoder).publish_state(id(display_page));
+            id(auto_rotate_pause) = millis();
+    on_multi_click:
+      - timing:
+          - ON for at most 350ms
+          - OFF for at most 350ms
+          - ON for at most 350ms
+          - OFF for at least 50ms
+        then:
+          - lambda: |-
+              // Double click → back to page 0
+              id(display_page) = 0;
+              id(encoder).publish_state(0);
+              id(auto_rotate_pause) = millis();
+      - timing:
+          - ON for at least 800ms
+        then:
+          - lambda: |-
+              // Long click → allarm page
+              id(display_page) = 4;
+              id(auto_rotate_pause) = millis();            

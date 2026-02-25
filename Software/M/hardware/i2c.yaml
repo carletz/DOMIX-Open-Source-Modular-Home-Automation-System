@@ -1,0 +1,16 @@
+i2c:
+  - id: bus_module
+    sda: GPIO08
+    scl: GPIO18
+    scan: true
+    frequency: 100kHz
+    sda_pullup_enabled: False
+    scl_pullup_enabled: False
+
+  - id: bus_screen
+    sda: GPIO04
+    scl: GPIO05
+    scan: true
+    frequency: 100kHz
+    sda_pullup_enabled: False
+    scl_pullup_enabled: False

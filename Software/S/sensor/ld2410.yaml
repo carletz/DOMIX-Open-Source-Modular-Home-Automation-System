@@ -1,0 +1,33 @@
+ld2410:
+  id: ld2410_radar
+  uart_id: ld2410_uart
+
+binary_sensor:
+  - platform: ld2410
+    ld2410_id: ld2410_radar
+    has_target:
+      name: "Presence"
+      id: ld2410_presence
+    has_moving_target:
+      name: "Movement"
+      id: ld2410_moving
+    has_still_target:
+      name: "Static Presence"
+      id: ld2410_still  
+
+sensor:
+  - platform: ld2410
+    ld2410_id: ld2410_radar
+    moving_distance:
+      name: "Moving Distance"
+      id: ld2410_mov_dist
+    still_distance:
+      name: "Static Distance"
+      id: ld2410_still_dist
+    moving_energy:
+      name: "Moving Energy"
+    still_energy:
+      name: "Static Energy"
+    detection_distance:
+      name: "Detection Distance"
+      id: ld2410_det_dist      

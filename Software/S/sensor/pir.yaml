@@ -1,0 +1,10 @@
+binary_sensor:
+  - platform: gpio
+    name: "PIR Movement"
+    id: pir_sensor
+    pin:
+      number: GPIO6
+      mode: INPUT_PULLDOWN
+    device_class: motion
+    filters:
+      - delayed_off: 5s           # keep ON for 5s after last trigger

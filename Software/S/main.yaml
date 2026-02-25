@@ -1,0 +1,34 @@
+# ============================================================================
+#   DOMIX SENSOR Configuration
+# ============================================================================
+# This is the base configuration file for DOMIX SENSOR modular system.
+# The user can adapt and modify at his use the following code and the 
+# connected packages.
+#
+# 
+# ============================================================================
+
+# ----------------------------------------------------------------------------
+# PACKAGES
+# Users can modify, remove or add packages considering the configuration
+# ----------------------------------------------------------------------------
+packages:
+  - !include hardware/rp2040.yaml
+
+  # === Base System Configuration ===
+  - !include hardware/data.yaml
+  - !include hardware/i2c.yaml
+  - !include hardware/modbus_interval.yaml
+  - !include hardware/serial.yaml
+  - !include hardware/modbus.yaml
+
+  # === Sensors ===
+  - !include sensor/ld2410.yaml
+  - !include sensor/pir.yaml
+#   - !include sensor/remote_rec.yaml       # not available for ESPHome with RP2040 chip!
+  - !include sensor/remote_tran.yaml
+  - !include sensor/bme280.yaml
+  - !include sensor/bh1750.yaml
+  - !include sensor/sgp41.yaml
+  - !include sensor/scd41.yaml
+  - !include sensor/screen.yaml
