@@ -62,8 +62,7 @@ Software/
     │   ├── ld2410.yaml         # 24 GHz mmWave presence radar (UART)
     │   ├── pir.yaml            # PIR passive motion sensor (GPIO)
     │   ├── remote_tran.yaml    # IR transmitter — NEC protocol (current)
-    │   ├── remote_tran_old.yaml# IR transmitter — legacy variant
-    │   ├── remote_rec.yaml     # IR receiver (optional, commented out by default)
+    │   ├── remote_rec.yaml     # IR receiver (not supported on ESPHome and RP2040 unfortunately)
     │   ├── screen.yaml         # SSD1306/SH1106 OLED screen output
     │   └── ir_transmitter_rp2040.h  # C++ NEC IR transmission helper
     └── font/                   # Embedded fonts for the OLED screen
