@@ -1,0 +1,17 @@
+uart:
+  - id: uart_bus                    # UART Settings for Zigbee Coordinator
+    rx_pin: GPIO06
+    tx_pin: GPIO07
+    baud_rate: 115200
+
+  - id: modbus_uart                 # UART settings for RS485 comunications
+    tx_pin: GPIO16
+    rx_pin: GPIO15
+    baud_rate: 9600
+    stop_bits: 1
+    data_bits: 8
+    parity: NONE
+
+modbus:
+  - uart_id: modbus_uart
+    id: modbus_bus    

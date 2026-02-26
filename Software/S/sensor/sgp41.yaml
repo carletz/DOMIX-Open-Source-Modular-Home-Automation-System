@@ -1,0 +1,13 @@
+sensor:
+  - platform: sgp4x
+    voc:
+      name: "VOC Index"
+      id: sens_voc
+    nox:
+      name: "NOx Index"
+      id: sens_nox
+    # Temperature and humidity compensation from the BME280
+    compensation:
+      temperature_source: sens_temp
+      humidity_source: sens_hum
+    update_interval: 10s

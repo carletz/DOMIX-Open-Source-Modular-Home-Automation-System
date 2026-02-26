@@ -1,0 +1,50 @@
+interval:
+  # Update Modbus tables with sensor values
+  - interval: 5s
+    then:
+      - lambda: |-
+          // Input Registers (FC04) — R only for master
+          modbus_input_regs[0] = (uint16_t)(id(sens_temp).state * 10);
+          modbus_input_regs[1] = (uint16_t)(id(sens_hum).state * 10);
+          modbus_input_regs[2] = (uint16_t)(id(sens_pres).state * 10);
+          modbus_input_regs[3] = (uint16_t)(id(sens_lux).state);
+          modbus_input_regs[4] = (uint16_t)(id(sens_voc).state);
+          modbus_input_regs[5] = (uint16_t)(id(sens_nox).state);
+          modbus_input_regs[6] = (uint16_t)(id(sens_co2).state);
+          modbus_input_regs[7] = (uint16_t)(id(ld2410_det_dist).state);
+
+          // Discrete Inputs (FC02) — R only for master
+          modbus_discrete[0] = id(pir_sensor).state;
+          modbus_discrete[1] = id(ld2410_presence).state;
+          modbus_discrete[2] = id(ld2410_moving).state;
+          modbus_discrete[3] = id(ld2410_still).state;
+          modbus_discrete[4] = id(sens_co2).state  > 1000;
+          modbus_discrete[5] = id(sens_voc).state  > 200;
+          modbus_discrete[6] = id(sens_temp).state > 30.0;
+          // discrete[7] → allarm, written to display
+
+  # Polling Modbus — every 10ms
+  - interval: 10ms
+    then:
+      - lambda: |-
+          modbus_slave_poll(id(modbus_uart));
+
+  # Automatic page rotation — every 5s
+  - interval: 5s
+    then:
+      - lambda: |-
+          uint32_t now = millis();
+          bool encoder_idle = (now - id(auto_rotate_pause)) > 10000;
+          if (!id(alarm_active) && encoder_idle) {
+            id(display_page) = (id(display_page) + 1) % 4;
+            id(encoder).publish_state(id(display_page));
+          }
+
+  # Read coils written by the master and act
+  - interval: 100ms
+    then:
+      - lambda: |-
+          // Coil 1 → reset CO2 baseline (auto-clear)
+          if (modbus_coils[1]) {
+            modbus_coils[1] = false;
+          }

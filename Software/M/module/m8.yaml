@@ -1,0 +1,368 @@
+# ============================================================================
+#
+# M8 MODULE BASIC DESIGN FOR BASIC FUNCTIONS
+#
+# Adapt the configurations, names and other to your needs
+#
+# ============================================================================
+
+# Configuration for pca9554 chip
+pca9554:
+  - id: domix_m8${m8_number_1}_busi2c
+    address: ${m8_i2c_1}
+    i2c_id: ${m8_i2c_id}              # Bus for comunication with DOMIX M1 module
+    pin_count: 16
+
+binary_sensor:
+  - platform: gpio
+    name: "${m8_name}${m8_number_1} ${m8_input_name} channel 1"
+    id: m8${m8_number_1}_I_channel_1
+    icon: "mdi:door-open"
+    pin:
+      pca9554: domix_m8${m8_number_1}_busi2c
+      number: 0
+      mode: INPUT
+      inverted: false
+    on_press:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m8_name}${m8_number_1}/${m8_input_name} 1/state"
+          payload: "ON"
+          retain: True
+    on_release:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m8_name}${m8_number_1}/${m8_input_name} 1/state"
+          payload: "OFF"
+          retain: True       
+    web_server:
+      sorting_group_id: domix_m8_web
+      sorting_weight: 1
+
+  - platform: gpio
+    name: "${m8_name}${m8_number_1} ${m8_input_name} channel 2"
+    id: m8${m8_number_1}_I_channel_2
+    icon: "mdi:door-open"
+    pin:
+      pca9554: domix_m8${m8_number_1}_busi2c
+      number: 1
+      mode: INPUT
+    on_press:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m8_name}${m8_number_1}/${m8_input_name} 2/state"
+          payload: "ON"
+          retain: True
+    on_release:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m8_name}${m8_number_1}/${m8_input_name} 2/state"
+          payload: "OFF"
+          retain: True       
+    web_server:
+      sorting_group_id: domix_m8_web
+      sorting_weight: 2
+
+  - platform: gpio
+    name: "${m8_name}${m8_number_1} ${m8_input_name} channel 3"
+    id: m8${m8_number_1}_I_channel_3
+    icon: "mdi:door-open"
+    pin:
+      pca9554: domix_m8${m8_number_1}_busi2c
+      number: 2
+      mode: INPUT
+    on_press:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m8_name}${m8_number_1}/${m8_input_name} 3/state"
+          payload: "ON"
+          retain: True
+    on_release:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m8_name}${m8_number_1}/${m8_input_name} 3/state"
+          payload: "OFF"
+          retain: True       
+    web_server:
+      sorting_group_id: domix_m8_web
+      sorting_weight: 3
+
+  - platform: gpio
+    name: "${m8_name}${m8_number_1} ${m8_input_name} channel 4"
+    id: m8${m8_number_1}_I_channel_4
+    icon: "mdi:door-open"
+    pin:
+      pca9554: domix_m8${m8_number_1}_busi2c
+      number: 3
+      mode: INPUT
+    on_press:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m8_name}${m8_number_1}/${m8_input_name} 4/state"
+          payload: "ON"
+          retain: True
+    on_release:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m8_name}${m8_number_1}/${m8_input_name} 4/state"
+          payload: "OFF"
+          retain: True       
+    web_server:
+      sorting_group_id: domix_m8_web
+      sorting_weight: 4
+
+  - platform: gpio
+    name: "${m8_name}${m8_number_1} ${m8_input_name} channel 5"
+    id: m8${m8_number_1}_I_channel_5
+    icon: "mdi:door-open"
+    pin:
+      pca9554: domix_m8${m8_number_1}_busi2c
+      number: 4
+      mode: INPUT
+    on_press:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m8_name}${m8_number_1}/${m8_input_name} 5/state"
+          payload: "ON"
+          retain: True
+    on_release:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m8_name}${m8_number_1}/${m8_input_name} 5/state"
+          payload: "OFF"
+          retain: True       
+    web_server:
+      sorting_group_id: domix_m8_web
+      sorting_weight: 5
+
+  - platform: gpio
+    name: "${m8_name}${m8_number_1} ${m8_input_name} channel 6"
+    id: m8${m8_number_1}_I_channel_6
+    icon: "mdi:door-open"
+    pin:
+      pca9554: domix_m8${m8_number_1}_busi2c
+      number: 5
+      mode: INPUT
+    on_press:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m8_name}${m8_number_1}/${m8_input_name} 6/state"
+          payload: "ON"
+          retain: True
+    on_release:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m8_name}${m8_number_1}/${m8_input_name} 6/state"
+          payload: "OFF"
+          retain: True       
+    web_server:
+      sorting_group_id: domix_m8_web
+      sorting_weight: 6
+
+  - platform: gpio
+    name: "${m8_name}${m8_number_1} ${m8_input_name} channel 7"
+    id: m8${m8_number_1}_I_channel_7
+    icon: "mdi:door-open"
+    pin:
+      pca9554: domix_m8${m8_number_1}_busi2c
+      number: 6
+      mode: INPUT
+    on_press:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m8_name}${m8_number_1}/${m8_input_name} 7/state"
+          payload: "ON"
+          retain: True
+    on_release:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m8_name}${m8_number_1}/${m8_input_name} 7/state"
+          payload: "OFF"
+          retain: True       
+    web_server:
+      sorting_group_id: domix_m8_web
+      sorting_weight: 7
+
+  - platform: gpio
+    name: "${m8_name}${m8_number_1} ${m8_input_name} channel 8"
+    id: m8${m8_number_1}_I_channel_8
+    icon: "mdi:door-open"
+    pin:
+      pca9554: domix_m8${m8_number_1}_busi2c
+      number: 7
+      mode: INPUT
+    on_press:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m8_name}${m8_number_1}/${m8_input_name} 8/state"
+          payload: "ON"
+          retain: True
+    on_release:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m8_name}${m8_number_1}/${m8_input_name} 8/state"
+          payload: "OFF"
+          retain: True       
+    web_server:
+      sorting_group_id: domix_m8_web
+      sorting_weight: 8
+
+  - platform: gpio
+    name: "${m8_name}${m8_number_1} ${m8_input_name} channel 9"
+    id: m8${m8_number_1}_I_channel_9
+    icon: "mdi:door-open"
+    pin:
+      pca9554: domix_m8${m8_number_1}_busi2c
+      number: 8
+      mode: INPUT
+    on_press:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m8_name}${m8_number_1}/${m8_input_name} 9/state"
+          payload: "ON"
+          retain: True
+    on_release:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m8_name}${m8_number_1}/${m8_input_name} 9/state"
+          payload: "OFF"
+          retain: True       
+    web_server:
+      sorting_group_id: domix_m8_web
+      sorting_weight: 9
+
+  - platform: gpio
+    name: "${m8_name}${m8_number_1} ${m8_input_name} channel 10"
+    id: m8${m8_number_1}_I_channel_10
+    icon: "mdi:door-open"
+    pin:
+      pca9554: domix_m8${m8_number_1}_busi2c
+      number: 9
+      mode: INPUT
+    on_press:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m8_name}${m8_number_1}/${m8_input_name} 10/state"
+          payload: "ON"
+          retain: True
+    on_release:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m8_name}${m8_number_1}/${m8_input_name} 10/state"
+          payload: "OFF"
+          retain: True       
+    web_server:
+      sorting_group_id: domix_m8_web
+      sorting_weight: 10
+
+  - platform: gpio
+    name: "${m8_name}${m8_number_1} ${m8_input_name} channel 11"
+    id: m8${m8_number_1}_I_channel_11
+    icon: "mdi:door-open"
+    pin:
+      pca9554: domix_m8${m8_number_1}_busi2c
+      number: 10
+      mode: INPUT
+    on_press:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m8_name}${m8_number_1}/${m8_input_name} 11/state"
+          payload: "ON"
+          retain: True
+    on_release:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m8_name}${m8_number_1}/${m8_input_name} 11/state"
+          payload: "OFF"
+          retain: True       
+    web_server:
+      sorting_group_id: domix_m8_web
+      sorting_weight: 11
+
+  - platform: gpio
+    name: "${m8_name}${m8_number_1} ${m8_input_name} channel 12"
+    id: m8${m8_number_1}_I_channel_12
+    icon: "mdi:door-open"
+    pin:
+      pca9554: domix_m8${m8_number_1}_busi2c
+      number: 11
+      mode: INPUT
+    on_press:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m8_name}${m8_number_1}/${m8_input_name} 12/state"
+          payload: "ON"
+          retain: True
+    on_release:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m8_name}${m8_number_1}/${m8_input_name} 12/state"
+          payload: "OFF"
+          retain: True       
+    web_server:
+      sorting_group_id: domix_m8_web
+      sorting_weight: 12
+
+  - platform: gpio
+    name: "${m8_name}${m8_number_1} ${m8_input_name} channel 13"
+    id: m8${m8_number_1}_I_channel_13
+    icon: "mdi:door-open"
+    pin:
+      pca9554: domix_m8${m8_number_1}_busi2c
+      number: 12
+      mode: INPUT
+    on_press:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m8_name}${m8_number_1}/${m8_input_name} 13/state"
+          payload: "ON"
+          retain: True
+    on_release:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m8_name}${m8_number_1}/${m8_input_name} 13/state"
+          payload: "OFF"
+          retain: True       
+    web_server:
+      sorting_group_id: domix_m8_web
+      sorting_weight: 13
+
+  - platform: gpio
+    name: "${m8_name}${m8_number_1} ${m8_input_name} channel 14"
+    id: m8${m8_number_1}_I_channel_14
+    icon: "mdi:door-open"
+    pin:
+      pca9554: domix_m8${m8_number_1}_busi2c
+      number: 13
+      mode: INPUT
+    on_press:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m8_name}${m8_number_1}/${m8_input_name} 14/state"
+          payload: "ON"
+          retain: True
+    on_release:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m8_name}${m8_number_1}/${m8_input_name} 14/state"
+          payload: "OFF"
+          retain: True       
+    web_server:
+      sorting_group_id: domix_m8_web
+      sorting_weight: 14
+
+  - platform: gpio
+    name: "${m8_name}${m8_number_1} ${m8_input_name} channel 15"
+    id: m8${m8_number_1}_I_channel_15
+    icon: "mdi:door-open"
+    pin:
+      pca9554: domix_m8${m8_number_1}_busi2c
+      number: 14
+      mode: INPUT
+    on_press:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m8_name}${m8_number_1}/${m8_input_name} 15/state"
+          payload: "ON"
+          retain: True
+    on_release:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m8_name}${m8_number_1}/${m8_input_name} 15/state"
+          payload: "OFF"
+          retain: True       
+    web_server:
+      sorting_group_id: domix_m8_web
+      sorting_weight: 15
+
+  - platform: gpio
+    name: "${m8_name}${m8_number_1} ${m8_input_name} channel 16"
+    id: m8${m8_number_1}_I_channel_16
+    icon: "mdi:door-open"
+    pin:
+      pca9554: domix_m8${m8_number_1}_busi2c
+      number: 15
+      mode: INPUT
+    on_press:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m8_name}${m8_number_1}/${m8_input_name} 16/state"
+          payload: "ON"
+          retain: True
+    on_release:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m8_name}${m8_number_1}/${m8_input_name} 16/state"
+          payload: "OFF"
+          retain: True       
+    web_server:
+      sorting_group_id: domix_m8_web
+      sorting_weight: 16

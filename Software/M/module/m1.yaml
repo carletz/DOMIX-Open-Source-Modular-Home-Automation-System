@@ -1,0 +1,972 @@
+# ============================================================================
+#
+# M1 MODULE BASIC DESIGN FOR DISPLAY
+#
+# Adapt the configurations, names and other to your needs
+#
+# ============================================================================
+
+globals:
+  - id: menu_splash
+    type: bool
+    initial_value: 'false'
+  - id: splash_time
+    type: uint32_t
+    initial_value: '0'
+  - id: menu_active
+    type: bool
+    restore_value: no
+    initial_value: 'false'
+
+  - id: menu_level
+    type: int
+    initial_value: '0'
+    # 0 = main menu
+    # 1 = module submenu
+    # 2 = component detail / edit
+
+  - id: menu_index
+    type: int
+    initial_value: '0'
+
+  - id: submenu_index
+    type: int
+    initial_value: '0'
+
+  - id: menu_edit
+    type: bool
+    restore_value: no
+    initial_value: 'false'
+
+  - id: main_menu_items
+    type: int
+    initial_value: '8'
+
+  - id: m2_pages
+    type: int
+    initial_value: '2'   # 0 = input, 1 = output
+
+  - id: output_index
+    type: int
+    initial_value: '0'
+
+  - id: last_activity_time
+    type: unsigned long
+    restore_value: no
+    initial_value: '0'
+
+  - id: ok_press_time
+    type: unsigned long
+    restore_value: no
+    initial_value: '0'
+
+  # Configurable timeout in ms (default 10 seconds = 10000)
+  - id: menu_timeout_ms
+    type: unsigned long
+    restore_value: no
+    initial_value: '10000'
+
+ads1115:
+  - id: screen_button
+    address: ${m1_screen_button_address}
+    i2c_id: ${m1_i2c_id}
+
+sensor:
+  - platform: ads1115
+    ads1115_id: screen_button
+    name: "Screen Button Level"
+    id: analog_button
+    multiplexer: 'A0_GND'
+    gain: 6.144
+    update_interval: 100ms
+    internal: true
+
+font:
+  - file: "font/Roboto-Regular.ttf"
+    id: font_small
+    size: 10
+
+  - file: "font/Roboto-Regular.ttf"
+    id: font_normal
+    size: 12
+
+image:
+  - file: "font/domix_logo.png"
+    id: img_domix_logo
+    type: BINARY
+    resize: 124x38
+
+display:
+  - platform: ssd1306_i2c
+    id: "${m1_name}_screen"
+    i2c_id: bus_screen
+    address: ${m1_screen_address}
+    model: "SH1106 128x64"
+    update_interval: 0.5s
+    contrast: 70%
+    lambda: |-
+      const char* module_names[8] = {
+        "M2 I/O",
+        "M3 Contacts",
+        "M4 6 Relays",
+        "M5 12 Relays",
+        "M6 Energy",
+        "M7 Output",
+        "M8 Input",
+        "M9 Sprinkler"
+      };
+      // Number of pages per module (0 = not implemented = fallback)
+      const int module_pages[8] = {
+        2,  // M2: 0=Input, 1=Output
+        2,  // M3: 0=CH1-8, 1=CH9-16
+        1,  // M4: 0=6 Relays (edit)
+        2,  // M5: 0=R1-6, 1=R7-12 (edit)
+        2,  // M6: 0=Voltage+CH1-5, 1=CH6-10 (read-only)
+        2,  // M7: 0=O1-8, 1=O9-16 (edit)
+        2,  // M8: 0=I1-8, 1=I9-16 (read-only)
+        3   // M9: 0=Status, 1=V1-4, 2=V5-8 (read-only)
+      };
+
+      /* ============================================================
+         SPLASH SCREEN — DOMIX logo on first menu activation
+         ============================================================ */
+      if (id(menu_splash)) {
+        it.image(2, 13, id(img_domix_logo));    // Center the 124x38 logo on the 128x64 display
+        return;
+      }
+
+      /* ============================================================
+         IDLE SCREEN — menu inactive
+         ============================================================ */
+      if (!id(menu_active)) {
+        it.printf(0, 0, id(font_normal), "DOMIX");
+        if (id(myclock).now().is_valid()) {
+          it.strftime(90, 0, id(font_normal), "%H:%M", id(myclock).now());
+        }
+        it.line(0, 10, 127, 10);
+        return;
+      }
+
+      /* ============================================================
+         LEVEL 0 — MAIN MENU
+         ============================================================ */
+      if (id(menu_level) == 0) {
+        it.printf(0, 0, id(font_small), "MENU");
+        it.line(0, 10, 127, 10);
+        for (int i = 0; i < 8; i++) {
+          int y = 12 + i * 6;
+          if (i == id(menu_index)) {
+            it.printf(0, y, id(font_small), ">%s", module_names[i]);
+          } else {
+            it.printf(8, y, id(font_small), "%s", module_names[i]);
+          }
+        }
+        it.line(0, 56, 127, 56);
+        it.printf(15, 58, id(font_small), "UP/DN  OK  HOLD=CLOSE");
+        return;
+      }
+
+      /* ============================================================
+         LEVEL 1 — SUBMENU
+         ============================================================ */
+      if (id(menu_level) == 1) {
+        int idx   = id(menu_index);
+        int pages = module_pages[idx];
+
+        // Header: module name [3] + page indicator [4]
+        it.printf(0, 0, id(font_small), "%s", module_names[idx]);
+        if (pages > 0) {
+          it.printf(95, 0, id(font_small), "[%d/%d]", id(submenu_index) + 1, pages);
+        }
+        it.line(0, 10, 127, 10);
+
+        /* ---- Module not yet implemented ---- */
+        if (pages == 0) {
+          it.printf(15, 26, id(font_small), "Coming soon...");
+          it.line(0, 56, 127, 56);
+          it.printf(25, 58, id(font_small), "HOLD OK = BACK");
+          return;
+        }
+
+        /* ---- M2 I/O (idx == 0) ---- */
+        if (idx == 0) {
+
+          /* INPUT */
+          if (id(submenu_index) == 0) {
+            it.printf(110, 0, id(font_small), "IN");
+            // [7] has_state() guard — shows "---" if module has no state yet
+            it.printf(0, 14, id(font_small), "I1:%-3s  I2:%s",
+              id(m2${m2_number_1}_I_channel_1).has_state() ? (id(m2${m2_number_1}_I_channel_1).state ? "ON":"OFF") : "---",
+              id(m2${m2_number_1}_I_channel_2).has_state() ? (id(m2${m2_number_1}_I_channel_2).state ? "ON":"OFF") : "---");
+            it.printf(0, 24, id(font_small), "I3:%-3s  I4:%s",
+              id(m2${m2_number_1}_I_channel_3).has_state() ? (id(m2${m2_number_1}_I_channel_3).state ? "ON":"OFF") : "---",
+              id(m2${m2_number_1}_I_channel_4).has_state() ? (id(m2${m2_number_1}_I_channel_4).state ? "ON":"OFF") : "---");
+            it.printf(0, 34, id(font_small), "I5:%-3s  I6:%s",
+              id(m2${m2_number_1}_I_channel_5).has_state() ? (id(m2${m2_number_1}_I_channel_5).state ? "ON":"OFF") : "---",
+              id(m2${m2_number_1}_I_channel_6).has_state() ? (id(m2${m2_number_1}_I_channel_6).state ? "ON":"OFF") : "---");
+            it.printf(0, 44, id(font_small), "I7:%-3s  I8:%s",
+              id(m2${m2_number_1}_I_channel_7).has_state() ? (id(m2${m2_number_1}_I_channel_7).state ? "ON":"OFF") : "---",
+              id(m2${m2_number_1}_I_channel_8).has_state() ? (id(m2${m2_number_1}_I_channel_8).state ? "ON":"OFF") : "---");
+          }
+
+          /* OUTPUT */
+          if (id(submenu_index) == 1) {
+            it.printf(107, 0, id(font_small), "OUT");
+            it.printf(0, 14, id(font_small), "O1:%-3s  O2:%s",
+              id(m2${m2_number_1}_O_channel_1).has_state() ? (id(m2${m2_number_1}_O_channel_1).state ? "ON":"OFF") : "---",
+              id(m2${m2_number_1}_O_channel_2).has_state() ? (id(m2${m2_number_1}_O_channel_2).state ? "ON":"OFF") : "---");
+            it.printf(0, 24, id(font_small), "O3:%-3s  O4:%s",
+              id(m2${m2_number_1}_O_channel_3).has_state() ? (id(m2${m2_number_1}_O_channel_3).state ? "ON":"OFF") : "---",
+              id(m2${m2_number_1}_O_channel_4).has_state() ? (id(m2${m2_number_1}_O_channel_4).state ? "ON":"OFF") : "---");
+            it.printf(0, 34, id(font_small), "O5:%-3s  O6:%s",
+              id(m2${m2_number_1}_O_channel_5).has_state() ? (id(m2${m2_number_1}_O_channel_5).state ? "ON":"OFF") : "---",
+              id(m2${m2_number_1}_O_channel_6).has_state() ? (id(m2${m2_number_1}_O_channel_6).state ? "ON":"OFF") : "---");
+            it.printf(0, 44, id(font_small), "O7:%-3s  O8:%s",
+              id(m2${m2_number_1}_O_channel_7).has_state() ? (id(m2${m2_number_1}_O_channel_7).state ? "ON":"OFF") : "---",
+              id(m2${m2_number_1}_O_channel_8).has_state() ? (id(m2${m2_number_1}_O_channel_8).state ? "ON":"OFF") : "---");
+          }
+        }
+
+        /* ---- M3 Contacts (idx == 1) — read only, 16 binary channel ---- */
+        if (idx == 1) {
+          // Page 0: CH1–CH8
+          if (id(submenu_index) == 0) {
+            it.printf(0, 14, id(font_small), "C1:%-3s  C2:%s",
+              id(domix_m3${m3_number_1}_ch0_state).has_state() ? (id(domix_m3${m3_number_1}_ch0_state).state ? "ON":"OFF") : "---",
+              id(domix_m3${m3_number_1}_ch1_state).has_state() ? (id(domix_m3${m3_number_1}_ch1_state).state ? "ON":"OFF") : "---");
+            it.printf(0, 24, id(font_small), "C3:%-3s  C4:%s",
+              id(domix_m3${m3_number_1}_ch2_state).has_state() ? (id(domix_m3${m3_number_1}_ch2_state).state ? "ON":"OFF") : "---",
+              id(domix_m3${m3_number_1}_ch3_state).has_state() ? (id(domix_m3${m3_number_1}_ch3_state).state ? "ON":"OFF") : "---");
+            it.printf(0, 34, id(font_small), "C5:%-3s  C6:%s",
+              id(domix_m3${m3_number_1}_ch4_state).has_state() ? (id(domix_m3${m3_number_1}_ch4_state).state ? "ON":"OFF") : "---",
+              id(domix_m3${m3_number_1}_ch5_state).has_state() ? (id(domix_m3${m3_number_1}_ch5_state).state ? "ON":"OFF") : "---");
+            it.printf(0, 44, id(font_small), "C7:%-3s  C8:%s",
+              id(domix_m3${m3_number_1}_ch6_state).has_state() ? (id(domix_m3${m3_number_1}_ch6_state).state ? "ON":"OFF") : "---",
+              id(domix_m3${m3_number_1}_ch7_state).has_state() ? (id(domix_m3${m3_number_1}_ch7_state).state ? "ON":"OFF") : "---");
+          }
+          // Page 1: CH9–CH16
+          if (id(submenu_index) == 1) {
+            it.printf(0, 14, id(font_small), "C9:%-3s  C10:%s",
+              id(domix_m3${m3_number_1}_ch8_state).has_state()  ? (id(domix_m3${m3_number_1}_ch8_state).state  ? "ON":"OFF") : "---",
+              id(domix_m3${m3_number_1}_ch9_state).has_state() ? (id(domix_m3${m3_number_1}_ch9_state).state ? "ON":"OFF") : "---");
+            it.printf(0, 24, id(font_small), "C11:%-3s C12:%s",
+              id(domix_m3${m3_number_1}_ch10_state).has_state() ? (id(domix_m3${m3_number_1}_ch10_state).state ? "ON":"OFF") : "---",
+              id(domix_m3${m3_number_1}_ch11_state).has_state() ? (id(domix_m3${m3_number_1}_ch11_state).state ? "ON":"OFF") : "---");
+            it.printf(0, 34, id(font_small), "C13:%-3s C14:%s",
+              id(domix_m3${m3_number_1}_ch12_state).has_state() ? (id(domix_m3${m3_number_1}_ch12_state).state ? "ON":"OFF") : "---",
+              id(domix_m3${m3_number_1}_ch13_state).has_state() ? (id(domix_m3${m3_number_1}_ch13_state).state ? "ON":"OFF") : "---");
+            it.printf(0, 44, id(font_small), "C15:%-3s C16:%s",
+              id(domix_m3${m3_number_1}_ch14_state).has_state() ? (id(domix_m3${m3_number_1}_ch14_state).state ? "ON":"OFF") : "---",
+              id(domix_m3${m3_number_1}_ch15_state).has_state() ? (id(domix_m3${m3_number_1}_ch15_state).state ? "ON":"OFF") : "---");
+          }
+        }
+
+        /* ---- M4 6 Relays (idx == 2) — 6 output channels, editable ---- */
+        if (idx == 2) {
+          it.printf(0, 14, id(font_small), "R1:%-3s  R2:%s",
+            id(m4${m4_number_1}_channel_1).has_state() ? (id(m4${m4_number_1}_channel_1).state ? "ON":"OFF") : "---",
+            id(m4${m4_number_1}_channel_2).has_state() ? (id(m4${m4_number_1}_channel_2).state ? "ON":"OFF") : "---");
+          it.printf(0, 24, id(font_small), "R3:%-3s  R4:%s",
+            id(m4${m4_number_1}_channel_3).has_state() ? (id(m4${m4_number_1}_channel_3).state ? "ON":"OFF") : "---",
+            id(m4${m4_number_1}_channel_4).has_state() ? (id(m4${m4_number_1}_channel_4).state ? "ON":"OFF") : "---");
+          it.printf(0, 34, id(font_small), "R5:%-3s  R6:%s",
+            id(m4${m4_number_1}_channel_5).has_state() ? (id(m4${m4_number_1}_channel_5).state ? "ON":"OFF") : "---",
+            id(m4${m4_number_1}_channel_6).has_state() ? (id(m4${m4_number_1}_channel_6).state ? "ON":"OFF") : "---");
+        }
+
+        /* ---- M5 12 Relays (idx == 3) — 12 output channels, editable ---- */
+        if (idx == 3) {
+          // Page 0: R1–R6
+          if (id(submenu_index) == 0) {
+            it.printf(0, 14, id(font_small), "R1:%-3s  R2:%s",
+              id(m5${m5_number_1}_channel_1).has_state() ? (id(m5${m5_number_1}_channel_1).state ? "ON":"OFF") : "---",
+              id(m5${m5_number_1}_channel_2).has_state() ? (id(m5${m5_number_1}_channel_2).state ? "ON":"OFF") : "---");
+            it.printf(0, 24, id(font_small), "R3:%-3s  R4:%s",
+              id(m5${m5_number_1}_channel_3).has_state() ? (id(m5${m5_number_1}_channel_3).state ? "ON":"OFF") : "---",
+              id(m5${m5_number_1}_channel_4).has_state() ? (id(m5${m5_number_1}_channel_4).state ? "ON":"OFF") : "---");
+            it.printf(0, 34, id(font_small), "R5:%-3s  R6:%s",
+              id(m5${m5_number_1}_channel_5).has_state() ? (id(m5${m5_number_1}_channel_5).state ? "ON":"OFF") : "---",
+              id(m5${m5_number_1}_channel_6).has_state() ? (id(m5${m5_number_1}_channel_6).state ? "ON":"OFF") : "---");
+          }
+          // Page 1: R7–R12
+          if (id(submenu_index) == 1) {
+            it.printf(0, 14, id(font_small), "R7:%-3s  R8:%s",
+              id(m5${m5_number_1}_channel_7).has_state()  ? (id(m5${m5_number_1}_channel_7).state  ? "ON":"OFF") : "---",
+              id(m5${m5_number_1}_channel_8).has_state()  ? (id(m5${m5_number_1}_channel_8).state  ? "ON":"OFF") : "---");
+            it.printf(0, 24, id(font_small), "R9:%-3s  R10:%s",
+              id(m5${m5_number_1}_channel_9).has_state()  ? (id(m5${m5_number_1}_channel_9).state  ? "ON":"OFF") : "---",
+              id(m5${m5_number_1}_channel_10).has_state() ? (id(m5${m5_number_1}_channel_10).state ? "ON":"OFF") : "---");
+            it.printf(0, 34, id(font_small), "R11:%-3s R12:%s",
+              id(m5${m5_number_1}_channel_11).has_state() ? (id(m5${m5_number_1}_channel_11).state ? "ON":"OFF") : "---",
+              id(m5${m5_number_1}_channel_12).has_state() ? (id(m5${m5_number_1}_channel_12).state ? "ON":"OFF") : "---");
+          }
+        }
+
+        /* ---- M6 Energy (idx == 4) — voltage + 10 currents, read-only ---- */
+        if (idx == 4) {
+          // Helper: format a float sensor with 1 decimal or "---" if unavailable
+          // Use snprintf on local buffers to avoid dynamic allocations on ESP
+          char v_buf[8], a1[8], a2[8], a3[8], a4[8], a5[8], a6[8], a7[8], a8[8], a9[8], a10[8];
+
+          auto fmt_a = [](char* buf, float val, bool valid) {
+            if (valid) snprintf(buf, 8, "%.1fA", val);
+            else       snprintf(buf, 8, "---");
+          };
+
+          // Page 0: mains voltage + currents CH1–CH5
+          if (id(submenu_index) == 0) {
+            if (id(voltage${m6_number_1}).has_state())
+              snprintf(v_buf, 8, "%.1fV", id(voltage${m6_number_1}).state);
+            else
+              snprintf(v_buf, 8, "---");
+
+            fmt_a(a1, id(measured_current_m6${m6_number_1}_clamp_1).state,  id(measured_current_m6${m6_number_1}_clamp_1).has_state());
+            fmt_a(a2, id(measured_current_m6${m6_number_1}_clamp_2).state,  id(measured_current_m6${m6_number_1}_clamp_2).has_state());
+            fmt_a(a3, id(measured_current_m6${m6_number_1}_clamp_3).state,  id(measured_current_m6${m6_number_1}_clamp_3).has_state());
+            fmt_a(a4, id(measured_current_m6${m6_number_1}_clamp_4).state,  id(measured_current_m6${m6_number_1}_clamp_4).has_state());
+            fmt_a(a5, id(measured_current_m6${m6_number_1}_clamp_5).state,  id(measured_current_m6${m6_number_1}_clamp_5).has_state());
+
+            it.printf(0, 14, id(font_small), "V: %s", v_buf);
+            it.printf(0, 24, id(font_small), "A1:%-7s A2:%s", a1, a2);
+            it.printf(0, 34, id(font_small), "A3:%-7s A4:%s", a3, a4);
+            it.printf(0, 44, id(font_small), "A5:%s",         a5);
+          }
+
+          // Page 1: currents CH6–CH10
+          if (id(submenu_index) == 1) {
+            fmt_a(a6,  id(measured_current_m6${m6_number_1}_clamp_6).state,  id(measured_current_m6${m6_number_1}_clamp_6).has_state());
+            fmt_a(a7,  id(measured_current_m6${m6_number_1}_clamp_7).state,  id(measured_current_m6${m6_number_1}_clamp_7).has_state());
+            fmt_a(a8,  id(measured_current_m6${m6_number_1}_clamp_8).state,  id(measured_current_m6${m6_number_1}_clamp_8).has_state());
+            fmt_a(a9,  id(measured_current_m6${m6_number_1}_clamp_9).state,  id(measured_current_m6${m6_number_1}_clamp_9).has_state());
+            fmt_a(a10, id(measured_current_m6${m6_number_1}_clamp_10).state, id(measured_current_m6${m6_number_1}_clamp_10).has_state());
+
+            it.printf(0, 14, id(font_small), "A6:%-7s A7:%s",  a6,  a7);
+            it.printf(0, 24, id(font_small), "A8:%-7s A9:%s",  a8,  a9);
+            it.printf(0, 34, id(font_small), "A10:%s",         a10);
+          }
+        }
+
+        /* ---- M7 Output (idx == 5) — 16 output switches, editable ---- */
+        if (idx == 5) {
+          // Page 0: O1–O8
+          if (id(submenu_index) == 0) {
+            it.printf(0, 14, id(font_small), "O1:%-3s  O2:%s",
+              id(m7${m7_number_1}_O_channel_1).has_state() ? (id(m7${m7_number_1}_O_channel_1).state ? "ON":"OFF") : "---",
+              id(m7${m7_number_1}_O_channel_2).has_state() ? (id(m7${m7_number_1}_O_channel_2).state ? "ON":"OFF") : "---");
+            it.printf(0, 24, id(font_small), "O3:%-3s  O4:%s",
+              id(m7${m7_number_1}_O_channel_3).has_state() ? (id(m7${m7_number_1}_O_channel_3).state ? "ON":"OFF") : "---",
+              id(m7${m7_number_1}_O_channel_4).has_state() ? (id(m7${m7_number_1}_O_channel_4).state ? "ON":"OFF") : "---");
+            it.printf(0, 34, id(font_small), "O5:%-3s  O6:%s",
+              id(m7${m7_number_1}_O_channel_5).has_state() ? (id(m7${m7_number_1}_O_channel_5).state ? "ON":"OFF") : "---",
+              id(m7${m7_number_1}_O_channel_6).has_state() ? (id(m7${m7_number_1}_O_channel_6).state ? "ON":"OFF") : "---");
+            it.printf(0, 44, id(font_small), "O7:%-3s  O8:%s",
+              id(m7${m7_number_1}_O_channel_7).has_state() ? (id(m7${m7_number_1}_O_channel_7).state ? "ON":"OFF") : "---",
+              id(m7${m7_number_1}_O_channel_8).has_state() ? (id(m7${m7_number_1}_O_channel_8).state ? "ON":"OFF") : "---");
+          }
+          // Page 1: O9–O16
+          if (id(submenu_index) == 1) {
+            it.printf(0, 14, id(font_small), "O9:%-3s  O10:%s",
+              id(m7${m7_number_1}_O_channel_9).has_state()  ? (id(m7${m7_number_1}_O_channel_9).state  ? "ON":"OFF") : "---",
+              id(m7${m7_number_1}_O_channel_10).has_state() ? (id(m7${m7_number_1}_O_channel_10).state ? "ON":"OFF") : "---");
+            it.printf(0, 24, id(font_small), "O11:%-3s O12:%s",
+              id(m7${m7_number_1}_O_channel_11).has_state() ? (id(m7${m7_number_1}_O_channel_11).state ? "ON":"OFF") : "---",
+              id(m7${m7_number_1}_O_channel_12).has_state() ? (id(m7${m7_number_1}_O_channel_12).state ? "ON":"OFF") : "---");
+            it.printf(0, 34, id(font_small), "O13:%-3s O14:%s",
+              id(m7${m7_number_1}_O_channel_13).has_state() ? (id(m7${m7_number_1}_O_channel_13).state ? "ON":"OFF") : "---",
+              id(m7${m7_number_1}_O_channel_14).has_state() ? (id(m7${m7_number_1}_O_channel_14).state ? "ON":"OFF") : "---");
+            it.printf(0, 44, id(font_small), "O15:%-3s O16:%s",
+              id(m7${m7_number_1}_O_channel_15).has_state() ? (id(m7${m7_number_1}_O_channel_15).state ? "ON":"OFF") : "---",
+              id(m7${m7_number_1}_O_channel_16).has_state() ? (id(m7${m7_number_1}_O_channel_16).state ? "ON":"OFF") : "---");
+          }
+        }
+
+        /* ---- M8 Input (idx == 6) — 16 binary inputs, read-only ---- */
+        if (idx == 6) {
+          // Page 0: I1–I8
+          if (id(submenu_index) == 0) {
+            it.printf(0, 14, id(font_small), "I1:%-3s  I2:%s",
+              id(m8${m8_number_1}_I_channel_1).has_state() ? (id(m8${m8_number_1}_I_channel_1).state ? "ON":"OFF") : "---",
+              id(m8${m8_number_1}_I_channel_2).has_state() ? (id(m8${m8_number_1}_I_channel_2).state ? "ON":"OFF") : "---");
+            it.printf(0, 24, id(font_small), "I3:%-3s  I4:%s",
+              id(m8${m8_number_1}_I_channel_3).has_state() ? (id(m8${m8_number_1}_I_channel_3).state ? "ON":"OFF") : "---",
+              id(m8${m8_number_1}_I_channel_4).has_state() ? (id(m8${m8_number_1}_I_channel_4).state ? "ON":"OFF") : "---");
+            it.printf(0, 34, id(font_small), "I5:%-3s  I6:%s",
+              id(m8${m8_number_1}_I_channel_5).has_state() ? (id(m8${m8_number_1}_I_channel_5).state ? "ON":"OFF") : "---",
+              id(m8${m8_number_1}_I_channel_6).has_state() ? (id(m8${m8_number_1}_I_channel_6).state ? "ON":"OFF") : "---");
+            it.printf(0, 44, id(font_small), "I7:%-3s  I8:%s",
+              id(m8${m8_number_1}_I_channel_7).has_state() ? (id(m8${m8_number_1}_I_channel_7).state ? "ON":"OFF") : "---",
+              id(m8${m8_number_1}_I_channel_8).has_state() ? (id(m8${m8_number_1}_I_channel_8).state ? "ON":"OFF") : "---");
+          }
+          // Page 1: I9–I16
+          if (id(submenu_index) == 1) {
+            it.printf(0, 14, id(font_small), "I9:%-3s  I10:%s",
+              id(m8${m8_number_1}_I_channel_9).has_state()  ? (id(m8${m8_number_1}_I_channel_9).state  ? "ON":"OFF") : "---",
+              id(m8${m8_number_1}_I_channel_10).has_state() ? (id(m8${m8_number_1}_I_channel_10).state ? "ON":"OFF") : "---");
+            it.printf(0, 24, id(font_small), "I11:%-3s I12:%s",
+              id(m8${m8_number_1}_I_channel_11).has_state() ? (id(m8${m8_number_1}_I_channel_11).state ? "ON":"OFF") : "---",
+              id(m8${m8_number_1}_I_channel_12).has_state() ? (id(m8${m8_number_1}_I_channel_12).state ? "ON":"OFF") : "---");
+            it.printf(0, 34, id(font_small), "I13:%-3s I14:%s",
+              id(m8${m8_number_1}_I_channel_13).has_state() ? (id(m8${m8_number_1}_I_channel_13).state ? "ON":"OFF") : "---",
+              id(m8${m8_number_1}_I_channel_14).has_state() ? (id(m8${m8_number_1}_I_channel_14).state ? "ON":"OFF") : "---");
+            it.printf(0, 44, id(font_small), "I15:%-3s I16:%s",
+              id(m8${m8_number_1}_I_channel_15).has_state() ? (id(m8${m8_number_1}_I_channel_15).state ? "ON":"OFF") : "---",
+              id(m8${m8_number_1}_I_channel_16).has_state() ? (id(m8${m8_number_1}_I_channel_16).state ? "ON":"OFF") : "---");
+          }
+        }
+
+        /* ---- M9 Sprinkler (idx == 7) — 8 valves + status, read-only ---- */
+        if (idx == 7) {
+          // Page 0: global status
+          if (id(submenu_index) == 0) {
+            // Status (text_sensor: valve_status) + progress (text_sensor: progress_percent)
+            it.printf(0, 14, id(font_small), "ST: %s",
+              id(valve_status).has_state() ? id(valve_status).state.c_str() : "---");
+            it.printf(0, 24, id(font_small), "PR: %s",
+              id(progress_percent).has_state() ? id(progress_percent).state.c_str() : "---");
+            it.printf(0, 34, id(font_small), "REM: %s",
+              id(time_remaining).has_state() ? id(time_remaining).state.c_str() : "---");
+            // Auto irrigation + rain delay
+            it.printf(0, 44, id(font_small), "AUTO:%s RD24:%s",
+              id(${m9_description}_schedule1_enabled).has_state() ? (id(${m9_description}_schedule1_enabled).state ? "ON":"OFF") : "---",
+              id(${m9_description}_raindelay_24h_enabled).has_state() ? (id(${m9_description}_raindelay_24h_enabled).state ? "ON":"OFF") : "---");
+          }
+          // Page 1: V1–V4 state + duration
+          if (id(submenu_index) == 1) {
+            char d1[6], d2[6], d3[6], d4[6];
+            snprintf(d1, 6, id(valve_1).has_state() ? "%.0fm" : "---", id(valve_1).state);
+            snprintf(d2, 6, id(valve_2).has_state() ? "%.0fm" : "---", id(valve_2).state);
+            snprintf(d3, 6, id(valve_3).has_state() ? "%.0fm" : "---", id(valve_3).state);
+            snprintf(d4, 6, id(valve_4).has_state() ? "%.0fm" : "---", id(valve_4).state);
+            it.printf(0, 14, id(font_small), "V1:%s %s",
+              id(m9${m9_number_1}_valve_1).has_state() ? (id(m9${m9_number_1}_valve_1).state ? "ON ":"OFF") : "---", d1);
+            it.printf(0, 24, id(font_small), "V2:%s %s",
+              id(m9${m9_number_1}_valve_2).has_state() ? (id(m9${m9_number_1}_valve_2).state ? "ON ":"OFF") : "---", d2);
+            it.printf(0, 34, id(font_small), "V3:%s %s",
+              id(m9${m9_number_1}_valve_3).has_state() ? (id(m9${m9_number_1}_valve_3).state ? "ON ":"OFF") : "---", d3);
+            it.printf(0, 44, id(font_small), "V4:%s %s",
+              id(m9${m9_number_1}_valve_4).has_state() ? (id(m9${m9_number_1}_valve_4).state ? "ON ":"OFF") : "---", d4);
+          }
+          // Page 2: V5–V8 state + duration
+          if (id(submenu_index) == 2) {
+            char d5[6], d6[6], d7[6], d8[6];
+            snprintf(d5, 6, id(valve_5).has_state() ? "%.0fm" : "---", id(valve_5).state);
+            snprintf(d6, 6, id(valve_6).has_state() ? "%.0fm" : "---", id(valve_6).state);
+            snprintf(d7, 6, id(valve_7).has_state() ? "%.0fm" : "---", id(valve_7).state);
+            snprintf(d8, 6, id(valve_8).has_state() ? "%.0fm" : "---", id(valve_8).state);
+            it.printf(0, 14, id(font_small), "V5:%s %s",
+              id(m9${m9_number_1}_valve_5).has_state() ? (id(m9${m9_number_1}_valve_5).state ? "ON ":"OFF") : "---", d5);
+            it.printf(0, 24, id(font_small), "V6:%s %s",
+              id(m9${m9_number_1}_valve_6).has_state() ? (id(m9${m9_number_1}_valve_6).state ? "ON ":"OFF") : "---", d6);
+            it.printf(0, 34, id(font_small), "V7:%s %s",
+              id(m9${m9_number_1}_valve_7).has_state() ? (id(m9${m9_number_1}_valve_7).state ? "ON ":"OFF") : "---", d7);
+            it.printf(0, 44, id(font_small), "V8:%s %s",
+              id(m9${m9_number_1}_valve_8).has_state() ? (id(m9${m9_number_1}_valve_8).state ? "ON ":"OFF") : "---", d8);
+          }
+        }
+
+        it.line(0, 56, 127, 56);
+        // Footer: M3=1, M6=4, M8=6, M9=7 are read-only
+        if (idx == 1 || idx == 4 || idx == 6 || idx == 7) {
+          it.printf(20, 58, id(font_small), "UP/DN        HOLD=BCK");
+        } else {
+          it.printf(5, 58, id(font_small), "UP/DN  OK=EDIT  HOLD=BCK");
+        }
+        return;
+      }
+
+      /* ============================================================
+         LEVEL 2 — OUTPUT EDIT  (menu_index == 0, submenu_index == 1)
+         ============================================================ */
+      if (id(menu_level) == 2 && id(menu_index) == 0 && id(submenu_index) == 1) {
+        const char* out_labels[8] = {
+          id(m2${m2_number_1}_O_channel_1).has_state() ? (id(m2${m2_number_1}_O_channel_1).state ? "ON":"OFF") : "---",
+          id(m2${m2_number_1}_O_channel_2).has_state() ? (id(m2${m2_number_1}_O_channel_2).state ? "ON":"OFF") : "---",
+          id(m2${m2_number_1}_O_channel_3).has_state() ? (id(m2${m2_number_1}_O_channel_3).state ? "ON":"OFF") : "---",
+          id(m2${m2_number_1}_O_channel_4).has_state() ? (id(m2${m2_number_1}_O_channel_4).state ? "ON":"OFF") : "---",
+          id(m2${m2_number_1}_O_channel_5).has_state() ? (id(m2${m2_number_1}_O_channel_5).state ? "ON":"OFF") : "---",
+          id(m2${m2_number_1}_O_channel_6).has_state() ? (id(m2${m2_number_1}_O_channel_6).state ? "ON":"OFF") : "---",
+          id(m2${m2_number_1}_O_channel_7).has_state() ? (id(m2${m2_number_1}_O_channel_7).state ? "ON":"OFF") : "---",
+          id(m2${m2_number_1}_O_channel_8).has_state() ? (id(m2${m2_number_1}_O_channel_8).state ? "ON":"OFF") : "---"
+        };
+
+        it.printf(0, 0, id(font_small), id(menu_edit) ? "EDIT OUTPUT  [*]" : "EDIT OUTPUT");
+        it.line(0, 10, 127, 10);
+
+        for (int i = 0; i < 8; i++) {
+          int row = i / 2;
+          int col = i % 2;
+          int x   = (col == 0) ? 0 : 64;
+          int y   = 12 + row * 10;
+          bool sel = (i == id(output_index));
+          it.printf(x, y, id(font_small), "%sO%d:%-3s",
+            sel ? ">" : " ",
+            i + 1,
+            out_labels[i]);
+        }
+
+        it.line(0, 56, 127, 56);
+        if (!id(menu_edit)) {
+          it.printf(5, 58, id(font_small), "UP/DN OK=ENTER HOLD=BCK");
+        } else {
+          it.printf(5, 58, id(font_small), "UP/DN OK=TGLE  HOLD=BCK");
+        }
+        return;
+      }
+
+      /* ============================================================
+         LEVEL 2 — EDIT RELAYS M4  (menu_index == 2, submenu_index == 0)
+         ============================================================ */
+      if (id(menu_level) == 2 && id(menu_index) == 2 && id(submenu_index) == 0) {
+        const char* relay_labels[6] = {
+          id(m4${m4_number_1}_channel_1).has_state() ? (id(m4${m4_number_1}_channel_1).state ? "ON":"OFF") : "---",
+          id(m4${m4_number_1}_channel_2).has_state() ? (id(m4${m4_number_1}_channel_2).state ? "ON":"OFF") : "---",
+          id(m4${m4_number_1}_channel_3).has_state() ? (id(m4${m4_number_1}_channel_3).state ? "ON":"OFF") : "---",
+          id(m4${m4_number_1}_channel_4).has_state() ? (id(m4${m4_number_1}_channel_4).state ? "ON":"OFF") : "---",
+          id(m4${m4_number_1}_channel_5).has_state() ? (id(m4${m4_number_1}_channel_5).state ? "ON":"OFF") : "---",
+          id(m4${m4_number_1}_channel_6).has_state() ? (id(m4${m4_number_1}_channel_6).state ? "ON":"OFF") : "---"
+        };
+
+        it.printf(0, 0, id(font_small), id(menu_edit) ? "M4 RELAYS  [*]" : "M4 RELAYS");
+        it.line(0, 10, 127, 10);
+
+        for (int i = 0; i < 6; i++) {
+          int row = i / 2;
+          int col = i % 2;
+          int x   = (col == 0) ? 0 : 64;
+          int y   = 12 + row * 12;
+          bool sel = (i == id(output_index));
+          it.printf(x, y, id(font_small), "%sR%d:%-3s",
+            sel ? ">" : " ",
+            i + 1,
+            relay_labels[i]);
+        }
+
+        it.line(0, 56, 127, 56);
+        if (!id(menu_edit)) {
+          it.printf(5, 58, id(font_small), "UP/DN OK=ENTER HOLD=BCK");
+        } else {
+          it.printf(5, 58, id(font_small), "UP/DN OK=TGLE  HOLD=BCK");
+        }
+        return;
+      }
+
+      /* ============================================================
+         LEVEL 2 — EDIT RELAYS M5  (menu_index == 3)
+         12 channels on 2 pages: page 0 = R1–R6, page 1 = R7–R12
+         UP/DN moves cursor among the 6 channels of the current page.
+         To change page: HOLD=BACK → submenu → select page → OK.
+         ============================================================ */
+      if (id(menu_level) == 2 && id(menu_index) == 3) {
+        int page_offset = id(submenu_index) * 6;
+
+        const char* m5_labels[12] = {
+          id(m5${m5_number_1}_channel_1).has_state()  ? (id(m5${m5_number_1}_channel_1).state  ? "ON":"OFF") : "---",
+          id(m5${m5_number_1}_channel_2).has_state()  ? (id(m5${m5_number_1}_channel_2).state  ? "ON":"OFF") : "---",
+          id(m5${m5_number_1}_channel_3).has_state()  ? (id(m5${m5_number_1}_channel_3).state  ? "ON":"OFF") : "---",
+          id(m5${m5_number_1}_channel_4).has_state()  ? (id(m5${m5_number_1}_channel_4).state  ? "ON":"OFF") : "---",
+          id(m5${m5_number_1}_channel_5).has_state()  ? (id(m5${m5_number_1}_channel_5).state  ? "ON":"OFF") : "---",
+          id(m5${m5_number_1}_channel_6).has_state()  ? (id(m5${m5_number_1}_channel_6).state  ? "ON":"OFF") : "---",
+          id(m5${m5_number_1}_channel_7).has_state()  ? (id(m5${m5_number_1}_channel_7).state  ? "ON":"OFF") : "---",
+          id(m5${m5_number_1}_channel_8).has_state()  ? (id(m5${m5_number_1}_channel_8).state  ? "ON":"OFF") : "---",
+          id(m5${m5_number_1}_channel_9).has_state()  ? (id(m5${m5_number_1}_channel_9).state  ? "ON":"OFF") : "---",
+          id(m5${m5_number_1}_channel_10).has_state() ? (id(m5${m5_number_1}_channel_10).state ? "ON":"OFF") : "---",
+          id(m5${m5_number_1}_channel_11).has_state() ? (id(m5${m5_number_1}_channel_11).state ? "ON":"OFF") : "---",
+          id(m5${m5_number_1}_channel_12).has_state() ? (id(m5${m5_number_1}_channel_12).state ? "ON":"OFF") : "---"
+        };
+
+        it.printf(0, 0, id(font_small), id(menu_edit) ? "M5 RELAYS [%d/2][*]" : "M5 RELAYS [%d/2]",
+          id(submenu_index) + 1);
+        it.line(0, 10, 127, 10);
+
+        for (int i = 0; i < 6; i++) {
+          int row = i / 2;
+          int col = i % 2;
+          int x   = (col == 0) ? 0 : 64;
+          int y   = 12 + row * 12;
+          int ch  = page_offset + i;
+          bool sel = (id(menu_edit) && ch == id(output_index));
+          it.printf(x, y, id(font_small), "%sR%02d:%-3s",
+            sel ? ">" : " ",
+            ch + 1,
+            m5_labels[ch]);
+        }
+
+        it.line(0, 56, 127, 56);
+        if (!id(menu_edit)) {
+          it.printf(5, 58, id(font_small), "UP/DN OK=ENTER HOLD=BCK");
+        } else {
+          it.printf(5, 58, id(font_small), "UP/DN OK=TGLE  HOLD=BCK");
+        }
+        return;
+      }
+
+      /* ============================================================
+         LEVEL 2 — M7 OUTPUT EDIT  (menu_index == 5)
+         16 channels on 2 pages: page 0 = O1–O8, page 1 = O9–O16
+         ============================================================ */
+      if (id(menu_level) == 2 && id(menu_index) == 5) {
+        int page_offset = id(submenu_index) * 8;
+
+        const char* m7_labels[16] = {
+          id(m7${m7_number_1}_O_channel_1).has_state()  ? (id(m7${m7_number_1}_O_channel_1).state  ? "ON":"OFF") : "---",
+          id(m7${m7_number_1}_O_channel_2).has_state()  ? (id(m7${m7_number_1}_O_channel_2).state  ? "ON":"OFF") : "---",
+          id(m7${m7_number_1}_O_channel_3).has_state()  ? (id(m7${m7_number_1}_O_channel_3).state  ? "ON":"OFF") : "---",
+          id(m7${m7_number_1}_O_channel_4).has_state()  ? (id(m7${m7_number_1}_O_channel_4).state  ? "ON":"OFF") : "---",
+          id(m7${m7_number_1}_O_channel_5).has_state()  ? (id(m7${m7_number_1}_O_channel_5).state  ? "ON":"OFF") : "---",
+          id(m7${m7_number_1}_O_channel_6).has_state()  ? (id(m7${m7_number_1}_O_channel_6).state  ? "ON":"OFF") : "---",
+          id(m7${m7_number_1}_O_channel_7).has_state()  ? (id(m7${m7_number_1}_O_channel_7).state  ? "ON":"OFF") : "---",
+          id(m7${m7_number_1}_O_channel_8).has_state()  ? (id(m7${m7_number_1}_O_channel_8).state  ? "ON":"OFF") : "---",
+          id(m7${m7_number_1}_O_channel_9).has_state()  ? (id(m7${m7_number_1}_O_channel_9).state  ? "ON":"OFF") : "---",
+          id(m7${m7_number_1}_O_channel_10).has_state() ? (id(m7${m7_number_1}_O_channel_10).state ? "ON":"OFF") : "---",
+          id(m7${m7_number_1}_O_channel_11).has_state() ? (id(m7${m7_number_1}_O_channel_11).state ? "ON":"OFF") : "---",
+          id(m7${m7_number_1}_O_channel_12).has_state() ? (id(m7${m7_number_1}_O_channel_12).state ? "ON":"OFF") : "---",
+          id(m7${m7_number_1}_O_channel_13).has_state() ? (id(m7${m7_number_1}_O_channel_13).state ? "ON":"OFF") : "---",
+          id(m7${m7_number_1}_O_channel_14).has_state() ? (id(m7${m7_number_1}_O_channel_14).state ? "ON":"OFF") : "---",
+          id(m7${m7_number_1}_O_channel_15).has_state() ? (id(m7${m7_number_1}_O_channel_15).state ? "ON":"OFF") : "---",
+          id(m7${m7_number_1}_O_channel_16).has_state() ? (id(m7${m7_number_1}_O_channel_16).state ? "ON":"OFF") : "---"
+        };
+
+        it.printf(0, 0, id(font_small), id(menu_edit) ? "M7 OUTPUT [%d/2][*]" : "M7 OUTPUT [%d/2]",
+          id(submenu_index) + 1);
+        it.line(0, 10, 127, 10);
+
+        // 2x4 grid: 8 channels per page
+        for (int i = 0; i < 8; i++) {
+          int row = i / 2;
+          int col = i % 2;
+          int x   = (col == 0) ? 0 : 64;
+          int y   = 12 + row * 10;
+          int ch  = page_offset + i;
+          bool sel = (id(menu_edit) && ch == id(output_index));
+          it.printf(x, y, id(font_small), "%sO%02d:%-3s",
+            sel ? ">" : " ",
+            ch + 1,
+            m7_labels[ch]);
+        }
+
+        it.line(0, 56, 127, 56);
+        if (!id(menu_edit)) {
+          it.printf(5, 58, id(font_small), "UP/DN OK=ENTER HOLD=BCK");
+        } else {
+          it.printf(5, 58, id(font_small), "UP/DN OK=TGLE  HOLD=BCK");
+        }
+        return;
+      }
+
+      if (id(menu_level) == 2) {
+        it.printf(20, 24, id(font_small), "No edit available");
+        it.line(0, 56, 127, 56);
+        it.printf(25, 58, id(font_small), "HOLD OK = BACK");
+      }
+
+binary_sensor:
+
+  # ----------------------------------------------------------------
+  # BUTTON UP
+  # ----------------------------------------------------------------
+  - platform: template
+    name: "Button Up"
+    internal: true
+    lambda: |-
+      return (id(analog_button).state > 2.5 && id(analog_button).state < 2.9);
+    filters:
+      - delayed_on: 20ms
+      - delayed_off: 20ms
+    on_press:
+      - lambda: |-
+          id(last_activity_time) = millis();
+
+          // If menu inactive and splash inactive → show splash
+          if (!id(menu_active) && !id(menu_splash)) {
+            id(menu_splash) = true;
+            id(splash_time) = millis();
+            return;
+          }
+          // If splash active → ignore further presses (splash clears itself)
+          if (id(menu_splash)) return;
+
+          if (id(menu_level) == 0) {
+            id(menu_index)--;
+            if (id(menu_index) < 0) id(menu_index) = id(main_menu_items) - 1;
+            return;
+          }
+
+          // Level 2, output/relay edit: cursor up (wrap within current page)
+          if (id(menu_level) == 2 && id(menu_edit)) {
+            int page_start, page_end;
+            if (id(menu_index) == 5) {
+              // M7: 16ch on 2 pages of 8, absolute index
+              page_start = id(submenu_index) * 8;
+              page_end   = page_start + 7;
+            } else if (id(menu_index) == 3) {
+              // M5: 12ch on 2 pages of 6, absolute index
+              page_start = id(submenu_index) * 6;
+              page_end   = page_start + 5;
+            } else {
+              // M2 (8ch single page), M4 (6ch single page)
+              page_start = 0;
+              page_end   = (id(menu_index) == 2) ? 5 : 7;
+            }
+            id(output_index)--;
+            if (id(output_index) < page_start) id(output_index) = page_end;
+            return;
+          }
+
+          // Clamp submenu in logic
+          if (id(menu_level) >= 1) {
+            id(submenu_index)--;
+            if (id(submenu_index) < 0) id(submenu_index) = 0;
+          }
+
+  # ----------------------------------------------------------------
+  # BUTTON DOWN
+  # ----------------------------------------------------------------
+  - platform: template
+    name: "Button Down"
+    internal: true
+    lambda: |-
+      return (id(analog_button).state > 0.4 && id(analog_button).state < 0.65);
+    filters:
+      - delayed_on: 20ms
+      - delayed_off: 20ms
+    on_press:
+      - lambda: |-
+          id(last_activity_time) = millis();
+          if (!id(menu_active) && !id(menu_splash)) {
+            id(menu_splash) = true;
+            id(splash_time) = millis();
+            return;
+          }
+          if (id(menu_splash)) return;
+          if (!id(menu_active)) return;
+
+          if (id(menu_level) == 0) {
+            id(menu_index)++;
+            if (id(menu_index) >= id(main_menu_items)) id(menu_index) = 0;
+            return;
+          }
+
+          // Level 2, output/relay edit: cursor down (wrap within current page)
+          if (id(menu_level) == 2 && id(menu_edit)) {
+            int page_start, page_end;
+            if (id(menu_index) == 5) {
+              page_start = id(submenu_index) * 8;
+              page_end   = page_start + 7;
+            } else if (id(menu_index) == 3) {
+              page_start = id(submenu_index) * 6;
+              page_end   = page_start + 5;
+            } else {
+              page_start = 0;
+              page_end   = (id(menu_index) == 2) ? 5 : 7;
+            }
+            id(output_index)++;
+            if (id(output_index) > page_end) id(output_index) = page_start;
+            return;
+          }
+
+          // Clamp submenu in logic
+          if (id(menu_level) >= 1) {
+            const int module_pages_nav[8] = {2, 2, 1, 2, 2, 2, 2, 3};
+            int max_p = module_pages_nav[id(menu_index)];
+            if (max_p == 0) return;  // module not implemented: block DOWN
+            id(submenu_index)++;
+            if (id(submenu_index) >= max_p) id(submenu_index) = max_p - 1;
+          }
+
+  # ----------------------------------------------------------------
+  # BUTTON OK
+  #     Short press (<600ms) = confirm/enter
+  #     Long press  (>600ms) = BACK (no extra hardware needed)
+  # Logic moved to on_release to calculate press duration
+  # ----------------------------------------------------------------
+  - platform: template
+    name: "Button OK"
+    internal: true
+    lambda: |-
+      return (id(analog_button).state > 1.5 && id(analog_button).state < 1.75);
+    filters:
+      - delayed_on: 20ms
+      - delayed_off: 20ms
+
+    on_press:
+      - lambda: |-
+          // Record press timestamp
+          id(ok_press_time)      = millis();
+          id(last_activity_time) = millis();
+          // If menu inactive and splash inactive → show splash
+          if (!id(menu_active) && !id(menu_splash)) {
+            id(menu_splash) = true;
+            id(splash_time) = millis();
+          }
+
+    on_release:
+      - lambda: |-
+          unsigned long dur = millis() - id(ok_press_time);
+          // If splash active → ignore button
+          if (id(menu_splash)) return;
+
+          /* ---- LONG PRESS (>600ms) = BACK ---- */
+          if (dur > 600) {
+            if (!id(menu_active)) return;
+            if (id(menu_level) == 0) {
+              // Close menu from top level
+              id(menu_active)   = false;
+              id(menu_edit)     = false;
+              id(menu_index)    = 0;
+              id(submenu_index) = 0;
+            } else if (id(menu_level) == 2) {
+              // Level 2 → back to level 1
+              id(menu_edit)  = false;
+              id(menu_level) = 1;
+            } else if (id(menu_level) == 1) {
+              // Level 1 → back to level 0 (main menu)
+              id(menu_level)    = 0;
+              id(submenu_index) = 0;
+            }
+            return;
+          }
+
+          /* ---- SHORT PRESS: confirm / enter ---- */
+          if (!id(menu_active)) {
+            id(menu_active) = true;
+            id(menu_level)  = 0;
+            return;
+          }
+
+          if (id(menu_level) == 0) {
+            id(menu_level)    = 1;
+            id(submenu_index) = 0;
+            return;
+          }
+
+          // Level 2, output edit: toggle
+          if (id(menu_level) == 2 && id(menu_index) == 0 && id(submenu_index) == 1) {
+            if (!id(menu_edit)) {
+              id(menu_edit) = true;
+              return;
+            }
+            switch (id(output_index)) {
+              case 0: id(m2${m2_number_1}_O_channel_1).toggle(); break;
+              case 1: id(m2${m2_number_1}_O_channel_2).toggle(); break;
+              case 2: id(m2${m2_number_1}_O_channel_3).toggle(); break;
+              case 3: id(m2${m2_number_1}_O_channel_4).toggle(); break;
+              case 4: id(m2${m2_number_1}_O_channel_5).toggle(); break;
+              case 5: id(m2${m2_number_1}_O_channel_6).toggle(); break;
+              case 6: id(m2${m2_number_1}_O_channel_7).toggle(); break;
+              case 7: id(m2${m2_number_1}_O_channel_8).toggle(); break;
+            }
+            return;
+          }
+
+          // Level 2, M4 relay edit: toggle
+          if (id(menu_level) == 2 && id(menu_index) == 2 && id(submenu_index) == 0) {
+            if (!id(menu_edit)) {
+              id(menu_edit) = true;
+              // Reset cursor to first channel when entering edit mode
+              id(output_index) = 0;
+              return;
+            }
+            switch (id(output_index)) {
+              case 0: id(m4${m4_number_1}_channel_1).toggle(); break;
+              case 1: id(m4${m4_number_1}_channel_2).toggle(); break;
+              case 2: id(m4${m4_number_1}_channel_3).toggle(); break;
+              case 3: id(m4${m4_number_1}_channel_4).toggle(); break;
+              case 4: id(m4${m4_number_1}_channel_5).toggle(); break;
+              case 5: id(m4${m4_number_1}_channel_6).toggle(); break;
+            }
+            return;
+          }
+
+
+          // Level 2, M5 relay edit: toggle (output_index = absolute index 0–11)
+          if (id(menu_level) == 2 && id(menu_index) == 3) {
+            if (!id(menu_edit)) {
+              id(menu_edit)    = true;
+              id(output_index) = id(submenu_index) * 6;  // start at first channel of the page
+              return;
+            }
+            switch (id(output_index)) {
+              case 0:  id(m5${m5_number_1}_channel_1).toggle();  break;
+              case 1:  id(m5${m5_number_1}_channel_2).toggle();  break;
+              case 2:  id(m5${m5_number_1}_channel_3).toggle();  break;
+              case 3:  id(m5${m5_number_1}_channel_4).toggle();  break;
+              case 4:  id(m5${m5_number_1}_channel_5).toggle();  break;
+              case 5:  id(m5${m5_number_1}_channel_6).toggle();  break;
+              case 6:  id(m5${m5_number_1}_channel_7).toggle();  break;
+              case 7:  id(m5${m5_number_1}_channel_8).toggle();  break;
+              case 8:  id(m5${m5_number_1}_channel_9).toggle();  break;
+              case 9:  id(m5${m5_number_1}_channel_10).toggle(); break;
+              case 10: id(m5${m5_number_1}_channel_11).toggle(); break;
+              case 11: id(m5${m5_number_1}_channel_12).toggle(); break;
+            }
+            return;
+          }
+
+
+          // Level 2, M7 output edit: toggle (output_index = absolute index 0–15)
+          if (id(menu_level) == 2 && id(menu_index) == 5) {
+            if (!id(menu_edit)) {
+              id(menu_edit)    = true;
+              id(output_index) = id(submenu_index) * 8;  // start at first channel of the page
+              return;
+            }
+            switch (id(output_index)) {
+              case 0:  id(m7${m7_number_1}_O_channel_1).toggle();  break;
+              case 1:  id(m7${m7_number_1}_O_channel_2).toggle();  break;
+              case 2:  id(m7${m7_number_1}_O_channel_3).toggle();  break;
+              case 3:  id(m7${m7_number_1}_O_channel_4).toggle();  break;
+              case 4:  id(m7${m7_number_1}_O_channel_5).toggle();  break;
+              case 5:  id(m7${m7_number_1}_O_channel_6).toggle();  break;
+              case 6:  id(m7${m7_number_1}_O_channel_7).toggle();  break;
+              case 7:  id(m7${m7_number_1}_O_channel_8).toggle();  break;
+              case 8:  id(m7${m7_number_1}_O_channel_9).toggle();  break;
+              case 9:  id(m7${m7_number_1}_O_channel_10).toggle(); break;
+              case 10: id(m7${m7_number_1}_O_channel_11).toggle(); break;
+              case 11: id(m7${m7_number_1}_O_channel_12).toggle(); break;
+              case 12: id(m7${m7_number_1}_O_channel_13).toggle(); break;
+              case 13: id(m7${m7_number_1}_O_channel_14).toggle(); break;
+              case 14: id(m7${m7_number_1}_O_channel_15).toggle(); break;
+              case 15: id(m7${m7_number_1}_O_channel_16).toggle(); break;
+            }
+            return;
+          }
+
+          if (id(menu_level) == 1) {
+            const int module_has_edit[8] = {1, 0, 1, 1, 0, 1, 0, 0};
+            if (module_has_edit[id(menu_index)] == 0) return;
+            id(menu_level) = 2;
+            id(menu_edit)  = false;
+            return;
+          }
+
+          // Level 2 fallback → back
+          id(menu_edit)  = false;
+          id(menu_level) = 1;
+
+interval:
+  - interval: 100ms
+    then:
+      - lambda: |-
+          // Splash screen: after 3000ms automatically transitions to main menu
+          if (id(menu_splash) && (millis() - id(splash_time) >= 3000)) {
+            id(menu_splash)        = false;
+            id(menu_active)        = true;
+            id(menu_level)         = 0;
+            id(menu_index)         = 0;
+            id(submenu_index)      = 0;
+            id(last_activity_time) = millis();
+          }
+
+  - interval: 1s
+    then:
+      - lambda: |-
+          // Configurable timeout via global menu_timeout_ms
+          if (id(menu_active) &&
+              (millis() - id(last_activity_time) > id(menu_timeout_ms))) {
+            id(menu_active)   = false;
+            id(menu_level)    = 0;
+            id(menu_index)    = 0;
+            id(submenu_index) = 0;
+            id(output_index)  = 0;
+            id(menu_edit)     = false;
+          }

@@ -1,0 +1,6 @@
+sensor:
+  - platform: bh1750
+    name: "Ambient Light"
+    id: sens_lux
+    address: ${bh1750_addr}
+    update_interval: 10s

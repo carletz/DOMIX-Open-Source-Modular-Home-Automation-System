@@ -1,0 +1,536 @@
+# ============================================================================
+#
+# M5 MODULE BASIC DESIGN FOR BASIC FUNCTIONS
+#
+# Adapt the configurations, names and other to your needs
+#
+# ============================================================================
+
+mqtt:
+  on_message:
+    - topic: ${mqtt_name}/${m5_name}${m5_number_1}/${m5_output_name} 1/command
+      then:
+        - if:
+            condition:
+              lambda: 'return x == "ON";'
+            then:
+              - switch.turn_on: m5${m5_number_1}_channel_1
+            else:
+              - switch.turn_off: m5${m5_number_1}_channel_1
+    - topic: ${mqtt_name}/${m5_name}${m5_number_1}/${m5_output_name} 2/command
+      then:
+        - if:
+            condition:
+              lambda: 'return x == "ON";'
+            then:
+              - switch.turn_on: m5${m5_number_1}_channel_2
+            else:
+              - switch.turn_off: m5${m5_number_1}_channel_2
+    - topic: ${mqtt_name}/${m5_name}${m5_number_1}/${m5_output_name} 3/command
+      then:
+        - if:
+            condition:
+              lambda: 'return x == "ON";'
+            then:
+              - switch.turn_on: m5${m5_number_1}_channel_3
+            else:
+              - switch.turn_off: m5${m5_number_1}_channel_3
+    - topic: ${mqtt_name}/${m5_name}${m5_number_1}/${m5_output_name} 4/command
+      then:
+        - if:
+            condition:
+              lambda: 'return x == "ON";'
+            then:
+              - switch.turn_on: m5${m5_number_1}_channel_4
+            else:
+              - switch.turn_off: m5${m5_number_1}_channel_4
+    - topic: ${mqtt_name}/${m5_name}${m5_number_1}/${m5_output_name} 5/command
+      then:
+        - if:
+            condition:
+              lambda: 'return x == "ON";'
+            then:
+              - switch.turn_on: m5${m5_number_1}_channel_5
+            else:
+              - switch.turn_off: m5${m5_number_1}_channel_5
+    - topic: ${mqtt_name}/${m5_name}${m5_number_1}/${m5_output_name} 6/command
+      then:
+        - if:
+            condition:
+              lambda: 'return x == "ON";'
+            then:
+              - switch.turn_on: m5${m5_number_1}_channel_6
+            else:
+              - switch.turn_off: m5${m5_number_1}_channel_6
+    - topic: ${mqtt_name}/${m5_name}${m5_number_1}/${m5_output_name} 7/command
+      then:
+        - if:
+            condition:
+              lambda: 'return x == "ON";'
+            then:
+              - switch.turn_on: m5${m5_number_1}_channel_7
+            else:
+              - switch.turn_off: m5${m5_number_1}_channel_7
+    - topic: ${mqtt_name}/${m5_name}${m5_number_1}/${m5_output_name} 8/command
+      then:
+        - if:
+            condition:
+              lambda: 'return x == "ON";'
+            then:
+              - switch.turn_on: m5${m5_number_1}_channel_8
+            else:
+              - switch.turn_off: m5${m5_number_1}_channel_8
+    - topic: ${mqtt_name}/${m5_name}${m5_number_1}/${m5_output_name} 9/command
+      then:
+        - if:
+            condition:
+              lambda: 'return x == "ON";'
+            then:
+              - switch.turn_on: m5${m5_number_1}_channel_9
+            else:
+              - switch.turn_off: m5${m5_number_1}_channel_9
+    - topic: ${mqtt_name}/${m5_name}${m5_number_1}/${m5_output_name} 10/command
+      then:
+        - if:
+            condition:
+              lambda: 'return x == "ON";'
+            then:
+              - switch.turn_on: m5${m5_number_1}_channel_10
+            else:
+              - switch.turn_off: m5${m5_number_1}_channel_10   
+    - topic: ${mqtt_name}/${m5_name}${m5_number_1}/${m5_output_name} 11/command
+      then:
+        - if:
+            condition:
+              lambda: 'return x == "ON";'
+            then:
+              - switch.turn_on: m5${m5_number_1}_channel_11
+            else:
+              - switch.turn_off: m5${m5_number_1}_channel_11       
+    - topic: ${mqtt_name}/${m5_name}${m5_number_1}/${m5_output_name} 12/command
+      then:
+        - if:
+            condition:
+              lambda: 'return x == "ON";'
+            then:
+              - switch.turn_on: m5${m5_number_1}_channel_12
+            else:
+              - switch.turn_off: m5${m5_number_1}_channel_12    
+                                      
+pca9554:
+  - id: domix_m5${m5_number_1}_busi2c
+    address: ${m5_i2c_1}
+    i2c_id: ${m5_i2c_id}              # Bus for comunication with DOMIX M1 module
+    pin_count: 16
+
+cover:
+  - platform: time_based
+    name: "Main Bedroom Shutter"
+    id: main_bedroom_shutter
+    
+    open_action:
+      - switch.turn_on: m5${m5_number_1}_channel_1
+    open_duration: 30s                # to be measured for each shutter, time necessary to open completely
+    
+    close_action:
+      - switch.turn_on: m5${m5_number_1}_channel_2
+    close_duration: 30s                # to be measured for each shutter, time necessary to open completely
+    
+    stop_action:
+      - switch.turn_off: m5${m5_number_1}_channel_1
+      - switch.turn_off: m5${m5_number_1}_channel_2
+
+  - platform: time_based
+    name: "Kids Bedroom Shutter"
+    id: kids_bedroom_shutter
+    
+    open_action:
+      - switch.turn_on: m5${m5_number_1}_channel_3  
+    open_duration: 30s                # to be measured for each shutter, time necessary to open completely
+    
+    close_action:
+      - switch.turn_on: m5${m5_number_1}_channel_4
+    close_duration: 30s                # to be measured for each shutter, time necessary to open completely
+    
+    stop_action:
+      - switch.turn_off: m5${m5_number_1}_channel_3
+      - switch.turn_off: m5${m5_number_1}_channel_4
+
+  - platform: time_based
+    name: "Bathroom Shutter"
+    id: bathroom_shutter
+    
+    open_action:
+      - switch.turn_on: m5${m5_number_1}_channel_5
+    open_duration: 30s                # to be measured for each shutter, time necessary to open completely
+    
+    close_action:
+      - switch.turn_on: m5${m5_number_1}_channel_6
+    close_duration: 30s                # to be measured for each shutter, time necessary to open completely
+    
+    stop_action:
+      - switch.turn_off: m5${m5_number_1}_channel_5
+      - switch.turn_off: m5${m5_number_1}_channel_6  
+
+  - platform: time_based
+    name: "Studio Shutter"
+    id: studio_shutter
+
+    open_action:
+      - switch.turn_on: m5${m5_number_1}_channel_7  
+    open_duration: 30s                # to be measured for each shutter, time necessary to open completely
+    
+    close_action:
+      - switch.turn_on: m5${m5_number_1}_channel_8
+    close_duration: 30s                # to be measured for each shutter, time necessary to open completely
+    
+    stop_action:
+      - switch.turn_off: m5${m5_number_1}_channel_7
+      - switch.turn_off: m5${m5_number_1}_channel_8
+
+  - platform: time_based
+    name: "Entrance Shutter"
+    id: entrance_shutter
+    
+    open_action:
+      - switch.turn_on: m5${m5_number_1}_channel_9
+    open_duration: 30s                # to be measured for each shutter, time necessary to open completely
+    
+    close_action:
+      - switch.turn_on: m5${m5_number_1}_channel_10
+    close_duration: 30s                # to be measured for each shutter, time necessary to open completely
+    
+    stop_action:
+      - switch.turn_off: m5${m5_number_1}_channel_9
+      - switch.turn_off: m5${m5_number_1}_channel_10
+
+  - platform: time_based
+    name: "Closet Shutter"
+    id: closet_shutter
+    
+    open_action:
+      - switch.turn_on: m5${m5_number_1}_channel_11
+    open_duration: 30s                # to be measured for each shutter, time necessary to open completely
+    
+    close_action:
+      - switch.turn_on: m5${m5_number_1}_channel_12
+    close_duration: 30s                # to be measured for each shutter, time necessary to open completely
+    
+    stop_action:
+      - switch.turn_off: m5${m5_number_1}_channel_11
+      - switch.turn_off: m5${m5_number_1}_channel_12  
+
+
+switch:
+  - platform: gpio
+    name: "${m5_name}${m5_number_1} ${m5_output_name} channel 1"
+    id: m5${m5_number_1}_channel_1
+    icon: "mdi:blinds"
+    interlock:  &interlock_group_1 
+      - m5${m5_number_1}_channel_1
+      - m5${m5_number_1}_channel_2
+    interlock_wait_time: 500ms
+    restore_mode: ALWAYS_OFF
+    pin:
+      pca9554: domix_m5${m5_number_1}_busi2c
+      number: 0
+      mode: OUTPUT
+      inverted: false
+    on_turn_on:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m5_name}${m5_number_1}/${m5_output_name} 1/state"
+          payload: "ON"
+          retain: True
+    on_turn_off:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m5_name}${m5_number_1}/${m5_output_name} 1/state"
+          payload: "OFF"
+          retain: True       
+    web_server:
+      sorting_group_id: domix_m5_web
+      sorting_weight: 1
+
+  - platform: gpio
+    name: "${m5_name}${m5_number_1} ${m5_output_name} channel 2"
+    id: m5${m5_number_1}_channel_2
+    icon: "mdi:blinds-closed"
+    interlock:  *interlock_group_1
+    interlock_wait_time: 500ms
+    restore_mode: ALWAYS_OFF
+    pin:
+      pca9554: domix_m5${m5_number_1}_busi2c
+      number: 1
+      mode: OUTPUT
+    on_turn_on:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m5_name}${m5_number_1}/${m5_output_name} 2/state"
+          payload: "ON"
+          retain: True
+    on_turn_off:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m5_name}${m5_number_1}/${m5_output_name} 2/state"
+          payload: "OFF"
+          retain: True       
+    web_server:
+      sorting_group_id: domix_m5_web
+      sorting_weight: 2
+
+  - platform: gpio
+    name: "${m5_name}${m5_number_1} ${m5_output_name} channel 3"
+    id: m5${m5_number_1}_channel_3
+    icon: "mdi:blinds"
+    interlock:  &interlock_group_2 
+      - m5${m5_number_1}_channel_3
+      - m5${m5_number_1}_channel_4
+    interlock_wait_time: 500ms
+    restore_mode: ALWAYS_OFF
+    pin:
+      pca9554: domix_m5${m5_number_1}_busi2c
+      number: 2
+      mode: OUTPUT
+    on_turn_on:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m5_name}${m5_number_1}/${m5_output_name} 3/state"
+          payload: "ON"
+          retain: True
+    on_turn_off:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m5_name}${m5_number_1}/${m5_output_name} 3/state"
+          payload: "OFF"
+          retain: True       
+    web_server:
+      sorting_group_id: domix_m5_web
+      sorting_weight: 3
+
+  - platform: gpio
+    name: "${m5_name}${m5_number_1} ${m5_output_name} channel 4"
+    id: m5${m5_number_1}_channel_4
+    icon: "mdi:blinds-closed"
+    interlock:  *interlock_group_2
+    interlock_wait_time: 500ms
+    restore_mode: ALWAYS_OFF
+    pin:
+      pca9554: domix_m5${m5_number_1}_busi2c
+      number: 3
+      mode: OUTPUT
+    on_turn_on:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m5_name}${m5_number_1}/${m5_output_name} 4/state"
+          payload: "ON"
+          retain: True
+    on_turn_off:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m5_name}${m5_number_1}/${m5_output_name} 4/state"
+          payload: "OFF"
+          retain: True       
+    web_server:
+      sorting_group_id: domix_m5_web
+      sorting_weight: 4
+
+  - platform: gpio
+    name: "${m5_name}${m5_number_1} ${m5_output_name} channel 5"
+    id: m5${m5_number_1}_channel_5
+    icon: "mdi:blinds"
+    interlock:  &interlock_group_3 
+      - m5${m5_number_1}_channel_5
+      - m5${m5_number_1}_channel_6
+    interlock_wait_time: 500ms
+    restore_mode: ALWAYS_OFF
+    pin:
+      pca9554: domix_m5${m5_number_1}_busi2c
+      number: 4
+      mode: OUTPUT
+    on_turn_on:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m5_name}${m5_number_1}/${m5_output_name} 5/state"
+          payload: "ON"
+          retain: True
+    on_turn_off:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m5_name}${m5_number_1}/${m5_output_name} 5/state"
+          payload: "OFF"
+          retain: True       
+    web_server:
+      sorting_group_id: domix_m5_web
+      sorting_weight: 5
+
+  - platform: gpio
+    name: "${m5_name}${m5_number_1} ${m5_output_name} channel 6"
+    id: m5${m5_number_1}_channel_6
+    icon: "mdi:blinds-closed"
+    interlock:  *interlock_group_3
+    interlock_wait_time: 500ms
+    restore_mode: ALWAYS_OFF    
+    pin:
+      pca9554: domix_m5${m5_number_1}_busi2c
+      number: 5
+      mode: OUTPUT
+    on_turn_on:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m5_name}${m5_number_1}/${m5_output_name} 6/state"
+          payload: "ON"
+          retain: True
+    on_turn_off:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m5_name}${m5_number_1}/${m5_output_name} 6/state"
+          payload: "OFF"
+          retain: True       
+    web_server:
+      sorting_group_id: domix_m5_web
+      sorting_weight: 6
+
+  - platform: gpio
+    name: "${m5_name}${m5_number_1} ${m5_output_name} channel 7"
+    id: m5${m5_number_1}_channel_7
+    icon: "mdi:blinds"
+    interlock:  &interlock_group_4 
+      - m5${m5_number_1}_channel_7
+      - m5${m5_number_1}_channel_8
+    interlock_wait_time: 500ms
+    restore_mode: ALWAYS_OFF    
+    pin:
+      pca9554: domix_m5${m5_number_1}_busi2c
+      number: 6
+      mode: OUTPUT
+    on_turn_on:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m5_name}${m5_number_1}/${m5_output_name} 7/state"
+          payload: "ON"
+          retain: True
+    on_turn_off:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m5_name}${m5_number_1}/${m5_output_name} 7/state"
+          payload: "OFF"
+          retain: True       
+    web_server:
+      sorting_group_id: domix_m5_web     
+      sorting_weight: 7
+
+  - platform: gpio
+    name: "${m5_name}${m5_number_1} ${m5_output_name} channel 8"
+    id: m5${m5_number_1}_channel_8
+    icon: "mdi:blinds-closed"
+    interlock:  *interlock_group_4
+    interlock_wait_time: 500ms
+    restore_mode: ALWAYS_OFF    
+    pin:
+      pca9554: domix_m5${m5_number_1}_busi2c
+      number: 7
+      mode: OUTPUT
+    on_turn_on:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m5_name}${m5_number_1}/${m5_output_name} 8/state"
+          payload: "ON"
+          retain: True
+    on_turn_off:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m5_name}${m5_number_1}/${m5_output_name} 8/state"
+          payload: "OFF"
+          retain: True       
+    web_server:
+      sorting_group_id: domix_m5_web   
+      sorting_weight: 8   
+
+  - platform: gpio
+    name: "${m5_name}${m5_number_1} ${m5_output_name} channel 9"
+    id: m5${m5_number_1}_channel_9
+    icon: "mdi:blinds"
+    interlock:  &interlock_group_5 
+      - m5${m5_number_1}_channel_9
+      - m5${m5_number_1}_channel_10
+    interlock_wait_time: 500ms
+    restore_mode: ALWAYS_OFF    
+    pin:
+      pca9554: domix_m5${m5_number_1}_busi2c
+      number: 8
+      mode: OUTPUT
+    on_turn_on:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m5_name}${m5_number_1}/${m5_output_name} 9/state"
+          payload: "ON"
+          retain: True
+    on_turn_off:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m5_name}${m5_number_1}/${m5_output_name} 9/state"
+          payload: "OFF"
+          retain: True       
+    web_server:
+      sorting_group_id: domix_m5_web    
+      sorting_weight: 9  
+
+  - platform: gpio
+    name: "${m5_name}${m5_number_1} ${m5_output_name} channel 10"
+    id: m5${m5_number_1}_channel_10
+    icon: "mdi:blinds-closed"
+    interlock:  *interlock_group_5
+    interlock_wait_time: 500ms
+    restore_mode: ALWAYS_OFF    
+    pin:
+      pca9554: domix_m5${m5_number_1}_busi2c
+      number: 9
+      mode: OUTPUT
+    on_turn_on:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m5_name}${m5_number_1}/${m5_output_name} 10/state"
+          payload: "ON"
+          retain: True
+    on_turn_off:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m5_name}${m5_number_1}/${m5_output_name} 10/state"
+          payload: "OFF"
+          retain: True       
+    web_server:
+      sorting_group_id: domix_m5_web
+      sorting_weight: 10
+
+  - platform: gpio
+    name: "${m5_name}${m5_number_1} ${m5_output_name} channel 11"
+    id: m5${m5_number_1}_channel_11
+    icon: "mdi:blinds"
+    interlock:  &interlock_group_6 
+      - m5${m5_number_1}_channel_11
+      - m5${m5_number_1}_channel_12
+    interlock_wait_time: 500ms
+    restore_mode: ALWAYS_OFF    
+    pin:
+      pca9554: domix_m5${m5_number_1}_busi2c
+      number: 10
+      mode: OUTPUT
+    on_turn_on:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m5_name}${m5_number_1}/${m5_output_name} 11/state"
+          payload: "ON"
+          retain: True
+    on_turn_off:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m5_name}${m5_number_1}/${m5_output_name} 11/state"
+          payload: "OFF"
+          retain: True       
+    web_server:
+      sorting_group_id: domix_m5_web
+      sorting_weight: 11
+
+  - platform: gpio
+    name: "${m5_name}${m5_number_1} ${m5_output_name} channel 12"
+    id: m5${m5_number_1}_channel_12
+    icon: "mdi:blinds-closed"
+    interlock:  *interlock_group_6
+    interlock_wait_time: 500ms
+    restore_mode: ALWAYS_OFF    
+    pin:
+      pca9554: domix_m5${m5_number_1}_busi2c
+      number: 11
+      mode: OUTPUT
+    on_turn_on:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m5_name}${m5_number_1}/${m5_output_name} 12/state"
+          payload: "ON"
+          retain: True
+    on_turn_off:
+      - mqtt.publish:
+          topic: "${mqtt_name}/${m5_name}${m5_number_1}/${m5_output_name} 12/state"
+          payload: "OFF"
+          retain: True       
+    web_server:
+      sorting_group_id: domix_m5_web
+      sorting_weight: 12
