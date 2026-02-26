@@ -1,9 +1,0 @@
-modbus:
-  id: modbus_bus
-  uart_id: modbus_uart
-
-modbus_controller:
-  - id: modbus_ctrl
-    modbus_id: modbus_bus
-    address: ${modbus_address}
-    update_interval: 10s

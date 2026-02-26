@@ -1,5 +1,0 @@
-i2c:
-  sda: GPIO8
-  scl: GPIO9
-  scan: true
-  frequency: 400kHz

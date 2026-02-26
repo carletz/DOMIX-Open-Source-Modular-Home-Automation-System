@@ -1,9 +1,0 @@
-remote_receiver:
-  id: ir_receiver
-  pin:
-    number: GPIO2
-    inverted: true   # inverted logic on TSOP
-  dump: all
-  # dump: nec        # if you want only NEC
-  tolerance: 25%
-  buffer_size: 10kb
