@@ -68,9 +68,9 @@ display:
         it.printf(16, 32, id(font_medium), "%.1f %%", id(sens_hum).state);
 
         it.print(0, 50, id(font_icons), "\U000F059D");
-        it.printf(16, 50, id(font_small), "%.1f hPa", id(sens_pres).state);
+        it.printf(16, 50, id(font_medium), "%.1f hPa", id(sens_pres).state);
 
-        it.print(110, 56, id(font_small), "1/5");
+        it.print(110, 52, id(font_small), "1/5");
       }
 
       // ══════════════════════════════════════
@@ -83,16 +83,16 @@ display:
         it.print(0, 14, id(font_icons), "\U000F1898");
         it.printf(16, 14, id(font_medium), "%d ppm", (int)id(sens_co2).state);
         int co2_bar = min((int)(id(sens_co2).state / 20), 108);
-        it.filled_rectangle(0, 30, co2_bar, 3);
-        it.rectangle(0, 30, 108, 3);
+        it.filled_rectangle(10, 28, co2_bar, 3);
+        it.rectangle(10, 28, 108, 3);
 
         it.print(0, 36, id(font_icons), "\U000F0F37");
-        it.printf(16, 36, id(font_small), "VOC:%d  NOx:%d",
+        it.printf(16, 36, id(font_medium), "VOC:%d  NOx:%d",
           (int)id(sens_voc).state,
           (int)id(sens_nox).state);
 
         it.print(0, 50, id(font_icons), "\U000F0335");
-        it.printf(16, 50, id(font_small), "%d lux", (int)id(sens_lux).state);
+        it.printf(16, 50, id(font_medium), "%d lux", (int)id(sens_lux).state);
 
         it.print(110, 56, id(font_small), "2/5");
       }
@@ -112,7 +112,7 @@ display:
         it.printf(16, 32, id(font_medium), "%s",
           id(ld2410_presence).state ? "PRESENCE" : "----");
 
-        it.printf(0, 50, id(font_small), "Dist: %s%d cm",
+        it.printf(16, 50, id(font_medium), "Dist: %s%d cm",
           id(ld2410_presence).state ? "" : "--- ",
           id(ld2410_presence).state ? (int)id(ld2410_det_dist).state : 0);
 
@@ -126,19 +126,19 @@ display:
         it.print(0, 0, id(font_small), "FROM MASTER");
         it.line(0, 11, 128, 11);
 
-        it.printf(0, 14, id(font_small), "Setpoint T: %.1f C",
+        it.printf(4, 14, id(font_small), "Setpoint T: %.1f C",
           modbus_regs[10] / 10.0f);
 
-        it.printf(0, 26, id(font_small), "Setpoint CO2: %d ppm",
+        it.printf(4, 26, id(font_small), "Setpoint CO2: %d ppm",
           modbus_regs[11]);
 
-        it.printf(0, 38, id(font_small), "Time: %02d:%02d",
+        it.printf(4, 38, id(font_small), "Time: %02d:%02d",
           modbus_regs[12] / 100,
           modbus_regs[12] % 100);
 
         const char* msgs[] = {"OK", "VENT", "HEAT", "COOL"};
         uint16_t msg_idx = modbus_regs[13] < 4 ? modbus_regs[13] : 0;
-        it.printf(0, 50, id(font_medium), ">>> %s", msgs[msg_idx]);
+        it.printf(4, 50, id(font_small), ">>> %s", msgs[msg_idx]);
 
         it.print(110, 56, id(font_small), "4/5");
       }
