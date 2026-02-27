@@ -41,7 +41,7 @@ globals:
 
 display:
   - platform: ssd1306_i2c
-    model: "SSD1306 128x64"
+    model: "SSD1315 128x64"
     address: ${screen_addr}
     id: oled
     update_interval: 1s
