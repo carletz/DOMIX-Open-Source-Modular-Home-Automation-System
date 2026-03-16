@@ -217,8 +217,6 @@ mqtt:
             else:
               - switch.turn_off: ${m9_description}_raindelay_48h_enabled
 
-
-
 globals:
   - id: valve_time_min
     type: float
@@ -237,6 +235,11 @@ pca9554:
   - id: domix_m9${m9_number_1}_busi2c
     address: ${m9_i2c_1}
     i2c_id: ${m9_i2c_id}              # Bus for comunication with DOMIX M1 module
+
+pcf8574:
+  - id: domix_m9${m9_number_1}_buttons_i2c
+    address: ${m9_buttons_i2c_address} 
+    i2c_id: ${m9_i2c_id}
 
 number:
   - platform: template
@@ -1208,3 +1211,164 @@ script:
       then:
         - sprinkler.start_full_cycle: m9${m9_number_1}_sprinkler
         - lambda: ESP_LOGI("main", "Irrigation cycle of ${m9_description_upper} has begun!");
+
+binary_sensor:
+  - platform: gpio
+    id: btn_valve_1
+    name: "${m9_description_upper} Button ${m9_valve_description} 1"
+    icon: "mdi:gesture-tap-button"
+    pin:
+      pcf8574: domix_m9${m9_number_1}_buttons_i2c
+      number: 0
+      mode: INPUT
+      inverted: true   
+    filters:
+      - delayed_on: 30ms    
+      - delayed_off: 30ms
+    on_press:
+      then:
+        - switch.toggle: m9${m9_number_1}_valve_1
+        - mqtt.publish:
+            topic: "${mqtt_name}/${m9_name}${m9_number_1}/${m9_description_upper}/Button/${m9_valve_description} 1/state"
+            payload: "PRESSED"
+            retain: false
+
+  - platform: gpio
+    id: btn_valve_2
+    name: "${m9_description_upper} Button ${m9_valve_description} 2"
+    icon: "mdi:gesture-tap-button"
+    pin:
+      pcf8574: domix_m9${m9_number_1}_buttons_i2c
+      number: 1
+      mode: INPUT
+      inverted: true
+    filters:
+      - delayed_on: 30ms
+      - delayed_off: 30ms
+    on_press:
+      then:
+        - switch.toggle: m9${m9_number_1}_valve_2
+        - mqtt.publish:
+            topic: "${mqtt_name}/${m9_name}${m9_number_1}/${m9_description_upper}/Button/${m9_valve_description} 2/state"
+            payload: "PRESSED"
+            retain: false
+
+  - platform: gpio
+    id: btn_valve_3
+    name: "${m9_description_upper} Button ${m9_valve_description} 3"
+    icon: "mdi:gesture-tap-button"
+    pin:
+      pcf8574: domix_m9${m9_number_1}_buttons_i2c
+      number: 2
+      mode: INPUT
+      inverted: true
+    filters:
+      - delayed_on: 30ms
+      - delayed_off: 30ms
+    on_press:
+      then:
+        - switch.toggle: m9${m9_number_1}_valve_3
+        - mqtt.publish:
+            topic: "${mqtt_name}/${m9_name}${m9_number_1}/${m9_description_upper}/Button/${m9_valve_description} 3/state"
+            payload: "PRESSED"
+            retain: false
+
+  - platform: gpio
+    id: btn_valve_4
+    name: "${m9_description_upper} Button ${m9_valve_description} 4"
+    icon: "mdi:gesture-tap-button"
+    pin:
+      pcf8574: domix_m9${m9_number_1}_buttons_i2c
+      number: 3
+      mode: INPUT
+      inverted: true
+    filters:
+      - delayed_on: 30ms
+      - delayed_off: 30ms
+    on_press:
+      then:
+        - switch.toggle: m9${m9_number_1}_valve_4
+        - mqtt.publish:
+            topic: "${mqtt_name}/${m9_name}${m9_number_1}/${m9_description_upper}/Button/${m9_valve_description} 4/state"
+            payload: "PRESSED"
+            retain: false
+
+  - platform: gpio
+    id: btn_valve_5
+    name: "${m9_description_upper} Button ${m9_valve_description} 5"
+    icon: "mdi:gesture-tap-button"
+    pin:
+      pcf8574: domix_m9${m9_number_1}_buttons_i2c
+      number: 4
+      mode: INPUT
+      inverted: true
+    filters:
+      - delayed_on: 30ms
+      - delayed_off: 30ms
+    on_press:
+      then:
+        - switch.toggle: m9${m9_number_1}_valve_5
+        - mqtt.publish:
+            topic: "${mqtt_name}/${m9_name}${m9_number_1}/${m9_description_upper}/Button/${m9_valve_description} 5/state"
+            payload: "PRESSED"
+            retain: false
+
+  - platform: gpio
+    id: btn_valve_6
+    name: "${m9_description_upper} Button ${m9_valve_description} 6"
+    icon: "mdi:gesture-tap-button"
+    pin:
+      pcf8574: domix_m9${m9_number_1}_buttons_i2c
+      number: 5
+      mode: INPUT
+      inverted: true
+    filters:
+      - delayed_on: 30ms
+      - delayed_off: 30ms
+    on_press:
+      then:
+        - switch.toggle: m9${m9_number_1}_valve_6
+        - mqtt.publish:
+            topic: "${mqtt_name}/${m9_name}${m9_number_1}/${m9_description_upper}/Button/${m9_valve_description} 6/state"
+            payload: "PRESSED"
+            retain: false
+
+  - platform: gpio
+    id: btn_valve_7
+    name: "${m9_description_upper} Button ${m9_valve_description} 7"
+    icon: "mdi:gesture-tap-button"
+    pin:
+      pcf8574: domix_m9${m9_number_1}_buttons_i2c
+      number: 6
+      mode: INPUT
+      inverted: true
+    filters:
+      - delayed_on: 30ms
+      - delayed_off: 30ms
+    on_press:
+      then:
+        - switch.toggle: m9${m9_number_1}_valve_7
+        - mqtt.publish:
+            topic: "${mqtt_name}/${m9_name}${m9_number_1}/${m9_description_upper}/Button/${m9_valve_description} 7/state"
+            payload: "PRESSED"
+            retain: false
+
+  - platform: gpio
+    id: btn_valve_8
+    name: "${m9_description_upper} Button ${m9_valve_description} 8"
+    icon: "mdi:gesture-tap-button"
+    pin:
+      pcf8574: domix_m9${m9_number_1}_buttons_i2c
+      number: 7
+      mode: INPUT
+      inverted: true
+    filters:
+      - delayed_on: 30ms
+      - delayed_off: 30ms
+    on_press:
+      then:
+        - switch.toggle: m9${m9_number_1}_valve_8
+        - mqtt.publish:
+            topic: "${mqtt_name}/${m9_name}${m9_number_1}/${m9_description_upper}/Button/${m9_valve_description} 8/state"
+            payload: "PRESSED"
+            retain: false        
