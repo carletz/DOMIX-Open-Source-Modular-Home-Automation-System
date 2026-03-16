@@ -96,7 +96,7 @@ substitutions:
   m5_i2c_id: bus_module     # I2C bus to which the module is connected, defined in i2c.yaml
   # m5_i2c_id: bus_module_X     # I2C bus for upper board buttons with i2c_switch.yaml file
   # ---------------------------------------------------------------------------------------------  
-  m5_i2c_1: 0x22            # ADDRESS AVAILABLE: 0x20 -> 0x27 
+  m5_i2c_1: 0x21            # ADDRESS AVAILABLE: 0x20 -> 0x27 
   m5_number_1: _1           
   m5_output_name: Output    # Name of each output channel on MQTT and web page
 
@@ -108,8 +108,8 @@ substitutions:
   m6_i2c_id: bus_module     # I2C bus to which the module is connected, defined in i2c.yaml
   # m6_i2c_id: bus_module_X     # I2C bus for upper board buttons with i2c_switch.yaml file
   # ---------------------------------------------------------------------------------------------  
-  m6_i2c_1: 0x39            # ADDRESS AVAILABLE: 0x38 -> 0x3F
-  m6_ads_1: 0x48            # ADDRESS AVAILABLE: 0x48 -> 0x4A    
+  m6_i2c_1: 0x3A            # ADDRESS AVAILABLE: 0x38 -> 0x3F
+  m6_ads_1: 0x49            # ADDRESS AVAILABLE: 0x48 -> 0x4A    
   m6_number_1: _1       
   m6_voltage_description: Voltage    # Name of each output channel on MQTT and web page    
   m6_channel_description: Channel     # Name of each output channel on MQTT and web page
@@ -122,7 +122,7 @@ substitutions:
   m7_i2c_id: bus_module     # I2C bus to which the module is connected, defined in i2c.yaml
   # m7_i2c_id: bus_module_X     # I2C bus for upper board buttons with i2c_switch.yaml file
   # ---------------------------------------------------------------------------------------------  
-  m7_i2c_1: 0x23            # ADDRESS AVAILABLE: 0x20 -> 0x27 
+  m7_i2c_1: 0x22            # ADDRESS AVAILABLE: 0x20 -> 0x27 
   m7_number_1: _1
   m7_output_name: Output    # Name of each output channel on MQTT and web page
 
@@ -134,7 +134,7 @@ substitutions:
   m8_i2c_id: bus_module     # I2C bus to which the module is connected, defined in i2c.yaml
   # m8_i2c_id: bus_module_X     # I2C bus for upper board buttons with i2c_switch.yaml file
   # ---------------------------------------------------------------------------------------------  
-  m8_i2c_1: 0x26            # ADDRESS AVAILABLE: 0x20 -> 0x27 
+  m8_i2c_1: 0x23            # ADDRESS AVAILABLE: 0x20 -> 0x27 
   m8_number_1: _1    
   m8_input_name: Input      # Name of each output channel on MQTT and web page
 
@@ -146,7 +146,8 @@ substitutions:
   m9_i2c_id: bus_module     # I2C bus to which the module is connected, defined in i2c.yaml
   # m9_i2c_id: bus_module_X     # I2C bus for upper board buttons with i2c_switch.yaml file
   # ---------------------------------------------------------------------------------------------  
-  m9_i2c_1: 0x3F            # ADDRESS AVAILABLE: 0x38 -> 0x3F 
+  m9_i2c_1: 0x3B            # ADDRESS AVAILABLE: 0x38 -> 0x3F 
+  m9_buttons_i2c_address: 0x3C   # Buttons Upper Board address
   m9_number_1: _1
   m9_description: garden    
   m9_description_upper: Garden    
