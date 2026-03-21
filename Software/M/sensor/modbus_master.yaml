@@ -416,6 +416,9 @@ number:
     max_value: 9999
     step: 1
     mode: box
+    web_server:
+      sorting_group_id: ${s_name}
+      sorting_weight: 20
 
   - platform: modbus_controller
     modbus_controller_id: ${s_controller_id}
@@ -476,6 +479,9 @@ number:
     min_value: 0
     max_value: 2359
     step: 1
+    web_server:
+      sorting_group_id: ${s_name}
+      sorting_weight: 21  
 
 select:
   - platform: modbus_controller
