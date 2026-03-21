@@ -52,7 +52,7 @@ sensor:
     gain: 1.024
     id: domix_m3${m3_number_1}_clamp_ch0
     ads1115_id: domix_m3${m3_number_1}_ads1115_hub
-    internal: true
+    internal: False
     update_interval: never
 
   - platform: cd74hc4067

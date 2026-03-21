@@ -139,6 +139,9 @@ cover:
     stop_action:
       - switch.turn_off: m5${m5_number_1}_channel_1
       - switch.turn_off: m5${m5_number_1}_channel_2
+    web_server:
+      sorting_group_id: domix_m5_web
+      sorting_weight: 3
 
   - platform: time_based
     name: "Kids Bedroom Shutter"
@@ -155,6 +158,9 @@ cover:
     stop_action:
       - switch.turn_off: m5${m5_number_1}_channel_3
       - switch.turn_off: m5${m5_number_1}_channel_4
+    web_server:
+      sorting_group_id: domix_m5_web
+      sorting_weight: 6
 
   - platform: time_based
     name: "Bathroom Shutter"
@@ -171,6 +177,9 @@ cover:
     stop_action:
       - switch.turn_off: m5${m5_number_1}_channel_5
       - switch.turn_off: m5${m5_number_1}_channel_6  
+    web_server:
+      sorting_group_id: domix_m5_web
+      sorting_weight: 9
 
   - platform: time_based
     name: "Studio Shutter"
@@ -187,6 +196,9 @@ cover:
     stop_action:
       - switch.turn_off: m5${m5_number_1}_channel_7
       - switch.turn_off: m5${m5_number_1}_channel_8
+    web_server:
+      sorting_group_id: domix_m5_web
+      sorting_weight: 12
 
   - platform: time_based
     name: "Entrance Shutter"
@@ -203,6 +215,9 @@ cover:
     stop_action:
       - switch.turn_off: m5${m5_number_1}_channel_9
       - switch.turn_off: m5${m5_number_1}_channel_10
+    web_server:
+      sorting_group_id: domix_m5_web
+      sorting_weight: 15
 
   - platform: time_based
     name: "Closet Shutter"
@@ -219,7 +234,9 @@ cover:
     stop_action:
       - switch.turn_off: m5${m5_number_1}_channel_11
       - switch.turn_off: m5${m5_number_1}_channel_12  
-
+    web_server:
+      sorting_group_id: domix_m5_web
+      sorting_weight: 18
 
 switch:
   - platform: gpio
@@ -300,7 +317,7 @@ switch:
           retain: True       
     web_server:
       sorting_group_id: domix_m5_web
-      sorting_weight: 3
+      sorting_weight: 4
 
   - platform: gpio
     name: "${m5_name}${m5_number_1} ${m5_output_name} channel 4"
@@ -325,7 +342,7 @@ switch:
           retain: True       
     web_server:
       sorting_group_id: domix_m5_web
-      sorting_weight: 4
+      sorting_weight: 5
 
   - platform: gpio
     name: "${m5_name}${m5_number_1} ${m5_output_name} channel 5"
@@ -352,7 +369,7 @@ switch:
           retain: True       
     web_server:
       sorting_group_id: domix_m5_web
-      sorting_weight: 5
+      sorting_weight: 7
 
   - platform: gpio
     name: "${m5_name}${m5_number_1} ${m5_output_name} channel 6"
@@ -377,7 +394,7 @@ switch:
           retain: True       
     web_server:
       sorting_group_id: domix_m5_web
-      sorting_weight: 6
+      sorting_weight: 8
 
   - platform: gpio
     name: "${m5_name}${m5_number_1} ${m5_output_name} channel 7"
@@ -404,7 +421,7 @@ switch:
           retain: True       
     web_server:
       sorting_group_id: domix_m5_web     
-      sorting_weight: 7
+      sorting_weight: 10
 
   - platform: gpio
     name: "${m5_name}${m5_number_1} ${m5_output_name} channel 8"
@@ -429,7 +446,7 @@ switch:
           retain: True       
     web_server:
       sorting_group_id: domix_m5_web   
-      sorting_weight: 8   
+      sorting_weight: 11  
 
   - platform: gpio
     name: "${m5_name}${m5_number_1} ${m5_output_name} channel 9"
@@ -456,7 +473,7 @@ switch:
           retain: True       
     web_server:
       sorting_group_id: domix_m5_web    
-      sorting_weight: 9  
+      sorting_weight: 13 
 
   - platform: gpio
     name: "${m5_name}${m5_number_1} ${m5_output_name} channel 10"
@@ -481,7 +498,7 @@ switch:
           retain: True       
     web_server:
       sorting_group_id: domix_m5_web
-      sorting_weight: 10
+      sorting_weight: 14
 
   - platform: gpio
     name: "${m5_name}${m5_number_1} ${m5_output_name} channel 11"
@@ -508,7 +525,7 @@ switch:
           retain: True       
     web_server:
       sorting_group_id: domix_m5_web
-      sorting_weight: 11
+      sorting_weight: 16
 
   - platform: gpio
     name: "${m5_name}${m5_number_1} ${m5_output_name} channel 12"
@@ -533,4 +550,4 @@ switch:
           retain: True       
     web_server:
       sorting_group_id: domix_m5_web
-      sorting_weight: 12
+      sorting_weight: 17

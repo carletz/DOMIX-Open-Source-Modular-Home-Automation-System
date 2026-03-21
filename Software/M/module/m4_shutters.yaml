@@ -84,6 +84,9 @@ cover:
     stop_action:
       - switch.turn_off: m4${m4_number_1}_channel_1
       - switch.turn_off: m4${m4_number_1}_channel_2
+    web_server:
+      sorting_group_id: domix_m4_web
+      sorting_weight: 3
 
   - platform: time_based
     name: "Dining Room Shutter"
@@ -100,11 +103,14 @@ cover:
     stop_action:
       - switch.turn_off: m4${m4_number_1}_channel_3
       - switch.turn_off: m4${m4_number_1}_channel_4
+    web_server:
+      sorting_group_id: domix_m4_web
+      sorting_weight: 6
 
   - platform: time_based
     name: "Kitchen Room Shutter"
     id: kitchen_room_shutter
-    
+
     open_action:
       - switch.turn_on: m4${m4_number_1}_channel_5
     open_duration: 30s                # to be measured for each shutter, time necessary to open completely
@@ -116,6 +122,9 @@ cover:
     stop_action:
       - switch.turn_off: m4${m4_number_1}_channel_5
       - switch.turn_off: m4${m4_number_1}_channel_6      
+    web_server:
+      sorting_group_id: domix_m4_web
+      sorting_weight: 9
 
 switch:
   - platform: gpio
@@ -196,7 +205,7 @@ switch:
           retain: True       
     web_server:
       sorting_group_id: domix_m4_web
-      sorting_weight: 3
+      sorting_weight: 4
 
   - platform: gpio
     name: "${m4_name}${m4_number_1} ${m4_output_name} channel 4"
@@ -221,7 +230,7 @@ switch:
           retain: True       
     web_server:
       sorting_group_id: domix_m4_web
-      sorting_weight: 4
+      sorting_weight: 5
 
   - platform: gpio
     name: "${m4_name}${m4_number_1} ${m4_output_name} channel 5"
@@ -248,7 +257,7 @@ switch:
           retain: True       
     web_server:
       sorting_group_id: domix_m4_web
-      sorting_weight: 5
+      sorting_weight: 7
 
   - platform: gpio
     name: "${m4_name}${m4_number_1} ${m4_output_name} channel 6"
@@ -273,4 +282,4 @@ switch:
           retain: True       
     web_server:
       sorting_group_id: domix_m4_web
-      sorting_weight: 6
+      sorting_weight: 8
