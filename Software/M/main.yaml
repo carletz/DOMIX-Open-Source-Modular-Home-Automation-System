@@ -17,14 +17,17 @@ packages:
   ethernet:     !include hardware/ethernet.yaml
   web_server:   !include hardware/web_server.yaml
   mqtt:         !include hardware/mqtt.yaml
+  ota:          !include hardware/ota.yaml
+  
   # WARNING: if you use the middle module V1.0 use this package
   # and leave the i2c_switch.yaml package commented, otherwise use the 
   # i2c_switch.yaml package and comment this one
-  i2c:          !include hardware/i2c.yaml
+  # i2c:          !include hardware/i2c.yaml
   # WARNING: if you use the middle module V1.2 use this package
   # and leave the i2c.yaml package commented, otherwise use the 
   # i2c.yaml package and comment this one
-  #- !include hardware/i2c_switch.yaml
+  i2c:          !include hardware/i2c_switch.yaml
+
   zigbee:       !include hardware/zigbee.yaml           # === System Add-on ===
   restart:      !include hardware/restart.yaml
   info:         !include hardware/info.yaml
@@ -57,22 +60,22 @@ packages:
         s_controller_id: modbus_slave1
         sorting_weight: -200
 
-  slave_room:
-    <<: !include
-      file: sensor/modbus_master.yaml
-      vars:
-        s_name: room
-        s_name_upper: Room
-        s_modbus_addr: "0x02"
-        s_controller_id: modbus_slave2
-        sorting_weight: -300        
+  # slave_room:
+  #   <<: !include
+  #     file: sensor/modbus_master.yaml
+  #     vars:
+  #       s_name: room
+  #       s_name_upper: Room
+  #       s_modbus_addr: "0x02"
+  #       s_controller_id: modbus_slave2
+  #       sorting_weight: -300        
 
-  slave_kitchen:
-    <<: !include
-      file: sensor/modbus_master.yaml
-      vars:
-        s_name: kitchen
-        s_name_upper: Kitchen
-        s_modbus_addr: "0x03"
-        s_controller_id: modbus_slave3      
-        sorting_weight: -400        
+  # slave_kitchen:
+  #   <<: !include
+  #     file: sensor/modbus_master.yaml
+  #     vars:
+  #       s_name: kitchen
+  #       s_name_upper: Kitchen
+  #       s_modbus_addr: "0x03"
+  #       s_controller_id: modbus_slave3      
+  #       sorting_weight: -400        
