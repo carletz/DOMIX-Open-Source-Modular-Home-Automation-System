@@ -8,16 +8,20 @@ select:
 logger:
   level: DEBUG 
   logs:
-    pca9554: INFO
-    custom: INFO
-    SPLASH: INFO 
+    pca9554: ERROR
+    custom: ERROR
+    SPLASH: ERROR 
     script: WARN
     switch: WARN
-    ads1115.sensor: WARN
+    ads1115.sensor: DEBUG
     sntp: WARN
     component: ERROR
     sensor: WARN   
     display: ERROR  
-    mqtt: INFO      
-    mqtt.component: INFO 
-    i2c: NONE               
+    mqtt: ERROR      
+    mqtt.component: ERROR 
+    i2c: DEBUG      
+    cd74hc4067: ERROR
+    text_sensor: ERROR
+    modbus_controller: ERROR    
+    ct_clamp: ERROR     
