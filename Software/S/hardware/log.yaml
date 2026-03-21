@@ -4,20 +4,29 @@ select:
     web_server:
       sorting_group_id: various
  
+usb:
+  cdc: true
+
+interval:
+  - interval: 2s
+    then:
+      - logger.log: "eccomi"
 
 logger:
   level: DEBUG 
-  logs:
-    pca9554: INFO
-    custom: INFO
-    SPLASH: INFO 
-    script: WARN
-    switch: WARN
-    ads1115.sensor: WARN
-    sntp: WARN
-    component: ERROR
-    sensor: WARN   
-    display: ERROR  
-    mqtt: INFO      
-    mqtt.component: INFO 
-    i2c: NONE               
+  hardware_uart: USB
+  baud_rate: 115200
+  # logs:
+  #   pca9554: INFO
+  #   custom: INFO
+  #   SPLASH: INFO 
+  #   script: WARN
+  #   switch: WARN
+  #   ads1115.sensor: WARN
+  #   sntp: WARN
+  #   component: ERROR
+  #   sensor: WARN   
+  #   display: ERROR  
+  #   mqtt: INFO      
+  #   mqtt.component: INFO 
+  #   i2c: NONE               

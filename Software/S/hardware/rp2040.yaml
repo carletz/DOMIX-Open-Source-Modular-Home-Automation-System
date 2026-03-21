@@ -3,6 +3,9 @@ esphome:
   friendly_name: ${friendly_name}
   includes:
     - hardware/modbus_slave.h
+  platformio_options:
+    build_flags:
+      - "-DUSE_TINYUSB"
 
 rp2040:
   board: rpipico
