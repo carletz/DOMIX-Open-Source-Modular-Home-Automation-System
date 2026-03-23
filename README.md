@@ -377,8 +377,8 @@ The RF-BM-2652P2 module requires Z-Stack firmware. See [POE Zigbee Coordinator](
 
 ## 📄 License & Disclaimer
 
-**Version:** 1.2  
-**Last Updated:** March 2026  
+**Version:** 1.3  
+**Last Updated:** April 2026  
 **DOMIX © 2026 by carletz**  
 Licensed under [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)
 
