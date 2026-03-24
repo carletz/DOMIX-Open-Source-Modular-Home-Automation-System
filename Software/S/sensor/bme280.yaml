@@ -1,3 +1,9 @@
+esphome:
+  build_path: .esphome/build
+  platformio_options:
+    build_flags:
+      - "-DHAS_BME280"
+
 sensor:
   - platform: bme280_i2c
     address: ${bme280_addr}

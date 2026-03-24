@@ -1,3 +1,9 @@
+esphome:
+  build_path: .esphome/build
+  platformio_options:
+    build_flags:
+      - "-DHAS_LD2410"
+
 ld2410:
   id: ld2410_radar
   uart_id: ld2410_uart
@@ -13,7 +19,7 @@ binary_sensor:
       id: ld2410_moving
     has_still_target:
       name: "Static Presence"
-      id: ld2410_still  
+      id: ld2410_still
 
 sensor:
   - platform: ld2410
@@ -30,4 +36,4 @@ sensor:
       name: "Static Energy"
     detection_distance:
       name: "Detection Distance"
-      id: ld2410_det_dist      
+      id: ld2410_det_dist

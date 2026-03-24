@@ -15,3 +15,4 @@ uart:
 modbus:
   - uart_id: modbus_uart
     id: modbus_bus    
+    send_wait_time: 1000ms

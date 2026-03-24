@@ -2,12 +2,24 @@
 #  Read data from DOMIX S sensor module
 #  Add more module at your use adding blocks and changing address
 # ──────────────────────────────────────────────────────────────
+#
+#  SUBSTITUTIONS REQUIRED in your main config:
+#
+#  s_controller_id:  unique id for this modbus controller
+#  s_modbus_addr:    modbus slave address (e.g. 0x01)
+#  s_name:           snake_case name (e.g. salon)
+#  s_name_upper:     display name     (e.g. Salon)
+#  sorting_weight:   web_server sort group weight
+#  mqtt_name:        MQTT base topic
+# ──────────────────────────────────────────────────────────────
 
 modbus_controller:
   - id: ${s_controller_id}
     modbus_id: modbus_bus
     address: ${s_modbus_addr}
-    update_interval: 5s
+    # 7s — intentionally offset from slave 5s cycle to avoid
+    # reading while slave is writing registers (race condition).
+    update_interval: 7s
 
 web_server:
   sorting_groups:
@@ -18,24 +30,7 @@ web_server:
 mqtt:
   on_message:
     # ══════════════════════════════════════════════════════════════
-    #  Receives IR commands over MQTT and forwards them to RP2040 
-    #  sensors via Modbus RTU (RS485).
-    #
-    #  Holding register convention 0 on each slave:
-    #    0        → idle (auto-reset after execution)
-    #    1–999    → digital channel
-    #    1001     → MUTE
-    #    1002     → GUIDE
-    #    1003     → BACK
-    #    1004     → CHANNEL FORWARD
-    #    1005     → CHANNEL BACK
-    #    1006     → ON / OFF (toggle)
-    #
-    #  To add a new IR sensor:
-    #    1. Flash slave_rp2040_ir.yaml with the new slave_id
-    #    2. Add a modbus_controller with the corresponding address
-    #    3. Add a number that points to the new controller
-    #    4. Add an MQTT on_message for your topic
+    #  IR commands over MQTT → Modbus holding register 0
     # ══════════════════════════════════════════════════════════════
     - topic: ${mqtt_name}/${s_name_upper} sensor/IR/command
       then:
@@ -62,25 +57,35 @@ mqtt:
               - switch.turn_on: ${s_name}_coil_co2_reset
             else:
               - switch.turn_off: ${s_name}_coil_co2_reset
+
     - topic: ${mqtt_name}/${s_name_upper} sensor/Temperature Setpoint/command
       then:
         - number.set:
             id: ${s_name}_setpoint_temp
             value: !lambda |-
               if (x.empty()) return 0;
-              return (int)atoi(x.c_str()); 
+              return (int)atoi(x.c_str());
+
     - topic: ${mqtt_name}/${s_name_upper} sensor/CO2 Setpoint/command
       then:
         - number.set:
             id: ${s_name}_setpoint_co2
             value: !lambda |-
               if (x.empty()) return 0;
-              return (int)atoi(x.c_str()); 
+              return (int)atoi(x.c_str());
 
 # ──────────────────────────────────────────────────────────────
 #  INPUT REGISTERS — FC04 (read only)
+#  All sensors include a zero filter (register=0 → bad read) and a
+#  range filter: values outside the plausible range are discarded
+#  (return {}) — the entity keeps its last valid state.
+#  After 3 consecutive bad readings the filter publishes NaN
+#  so Home Assistant marks the entity as "unavailable".
+#  Note: lux and distance legitimately can be 0 — no zero filter there.
 # ──────────────────────────────────────────────────────────────
 sensor:
+
+  # ── reg[0] — Temperature (BME280) ─────────────────────────
   - platform: modbus_controller
     modbus_controller_id: ${s_controller_id}
     name: "${s_name_upper} Temperature"
@@ -90,6 +95,11 @@ sensor:
     value_type: U_WORD
     filters:
       - multiply: 0.1
+      - lambda: |-
+          static int bad = 0;
+          if (x == 0.0) return {};
+          if (x < -10.0 || x > 80.0) { if (++bad > 3) return NAN; return {}; }
+          bad = 0; return x;
     unit_of_measurement: "°C"
     accuracy_decimals: 1
     qos: 1
@@ -99,6 +109,7 @@ sensor:
       sorting_group_id: ${s_name}
       sorting_weight: 1
 
+  # ── reg[1] — Humidity (BME280) ────────────────────────────
   - platform: modbus_controller
     modbus_controller_id: ${s_controller_id}
     name: "${s_name_upper} Humidity"
@@ -108,6 +119,11 @@ sensor:
     value_type: U_WORD
     filters:
       - multiply: 0.1
+      - lambda: |-
+          static int bad = 0;
+          if (x == 0.0) return {};
+          if (x < 0.0 || x > 100.0) { if (++bad > 3) return NAN; return {}; }
+          bad = 0; return x;
     unit_of_measurement: "%"
     accuracy_decimals: 1
     qos: 1
@@ -115,8 +131,9 @@ sensor:
     state_topic: ${mqtt_name}/${s_name_upper} sensor/Humidity/state
     web_server:
       sorting_group_id: ${s_name}
-      sorting_weight: 2    
+      sorting_weight: 2
 
+  # ── reg[2] — Pressure (BME280) ────────────────────────────
   - platform: modbus_controller
     modbus_controller_id: ${s_controller_id}
     name: "${s_name_upper} Pressure"
@@ -126,6 +143,11 @@ sensor:
     value_type: U_WORD
     filters:
       - multiply: 0.1
+      - lambda: |-
+          static int bad = 0;
+          if (x == 0.0) return {};
+          if (x < 800.0 || x > 1100.0) { if (++bad > 3) return NAN; return {}; }
+          bad = 0; return x;
     unit_of_measurement: "hPa"
     accuracy_decimals: 1
     qos: 1
@@ -133,8 +155,9 @@ sensor:
     state_topic: ${mqtt_name}/${s_name_upper} sensor/Pressure/state
     web_server:
       sorting_group_id: ${s_name}
-      sorting_weight: 3    
+      sorting_weight: 3
 
+  # ── reg[3] — Brightness (BH1750) ──────────────────────────
   - platform: modbus_controller
     modbus_controller_id: ${s_controller_id}
     name: "${s_name_upper} Brightness"
@@ -142,6 +165,11 @@ sensor:
     register_type: read
     address: 3
     value_type: U_WORD
+    filters:
+      - lambda: |-
+          static int bad = 0;
+          if (x < 0.0 || x > 65000.0) { if (++bad > 3) return NAN; return {}; }
+          bad = 0; return x;
     unit_of_measurement: "lux"
     accuracy_decimals: 0
     qos: 1
@@ -149,8 +177,9 @@ sensor:
     state_topic: ${mqtt_name}/${s_name_upper} sensor/Brightness/state
     web_server:
       sorting_group_id: ${s_name}
-      sorting_weight: 4    
+      sorting_weight: 4
 
+  # ── reg[4] — VOC Index (SGP41) ────────────────────────────
   - platform: modbus_controller
     modbus_controller_id: ${s_controller_id}
     name: "${s_name_upper} VOC Index"
@@ -158,14 +187,20 @@ sensor:
     register_type: read
     address: 4
     value_type: U_WORD
+    filters:
+      - lambda: |-
+          static int bad = 0;
+          if (x < 0.0 || x > 500.0) { if (++bad > 3) return NAN; return {}; }
+          bad = 0; return x;
     accuracy_decimals: 0
     qos: 1
     retain: true
     state_topic: ${mqtt_name}/${s_name_upper} sensor/VOC Index/state
     web_server:
       sorting_group_id: ${s_name}
-      sorting_weight: 5       
+      sorting_weight: 5
 
+  # ── reg[5] — NOx Index (SGP41) ────────────────────────────
   - platform: modbus_controller
     modbus_controller_id: ${s_controller_id}
     name: "${s_name_upper} NOx Index"
@@ -173,14 +208,20 @@ sensor:
     register_type: read
     address: 5
     value_type: U_WORD
+    filters:
+      - lambda: |-
+          static int bad = 0;
+          if (x < 0.0 || x > 500.0) { if (++bad > 3) return NAN; return {}; }
+          bad = 0; return x;
     accuracy_decimals: 0
     qos: 1
     retain: true
     state_topic: ${mqtt_name}/${s_name_upper} sensor/NOx Index/state
     web_server:
       sorting_group_id: ${s_name}
-      sorting_weight: 6       
+      sorting_weight: 6
 
+  # ── reg[6] — CO2 (SCD41) ──────────────────────────────────
   - platform: modbus_controller
     modbus_controller_id: ${s_controller_id}
     name: "${s_name_upper} CO2"
@@ -188,6 +229,12 @@ sensor:
     register_type: read
     address: 6
     value_type: U_WORD
+    filters:
+      - lambda: |-
+          static int bad = 0;
+          if (x == 0.0) return {};
+          if (x < 300.0 || x > 10000.0) { if (++bad > 3) return NAN; return {}; }
+          bad = 0; return x;
     unit_of_measurement: "ppm"
     accuracy_decimals: 0
     qos: 1
@@ -195,8 +242,9 @@ sensor:
     state_topic: ${mqtt_name}/${s_name_upper} sensor/CO2/state
     web_server:
       sorting_group_id: ${s_name}
-      sorting_weight: 7       
+      sorting_weight: 7
 
+  # ── reg[7] — Detected Distance (LD2410) ───────────────────
   - platform: modbus_controller
     modbus_controller_id: ${s_controller_id}
     name: "${s_name_upper} Detected Distance"
@@ -204,6 +252,11 @@ sensor:
     register_type: read
     address: 7
     value_type: U_WORD
+    filters:
+      - lambda: |-
+          static int bad = 0;
+          if (x < 0.0 || x > 600.0) { if (++bad > 3) return NAN; return {}; }
+          bad = 0; return x;
     unit_of_measurement: "cm"
     accuracy_decimals: 0
     qos: 1
@@ -211,12 +264,37 @@ sensor:
     state_topic: ${mqtt_name}/${s_name_upper} sensor/Detected Distance/state
     web_server:
       sorting_group_id: ${s_name}
-      sorting_weight: 8     
+      sorting_weight: 8
 
+  # ── reg[8] — Heartbeat ────────────────────────────────────
+  - platform: modbus_controller
+    modbus_controller_id: ${s_controller_id}
+    name: "${s_name_upper} Heartbeat"
+    id: ${s_name}_heartbeat
+    register_type: read
+    address: 8
+    value_type: U_WORD
+    internal: true     
+
+  # ── reg[9] — Validity bitmask ─────────────────────────────
+  # bit 0 = BME280 | bit 1 = BH1750 | bit 2 = SCD41
+  # bit 3 = SGP41  | bit 4 = LD2410 | bit 5 = PIR
+  # Internal — decoded by binary_sensors below.
+  - platform: modbus_controller
+    modbus_controller_id: ${s_controller_id}
+    name: "${s_name_upper} Validity Mask"
+    id: ${s_name}_valid_mask
+    register_type: read
+    address: 9
+    value_type: U_WORD
+    internal: true     
+    
 # ──────────────────────────────────────────────────────────────
 #  DISCRETE INPUTS — FC02 (read only)
 # ──────────────────────────────────────────────────────────────
 binary_sensor:
+
+  # ── PIR ───────────────────────────────────────────────────
   - platform: modbus_controller
     modbus_controller_id: ${s_controller_id}
     name: "${s_name_upper} PIR Movement"
@@ -227,16 +305,17 @@ binary_sensor:
       - mqtt.publish:
           topic: "${mqtt_name}/${s_name_upper} sensor/PIR Movement/state"
           payload: "ON"
-          retain: True
+          retain: true
     on_release:
       - mqtt.publish:
           topic: "${mqtt_name}/${s_name_upper} sensor/PIR Movement/state"
           payload: "OFF"
-          retain: True 
+          retain: true
     web_server:
       sorting_group_id: ${s_name}
-      sorting_weight: 9  
+      sorting_weight: 9
 
+  # ── Presence (LD2410) ─────────────────────────────────────
   - platform: modbus_controller
     modbus_controller_id: ${s_controller_id}
     name: "${s_name_upper} Presence"
@@ -247,16 +326,17 @@ binary_sensor:
       - mqtt.publish:
           topic: "${mqtt_name}/${s_name_upper} sensor/Presence/state"
           payload: "ON"
-          retain: True
+          retain: true
     on_release:
       - mqtt.publish:
           topic: "${mqtt_name}/${s_name_upper} sensor/Presence/state"
           payload: "OFF"
-          retain: True 
+          retain: true
     web_server:
       sorting_group_id: ${s_name}
-      sorting_weight: 10      
+      sorting_weight: 10
 
+  # ── Movement (LD2410) ─────────────────────────────────────
   - platform: modbus_controller
     modbus_controller_id: ${s_controller_id}
     name: "${s_name_upper} Movement"
@@ -267,16 +347,17 @@ binary_sensor:
       - mqtt.publish:
           topic: "${mqtt_name}/${s_name_upper} sensor/Movement/state"
           payload: "ON"
-          retain: True
+          retain: true
     on_release:
       - mqtt.publish:
           topic: "${mqtt_name}/${s_name_upper} sensor/Movement/state"
           payload: "OFF"
-          retain: True 
+          retain: true
     web_server:
       sorting_group_id: ${s_name}
-      sorting_weight: 11 
+      sorting_weight: 11
 
+  # ── Static Presence (LD2410) ──────────────────────────────
   - platform: modbus_controller
     modbus_controller_id: ${s_controller_id}
     name: "${s_name_upper} Static Presence"
@@ -287,95 +368,99 @@ binary_sensor:
       - mqtt.publish:
           topic: "${mqtt_name}/${s_name_upper} sensor/Static Presence/state"
           payload: "ON"
-          retain: True
+          retain: true
     on_release:
       - mqtt.publish:
           topic: "${mqtt_name}/${s_name_upper} sensor/Static Presence/state"
           payload: "OFF"
-          retain: True 
+          retain: true
     web_server:
       sorting_group_id: ${s_name}
-      sorting_weight: 12 
+      sorting_weight: 12
 
+  # ── CO2 Alarm ─────────────────────────────────────────────
   - platform: modbus_controller
     modbus_controller_id: ${s_controller_id}
-    name: "${s_name_upper} CO2 Allarm"
+    name: "${s_name_upper} CO2 Alarm"
     id: ${s_name}_alarm_co2
     register_type: discrete_input
     address: 4
     on_press:
       - mqtt.publish:
-          topic: "${mqtt_name}/${s_name_upper} sensor/CO2 Allarm/state"
+          topic: "${mqtt_name}/${s_name_upper} sensor/CO2 Alarm/state"
           payload: "ON"
-          retain: True
+          retain: true
     on_release:
       - mqtt.publish:
-          topic: "${mqtt_name}/${s_name_upper} sensor/CO2 Allarm/state"
+          topic: "${mqtt_name}/${s_name_upper} sensor/CO2 Alarm/state"
           payload: "OFF"
-          retain: True 
+          retain: true
     web_server:
       sorting_group_id: ${s_name}
-      sorting_weight: 13 
+      sorting_weight: 13
 
+  # ── VOC Alarm ─────────────────────────────────────────────
   - platform: modbus_controller
     modbus_controller_id: ${s_controller_id}
-    name: "${s_name_upper} VOC Allarm"
+    name: "${s_name_upper} VOC Alarm"
     id: ${s_name}_alarm_voc
     register_type: discrete_input
     address: 5
     on_press:
       - mqtt.publish:
-          topic: "${mqtt_name}/${s_name_upper} sensor/VOC Allarm/state"
+          topic: "${mqtt_name}/${s_name_upper} sensor/VOC Alarm/state"
           payload: "ON"
-          retain: True
+          retain: true
     on_release:
       - mqtt.publish:
-          topic: "${mqtt_name}/${s_name_upper} sensor/VOC Allarm/state"
+          topic: "${mqtt_name}/${s_name_upper} sensor/VOC Alarm/state"
           payload: "OFF"
-          retain: True 
+          retain: true
     web_server:
       sorting_group_id: ${s_name}
-      sorting_weight: 14 
+      sorting_weight: 14
 
+  # ── Temperature Alarm ─────────────────────────────────────
   - platform: modbus_controller
     modbus_controller_id: ${s_controller_id}
-    name: "${s_name_upper} Temperature Allarm"
+    name: "${s_name_upper} Temperature Alarm"
     id: ${s_name}_alarm_temp
     register_type: discrete_input
     address: 6
     on_press:
       - mqtt.publish:
-          topic: "${mqtt_name}/${s_name_upper} sensor/Allarm Temperature/state"
+          topic: "${mqtt_name}/${s_name_upper} sensor/Alarm Temperature/state"
           payload: "ON"
-          retain: True
+          retain: true
     on_release:
       - mqtt.publish:
-          topic: "${mqtt_name}/${s_name_upper} sensor/Allarm Temperature/state"
+          topic: "${mqtt_name}/${s_name_upper} sensor/Alarm Temperature/state"
           payload: "OFF"
-          retain: True 
+          retain: true
     web_server:
       sorting_group_id: ${s_name}
-      sorting_weight: 15     
+      sorting_weight: 15
 
+  # ── Active Alarm ──────────────────────────────────────────
   - platform: modbus_controller
     modbus_controller_id: ${s_controller_id}
-    name: "${s_name_upper} Active Allarm"
+    name: "${s_name_upper} Active Alarm"
     id: ${s_name}_alarm_active
     register_type: discrete_input
     address: 7
     on_press:
       - mqtt.publish:
-          topic: "${mqtt_name}/${s_name_upper} sensor/Active Allarm/state"
+          topic: "${mqtt_name}/${s_name_upper} sensor/Active Alarm/state"
           payload: "ON"
-          retain: True
+          retain: true
     on_release:
       - mqtt.publish:
-          topic: "${mqtt_name}/${s_name_upper} sensor/Active Allarm/state"
+          topic: "${mqtt_name}/${s_name_upper} sensor/Active Alarm/state"
           payload: "OFF"
-          retain: True 
+          retain: true
     web_server:
       sorting_group_id: ${s_name}
-      sorting_weight: 16   
+      sorting_weight: 16
 
 # ──────────────────────────────────────────────────────────────
 #  COILS — FC01/FC05 (reading and writing)
@@ -391,18 +476,18 @@ switch:
       - mqtt.publish:
           topic: "${mqtt_name}/${s_name_upper} sensor/Reset CO2 Baseline/state"
           payload: "ON"
-          retain: True
+          retain: true
     on_turn_off:
       - mqtt.publish:
           topic: "${mqtt_name}/${s_name_upper} sensor/Reset CO2 Baseline/state"
           payload: "OFF"
-          retain: True     
+          retain: true
     web_server:
       sorting_group_id: ${s_name}
-      sorting_weight: 17   
+      sorting_weight: 30
 
 # ──────────────────────────────────────────────────────────────
-#  HOLDING REGISTERS — FC03/FC06 (written by the ${s_name})
+#  HOLDING REGISTERS — FC03/FC06
 # ──────────────────────────────────────────────────────────────
 number:
   - platform: modbus_controller
@@ -418,7 +503,7 @@ number:
     mode: box
     web_server:
       sorting_group_id: ${s_name}
-      sorting_weight: 20
+      sorting_weight: 31
 
   - platform: modbus_controller
     modbus_controller_id: ${s_controller_id}
@@ -428,22 +513,22 @@ number:
     address: 10
     value_type: U_WORD
     min_value: 0
-    max_value: 40.0 
+    max_value: 40.0
     step: 0.5
     multiply: 10
     unit_of_measurement: "°C"
     on_value:
       then:
-        - mqtt.publish: 
+        - mqtt.publish:
             topic: "${mqtt_name}/${s_name_upper} sensor/Temperature Setpoint/state"
             payload: !lambda |-
                         char buf[10];
                         snprintf(buf, sizeof(buf), "%.1f", x);
                         return std::string(buf);
-            retain: True            
+            retain: true
     web_server:
       sorting_group_id: ${s_name}
-      sorting_weight: 18  
+      sorting_weight: 32
 
   - platform: modbus_controller
     modbus_controller_id: ${s_controller_id}
@@ -458,16 +543,16 @@ number:
     unit_of_measurement: "ppm"
     on_value:
       then:
-        - mqtt.publish: 
+        - mqtt.publish:
             topic: "${mqtt_name}/${s_name_upper} sensor/CO2 Setpoint/state"
             payload: !lambda |-
                         char buf[10];
                         snprintf(buf, sizeof(buf), "%.0f", x);
                         return std::string(buf);
-            retain: True            
+            retain: true
     web_server:
       sorting_group_id: ${s_name}
-      sorting_weight: 19  
+      sorting_weight: 33
 
   - platform: modbus_controller
     modbus_controller_id: ${s_controller_id}
@@ -479,9 +564,143 @@ number:
     min_value: 0
     max_value: 2359
     step: 1
+    internal: true   
+
+text_sensor:
+  - platform: template
+    name: "${s_name_upper} Current time"
+    id: ${s_name}_time_display
+    lambda: |-
+      int v = (int) id(${s_name}_time).state;
+      if (v < 0 || v > 2359) return {"--:--"};
+      char buf[6];
+      snprintf(buf, sizeof(buf), "%02d:%02d", v / 100, v % 100);
+      return {buf};
+    update_interval: 30s
+    icon: "mdi:clock-outline"
+    qos: 1
+    retain: true
+    state_topic: ${mqtt_name}/${s_name_upper} sensor/Current time/state
     web_server:
       sorting_group_id: ${s_name}
-      sorting_weight: 21  
+      sorting_weight: 34
+
+  - platform: template
+    name: "${s_name_upper} General Status"
+    id: ${s_name}_general_status
+    icon: "mdi:lan-connect"
+    update_interval: 10s
+    lambda: |-
+      static uint16_t last_hb  = 0xFFFF;
+      static uint32_t last_chg = 0;
+      uint16_t hb = (uint16_t) id(${s_name}_heartbeat).state;
+      if (hb != last_hb) {
+        last_hb  = hb;
+        last_chg = millis();
+      }
+      return std::string((millis() - last_chg) < 30000 ? "Online" : "Offline");
+    qos: 1
+    retain: true
+    state_topic: ${mqtt_name}/${s_name_upper} sensor/General Status/state
+    web_server:
+      sorting_group_id: ${s_name}
+      sorting_weight: 40
+
+  # ── BME280 Status ─────────────────────────────────────────
+  - platform: template
+    name: "${s_name_upper} BME280 Status"
+    id: ${s_name}_status_bme280
+    icon: "mdi:thermometer"
+    update_interval: 10s
+    lambda: |-
+      bool ok = (uint16_t)id(${s_name}_valid_mask).state & (1 << 0);
+      return std::string(ok ? "Online" : "Offline");
+    qos: 1
+    retain: true
+    state_topic: ${mqtt_name}/${s_name_upper} sensor/BME280 Status/state
+    web_server:
+      sorting_group_id: ${s_name}
+      sorting_weight: 41
+
+  # ── BH1750 Status ─────────────────────────────────────────
+  - platform: template
+    name: "${s_name_upper} BH1750 Status"
+    id: ${s_name}_status_bh1750
+    icon: "mdi:brightness-6"
+    update_interval: 10s
+    lambda: |-
+      bool ok = (uint16_t)id(${s_name}_valid_mask).state & (1 << 1);
+      return std::string(ok ? "Online" : "Offline");
+    qos: 1
+    retain: true
+    state_topic: ${mqtt_name}/${s_name_upper} sensor/BH1750 Status/state
+    web_server:
+      sorting_group_id: ${s_name}
+      sorting_weight: 42
+
+  # ── SCD41 Status ──────────────────────────────────────────
+  - platform: template
+    name: "${s_name_upper} SCD41 Status"
+    id: ${s_name}_status_scd41
+    icon: "mdi:molecule-co2"
+    update_interval: 10s
+    lambda: |-
+      bool ok = (uint16_t)id(${s_name}_valid_mask).state & (1 << 2);
+      return std::string(ok ? "Online" : "Offline");
+    qos: 1
+    retain: true
+    state_topic: ${mqtt_name}/${s_name_upper} sensor/SCD41 Status/state
+    web_server:
+      sorting_group_id: ${s_name}
+      sorting_weight: 43
+
+  # ── SGP41 Status ──────────────────────────────────────────
+  - platform: template
+    name: "${s_name_upper} SGP41 Status"
+    id: ${s_name}_status_sgp41
+    icon: "mdi:air-filter"
+    update_interval: 10s
+    lambda: |-
+      bool ok = (uint16_t)id(${s_name}_valid_mask).state & (1 << 3);
+      return std::string(ok ? "Online" : "Offline");
+    qos: 1
+    retain: true
+    state_topic: ${mqtt_name}/${s_name_upper} sensor/SGP41 Status/state
+    web_server:
+      sorting_group_id: ${s_name}
+      sorting_weight: 44
+
+  # ── LD2410 Status ─────────────────────────────────────────
+  - platform: template
+    name: "${s_name_upper} LD2410 Status"
+    id: ${s_name}_status_ld2410
+    icon: "mdi:radar"
+    update_interval: 10s
+    lambda: |-
+      bool ok = (uint16_t)id(${s_name}_valid_mask).state & (1 << 4);
+      return std::string(ok ? "Online" : "Offline");
+    qos: 1
+    retain: true
+    state_topic: ${mqtt_name}/${s_name_upper} sensor/LD2410 Status/state
+    web_server:
+      sorting_group_id: ${s_name}
+      sorting_weight: 45
+
+  # ── PIR Status ────────────────────────────────────────────
+  - platform: template
+    name: "${s_name_upper} PIR Status"
+    id: ${s_name}_status_pir
+    icon: "mdi:motion-sensor"
+    update_interval: 10s
+    lambda: |-
+      bool ok = (uint16_t)id(${s_name}_valid_mask).state & (1 << 5);
+      return std::string(ok ? "Online" : "Offline");
+    qos: 1
+    retain: true
+    state_topic: ${mqtt_name}/${s_name_upper} sensor/PIR Status/state
+    web_server:
+      sorting_group_id: ${s_name}
+      sorting_weight: 46
 
 select:
   - platform: modbus_controller
@@ -503,11 +722,8 @@ select:
             retain: true
     web_server:
       sorting_group_id: ${s_name}
-      sorting_weight: 20  
-      
-# ──────────────────────────────────────────────────────────────
-#  Automatically update current time every minute
-# ──────────────────────────────────────────────────────────────
+      sorting_weight: 35
+
 time:
   - platform: sntp
     on_time:

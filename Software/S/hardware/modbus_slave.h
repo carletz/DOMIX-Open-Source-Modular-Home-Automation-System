@@ -348,7 +348,6 @@ void modbus_process_frame(UARTComponent *uart, uint8_t *frame, uint8_t len) {
     uint16_t or_mask  = (frame[6] << 8) | frame[7];
     modbus_regs[start_addr] = (modbus_regs[start_addr] & and_mask) | (or_mask & ~and_mask);
 
-    // echo della richiesta
     if (!is_broadcast) modbus_send(uart, frame, len - 2);
   }
 
@@ -419,5 +418,11 @@ void modbus_slave_poll(UARTComponent *uart) {
   if (rx_len > 0 && (now - last_byte_ms) >= MODBUS_TIMEOUT_MS) {
     modbus_process_frame(uart, rx_buf, rx_len);
     rx_len = 0;
+    // Discard any bytes that arrived during response transmission.
+    // The master may have re-sent the same request (send_count > 1)
+    // while we were busy in flush(). Answering those stale duplicates
+    // would confuse the master and cause it to log 0 for that cycle.
+    delay(2);
+    while (uart->available()) { uint8_t dummy; uart->read_byte(&dummy); }
   }
 }

@@ -2,16 +2,31 @@
 #   DOMIX SENSOR Configuration
 # ============================================================================
 # This is the base configuration file for DOMIX SENSOR modular system.
-# The user can adapt and modify at his use the following code and the 
+# The user can adapt and modify at his use the following code and the
 # connected packages.
 #
-# 
-# ============================================================================
+# HOW TO CONFIGURE SENSOR PRESENCE
+# ─────────────────────────────────
+# 1. Comment/uncomment the package lines below to include/exclude a sensor.
+# 2. Set the corresponding substitution flag to "true" or "false".
+#    The flag controls MQTT publishing and web_server visibility on the MASTER.
+#    Rule: if you comment the package → set the flag to "false".
+#          if you include the package  → set the flag to "true".
+#
+# ─────────────────────────────────────────────────────────────────────────────
+#  SENSOR PRESENCE FLAGS — set true/false to match the packages below
+# ─────────────────────────────────────────────────────────────────────────────
+substitutions:
+  has_bme280: "true"    # Temperature / Humidity / Pressure
+  has_bh1750: "true"    # Ambient light (lux)
+  has_co2:    "true"    # CO2 — SCD41
+  has_sgp41:  "true"    # VOC / NOx — SGP41
+  has_ld2410: "true"    # Radar presence — LD2410
+  has_pir:    "true"    # PIR motion sensor
 
-# ----------------------------------------------------------------------------
+# ============================================================================
 # PACKAGES
-# Users can modify, remove or add packages considering the configuration
-# ----------------------------------------------------------------------------
+# ============================================================================
 packages:
   - !include hardware/rp2040.yaml
 
@@ -23,12 +38,13 @@ packages:
   - !include hardware/modbus.yaml
 
   # === Sensors ===
+  # Comment a line here AND set the matching flag above to "false"
   - !include sensor/ld2410.yaml
   - !include sensor/pir.yaml
-#   - !include sensor/remote_rec.yaml       # not available for ESPHome with RP2040 chip!
   - !include sensor/remote_tran.yaml
   - !include sensor/bme280.yaml
   - !include sensor/bh1750.yaml
   - !include sensor/sgp41.yaml
   - !include sensor/scd41.yaml
   - !include sensor/screen.yaml
+# - !include sensor/remote_rec.yaml   # not available for ESPHome with RP2040!

@@ -1,3 +1,9 @@
+esphome:
+  build_path: .esphome/build
+  platformio_options:
+    build_flags:
+      - "-DHAS_PIR"
+
 binary_sensor:
   - platform: gpio
     name: "PIR Movement"

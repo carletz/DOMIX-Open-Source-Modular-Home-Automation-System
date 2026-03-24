@@ -6,8 +6,10 @@ select:
  
 
 logger:
-  level: DEBUG 
+  level: DEBUG
   logs:
+    modbus_controller: ERROR
+    modbus: ERROR
     pca9554: ERROR
     custom: ERROR
     SPLASH: ERROR 
@@ -22,6 +24,5 @@ logger:
     mqtt.component: ERROR 
     i2c: DEBUG      
     cd74hc4067: ERROR
-    text_sensor: ERROR
-    modbus_controller: ERROR    
+    text_sensor: ERROR 
     ct_clamp: ERROR     

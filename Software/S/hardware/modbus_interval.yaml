@@ -1,35 +1,119 @@
 interval:
-  # Update Modbus tables with sensor values
+  # ─────────────────────────────────────────────────────────────
+  #  Update Modbus input registers with sensor values
+  #  reg[0..7]  → sensor data (unchanged if NaN → keeps last good value)
+  #  reg[8]     → heartbeat: seconds counter (rollover ~18h, no matter)
+  #  reg[9]     → validity bitmask:
+  #                 bit 0 → BME280  (temp/hum/pres)
+  #                 bit 1 → BH1750  (lux)
+  #                 bit 2 → SCD41   (CO2)
+  #                 bit 3 → SGP41   (VOC/NOx)
+  #                 bit 4 → LD2410  (radar distance)
+  #                 bit 5 → PIR     (always 1 if package included, GPIO-based)
+  # ─────────────────────────────────────────────────────────────
   - interval: 5s
     then:
       - lambda: |-
-          // Input Registers (FC04) — R only for master
-          modbus_input_regs[0] = (uint16_t)(id(sens_temp).state * 10);
-          modbus_input_regs[1] = (uint16_t)(id(sens_hum).state * 10);
-          modbus_input_regs[2] = (uint16_t)(id(sens_pres).state * 10);
-          modbus_input_regs[3] = (uint16_t)(id(sens_lux).state);
-          modbus_input_regs[4] = (uint16_t)(id(sens_voc).state);
-          modbus_input_regs[5] = (uint16_t)(id(sens_nox).state);
-          modbus_input_regs[6] = (uint16_t)(id(sens_co2).state);
-          modbus_input_regs[7] = (uint16_t)(id(ld2410_det_dist).state);
+          // ── Heartbeat ─────────────────────────────────────────
+          modbus_input_regs[8] = (uint16_t)((millis() / 1000) & 0xFFFF);
 
-          // Discrete Inputs (FC02) — R only for master
+          #ifdef HAS_BME280
+          {
+            float t = id(sens_temp).state;
+            float h = id(sens_hum).state;
+            float p = id(sens_pres).state;
+            bool ok = !isnan(t) && !isnan(h) && !isnan(p);
+            if (!isnan(t)) modbus_input_regs[0] = (uint16_t)(t * 10);
+            if (!isnan(h)) modbus_input_regs[1] = (uint16_t)(h * 10);
+            if (!isnan(p)) modbus_input_regs[2] = (uint16_t)(p * 10);
+            if (ok) modbus_input_regs[9] |=  (1 << 0);
+            else    modbus_input_regs[9] &= ~(1 << 0);
+          }
+          #endif
+
+          #ifdef HAS_BH1750
+          {
+            float l = id(sens_lux).state;
+            if (!isnan(l)) {
+              modbus_input_regs[3] = (uint16_t)(l);
+              modbus_input_regs[9] |=  (1 << 1);
+            } else {
+              modbus_input_regs[9] &= ~(1 << 1);
+            }
+          }
+          #endif
+
+          #ifdef HAS_SCD41
+          {
+            float c = id(sens_co2).state;
+            if (!isnan(c)) {
+              modbus_input_regs[6] = (uint16_t)(c);
+              modbus_input_regs[9] |=  (1 << 2);
+            } else {
+              modbus_input_regs[9] &= ~(1 << 2);
+            }
+          }
+          #endif
+
+          #ifdef HAS_SGP41
+          {
+            float v = id(sens_voc).state;
+            float n = id(sens_nox).state;
+            bool ok = !isnan(v) && !isnan(n);
+            if (!isnan(v)) modbus_input_regs[4] = (uint16_t)(v);
+            if (!isnan(n)) modbus_input_regs[5] = (uint16_t)(n);
+            if (ok) modbus_input_regs[9] |=  (1 << 3);
+            else    modbus_input_regs[9] &= ~(1 << 3);
+          }
+          #endif
+
+          #ifdef HAS_LD2410
+          {
+            float d = id(ld2410_det_dist).state;
+            if (!isnan(d)) {
+              modbus_input_regs[7] = (uint16_t)(d);
+              modbus_input_regs[9] |=  (1 << 4);
+            } else {
+              modbus_input_regs[9] &= ~(1 << 4);
+            }
+          }
+          #endif
+
+          // ── Discrete Inputs — write only if sensor is present ─
+          #ifdef HAS_PIR
           modbus_discrete[0] = id(pir_sensor).state;
+          modbus_input_regs[9] |= (1 << 5);   
+          #endif
+
+          #ifdef HAS_LD2410
           modbus_discrete[1] = id(ld2410_presence).state;
           modbus_discrete[2] = id(ld2410_moving).state;
           modbus_discrete[3] = id(ld2410_still).state;
-          modbus_discrete[4] = id(sens_co2).state  > 1000;
-          modbus_discrete[5] = id(sens_voc).state  > 200;
-          modbus_discrete[6] = id(sens_temp).state > 30.0;
-          // discrete[7] → allarm, written to display
+          #endif
 
-  # Polling Modbus — every 10ms
+          #ifdef HAS_SCD41
+          modbus_discrete[4] = !isnan(id(sens_co2).state) && id(sens_co2).state > 1000;
+          #endif
+
+          #ifdef HAS_SGP41
+          modbus_discrete[5] = !isnan(id(sens_voc).state) && id(sens_voc).state > 200;
+          #endif
+
+          #ifdef HAS_BME280
+          modbus_discrete[6] = !isnan(id(sens_temp).state) && id(sens_temp).state > 30.0;
+          #endif
+
+  # ─────────────────────────────────────────────────────────────
+  #  Polling Modbus slave — every 10ms
+  # ─────────────────────────────────────────────────────────────
   - interval: 10ms
     then:
       - lambda: |-
           modbus_slave_poll(id(modbus_uart));
 
-  # Automatic page rotation — every 5s
+  # ─────────────────────────────────────────────────────────────
+  #  Automatic page rotation — every 5s
+  # ─────────────────────────────────────────────────────────────
   - interval: 5s
     then:
       - lambda: |-
@@ -40,7 +124,9 @@ interval:
             id(encoder).publish_state(id(display_page));
           }
 
-  # Read coils written by the master and act
+  # ─────────────────────────────────────────────────────────────
+  #  Read coils written by master and act
+  # ─────────────────────────────────────────────────────────────
   - interval: 100ms
     then:
       - lambda: |-
