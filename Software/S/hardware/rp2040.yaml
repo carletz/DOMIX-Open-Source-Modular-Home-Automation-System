@@ -3,9 +3,15 @@ esphome:
   friendly_name: ${friendly_name}
   includes:
     - hardware/modbus_slave.h
+  build_path: .esphome/build
   platformio_options:
     build_flags:
       - "-DUSE_TINYUSB"
-
+      - "-DHAS_BME280"
+      - "-DHAS_BH1750"
+      - "-DHAS_SCD41"
+      - "-DHAS_SGP41"
+      - "-DHAS_LD2410"
+      - "-DHAS_PIR"
 rp2040:
   board: rpipico

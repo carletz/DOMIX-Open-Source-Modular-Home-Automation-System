@@ -22,7 +22,6 @@ binary_sensor:
       pca9554: domix_m8${m8_number_1}_busi2c
       number: 0
       mode: INPUT
-      inverted: false
     on_press:
       - mqtt.publish:
           topic: "${mqtt_name}/${m8_name}${m8_number_1}/${m8_input_name} 1/state"

@@ -6,6 +6,7 @@ uart:
     parity: NONE
     stop_bits: 1
     data_bits: 8
+    rx_buffer_size: 256
 
   - id: ld2410_uart
     tx_pin: GPIO4

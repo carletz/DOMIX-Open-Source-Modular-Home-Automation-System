@@ -44,8 +44,8 @@ substitutions:
 # ----------------------------------------------------------------------------
   m1_name: M1               # REMEMBER TO SET THE ADDRESS, UNIQUE FOR ALL PROJECT
   # -------- PLEAESE CHOOSE THE I2C BUS FOR M1 MODULE, ACCORDING TO YOUR CONFIGURATION --------
-  # m1_i2c_id: bus_module         # I2C bus for upper board buttons with i2c.yaml file
-  m1_i2c_id: bus_module_7     # I2C bus for upper board buttons with i2c_switch.yaml file
+  m1_i2c_id: bus_screen         # I2C bus for upper board buttons with i2c.yaml file
+  # m1_i2c_id: bus_module_7     # I2C bus for upper board buttons with i2c_switch.yaml file
   # ---------------------------------------------------------------------------------------------
   m1_screen_address: 0x3C            # ADDRESS AVAILABLE: 0x3C
   m1_screen_button_address: 0x48     # ADDRESS AVAILABLE: 0x48 -> 0x4A
@@ -55,8 +55,8 @@ substitutions:
 # ----------------------------------------------------------------------------
   m2_name: M2               # REMEMBER TO SET THE ADDRESS, UNIQUE FOR ALL PROJECT
   # -------- PLEAESE CHOOSE THE I2C BUS FOR M2 MODULE, ACCORDING TO YOUR CONFIGURATION --------  
-  # m2_i2c_id: bus_module     # I2C bus to which the module is connected, defined in i2c.yaml
-  m2_i2c_id: bus_module_1     # I2C bus for upper board buttons with i2c_switch.yaml file
+  m2_i2c_id: bus_module     # I2C bus to which the module is connected, defined in i2c.yaml
+  # m2_i2c_id: bus_module_1     # I2C bus for upper board buttons with i2c_switch.yaml file
   # ---------------------------------------------------------------------------------------------  
   m2_i2c_1: 0x20            # ADDRESS AVAILABLE: 0x20 -> 0x27 
   m2_number_1: _1        
@@ -68,8 +68,8 @@ substitutions:
 # ----------------------------------------------------------------------------
   m3_name: M3               # REMEMBER TO SET THE ADDRESS, UNIQUE FOR ALL PROJECT
   # -------- PLEAESE CHOOSE THE I2C BUS FOR M3 MODULE, ACCORDING TO YOUR CONFIGURATION --------  
-  # m3_i2c_id: bus_module     # I2C bus to which the module is connected, defined in i2c.yaml
-  m3_i2c_id: bus_module_1     # I2C bus for upper board buttons with i2c_switch.yaml file
+  m3_i2c_id: bus_module     # I2C bus to which the module is connected, defined in i2c.yaml
+  # m3_i2c_id: bus_module_1     # I2C bus for upper board buttons with i2c_switch.yaml file
   # ---------------------------------------------------------------------------------------------  
   m3_i2c_1: 0x38            # ADDRESS AVAILABLE: 0x38 -> 0x3F           
   m3_ads_1: 0x4A            # ADDRESS AVAILABLE: 0x48 -> 0x4A  
@@ -81,8 +81,8 @@ substitutions:
 # ----------------------------------------------------------------------------
   m4_name: M4               # REMEMBER TO SET THE ADDRESS, UNIQUE FOR ALL PROJECT
   # -------- PLEAESE CHOOSE THE I2C BUS FOR M4 MODULE, ACCORDING TO YOUR CONFIGURATION --------  
-  # m4_i2c_id: bus_module     # I2C bus to which the module is connected, defined in i2c.yaml
-  m4_i2c_id: bus_module_1     # I2C bus for upper board buttons with i2c_switch.yaml file
+  m4_i2c_id: bus_module     # I2C bus to which the module is connected, defined in i2c.yaml
+  # m4_i2c_id: bus_module_1     # I2C bus for upper board buttons with i2c_switch.yaml file
   # ---------------------------------------------------------------------------------------------  
   m4_i2c_1: 0x39            # ADDRESS AVAILABLE: 0x38 -> 0x3F 
   m4_number_1: _1           
@@ -93,8 +93,8 @@ substitutions:
 # ----------------------------------------------------------------------------
   m5_name: M5               # REMEMBER TO SET THE ADDRESS, UNIQUE FOR ALL PROJECT
   # -------- PLEAESE CHOOSE THE I2C BUS FOR M5 MODULE, ACCORDING TO YOUR CONFIGURATION --------  
-  # m5_i2c_id: bus_module     # I2C bus to which the module is connected, defined in i2c.yaml
-  m5_i2c_id: bus_module_1     # I2C bus for upper board buttons with i2c_switch.yaml file
+  m5_i2c_id: bus_module     # I2C bus to which the module is connected, defined in i2c.yaml
+  # m5_i2c_id: bus_module_1     # I2C bus for upper board buttons with i2c_switch.yaml file
   # ---------------------------------------------------------------------------------------------  
   m5_i2c_1: 0x21            # ADDRESS AVAILABLE: 0x20 -> 0x27 
   m5_number_1: _1           
@@ -105,8 +105,8 @@ substitutions:
 # ----------------------------------------------------------------------------
   m6_name: M6               # REMEMBER TO SET THE ADDRESS, UNIQUE FOR ALL PROJECT
   # -------- PLEAESE CHOOSE THE I2C BUS FOR M6 MODULE, ACCORDING TO YOUR CONFIGURATION --------  
-  # m6_i2c_id: bus_module     # I2C bus to which the module is connected, defined in i2c.yaml
-  m6_i2c_id: bus_module_1     # I2C bus for upper board buttons with i2c_switch.yaml file
+  m6_i2c_id: bus_module     # I2C bus to which the module is connected, defined in i2c.yaml
+  # m6_i2c_id: bus_module_1     # I2C bus for upper board buttons with i2c_switch.yaml file
   # ---------------------------------------------------------------------------------------------  
   m6_i2c_1: 0x3A            # ADDRESS AVAILABLE: 0x38 -> 0x3F
   m6_ads_1: 0x49            # ADDRESS AVAILABLE: 0x48 -> 0x4A    
@@ -119,8 +119,8 @@ substitutions:
 # ----------------------------------------------------------------------------
   m7_name: M7               # REMEMBER TO SET THE ADDRESS, UNIQUE FOR ALL PROJECT
   # -------- PLEAESE CHOOSE THE I2C BUS FOR M7 MODULE, ACCORDING TO YOUR CONFIGURATION --------  
-  # m7_i2c_id: bus_module     # I2C bus to which the module is connected, defined in i2c.yaml
-  m7_i2c_id: bus_module_1     # I2C bus for upper board buttons with i2c_switch.yaml file
+  m7_i2c_id: bus_module     # I2C bus to which the module is connected, defined in i2c.yaml
+  # m7_i2c_id: bus_module_1     # I2C bus for upper board buttons with i2c_switch.yaml file
   # ---------------------------------------------------------------------------------------------  
   m7_i2c_1: 0x22            # ADDRESS AVAILABLE: 0x20 -> 0x27 
   m7_number_1: _1
@@ -131,8 +131,8 @@ substitutions:
 # ----------------------------------------------------------------------------
   m8_name: M8               # REMEMBER TO SET THE ADDRESS, UNIQUE FOR ALL PROJECT
   # -------- PLEAESE CHOOSE THE I2C BUS FOR M8 MODULE, ACCORDING TO YOUR CONFIGURATION --------  
-  # m8_i2c_id: bus_module     # I2C bus to which the module is connected, defined in i2c.yaml
-  m8_i2c_id: bus_module_1     # I2C bus for upper board buttons with i2c_switch.yaml file
+  m8_i2c_id: bus_module     # I2C bus to which the module is connected, defined in i2c.yaml
+  # m8_i2c_id: bus_module_1     # I2C bus for upper board buttons with i2c_switch.yaml file
   # ---------------------------------------------------------------------------------------------  
   m8_i2c_1: 0x23            # ADDRESS AVAILABLE: 0x20 -> 0x27 
   m8_number_1: _1    
@@ -143,8 +143,8 @@ substitutions:
 # ----------------------------------------------------------------------------
   m9_name: M9               # REMEMBER TO SET THE ADDRESS, UNIQUE FOR ALL PROJECT
   # -------- PLEAESE CHOOSE THE I2C BUS FOR M9 MODULE, ACCORDING TO YOUR CONFIGURATION --------  
-  # m9_i2c_id: bus_module     # I2C bus to which the module is connected, defined in i2c.yaml
-  m9_i2c_id: bus_module_1     # I2C bus for upper board buttons with i2c_switch.yaml file
+  m9_i2c_id: bus_module     # I2C bus to which the module is connected, defined in i2c.yaml
+  # m9_i2c_id: bus_module_1     # I2C bus for upper board buttons with i2c_switch.yaml file
   # ---------------------------------------------------------------------------------------------  
   m9_i2c_1: 0x3B            # ADDRESS AVAILABLE: 0x38 -> 0x3F 
   m9_buttons_i2c_address: 0x3C   # Buttons Upper Board address

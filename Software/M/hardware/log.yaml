@@ -15,7 +15,7 @@ logger:
     SPLASH: ERROR 
     script: WARN
     switch: WARN
-    ads1115.sensor: DEBUG
+    ads1115.sensor: ERROR
     sntp: WARN
     component: ERROR
     sensor: WARN   

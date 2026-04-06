@@ -167,9 +167,9 @@ switch:
     icon: "mdi:switch"
     pin:
       pca9554: domix_m7${m7_number_1}_busi2c
-      number: 0
+      number: 15
       mode: OUTPUT
-      inverted: false
+      inverted: true
     on_turn_on:
       - mqtt.publish:
           topic: "${mqtt_name}/${m7_name}${m7_number_1}/${m7_output_name} 1/state"
@@ -190,8 +190,9 @@ switch:
     icon: "mdi:switch"
     pin:
       pca9554: domix_m7${m7_number_1}_busi2c
-      number: 1
+      number: 14
       mode: OUTPUT
+      inverted: true
     on_turn_on:
       - mqtt.publish:
           topic: "${mqtt_name}/${m7_name}${m7_number_1}/${m7_output_name} 2/state"
@@ -212,8 +213,9 @@ switch:
     icon: "mdi:switch"
     pin:
       pca9554: domix_m7${m7_number_1}_busi2c
-      number: 2
+      number: 13
       mode: OUTPUT
+      inverted: true
     on_turn_on:
       - mqtt.publish:
           topic: "${mqtt_name}/${m7_name}${m7_number_1}/${m7_output_name} 3/state"
@@ -234,8 +236,9 @@ switch:
     icon: "mdi:switch"
     pin:
       pca9554: domix_m7${m7_number_1}_busi2c
-      number: 3
+      number: 12
       mode: OUTPUT
+      inverted: true
     on_turn_on:
       - mqtt.publish:
           topic: "${mqtt_name}/${m7_name}${m7_number_1}/${m7_output_name} 4/state"
@@ -256,8 +259,9 @@ switch:
     icon: "mdi:switch"
     pin:
       pca9554: domix_m7${m7_number_1}_busi2c
-      number: 4
+      number: 11
       mode: OUTPUT
+      inverted: true
     on_turn_on:
       - mqtt.publish:
           topic: "${mqtt_name}/${m7_name}${m7_number_1}/${m7_output_name} 5/state"
@@ -278,8 +282,9 @@ switch:
     icon: "mdi:switch"
     pin:
       pca9554: domix_m7${m7_number_1}_busi2c
-      number: 5
+      number: 10
       mode: OUTPUT
+      inverted: true
     on_turn_on:
       - mqtt.publish:
           topic: "${mqtt_name}/${m7_name}${m7_number_1}/${m7_output_name} 6/state"
@@ -300,8 +305,9 @@ switch:
     icon: "mdi:switch"
     pin:
       pca9554: domix_m7${m7_number_1}_busi2c
-      number: 6
+      number: 9
       mode: OUTPUT
+      inverted: true
     on_turn_on:
       - mqtt.publish:
           topic: "${mqtt_name}/${m7_name}${m7_number_1}/${m7_output_name} 7/state"
@@ -322,8 +328,9 @@ switch:
     icon: "mdi:switch"
     pin:
       pca9554: domix_m7${m7_number_1}_busi2c
-      number: 7
+      number: 8
       mode: OUTPUT
+      inverted: true
     on_turn_on:
       - mqtt.publish:
           topic: "${mqtt_name}/${m7_name}${m7_number_1}/${m7_output_name} 8/state"
@@ -344,8 +351,9 @@ switch:
     icon: "mdi:switch"
     pin:
       pca9554: domix_m7${m7_number_1}_busi2c
-      number: 8
+      number: 0
       mode: OUTPUT
+      inverted: false
     on_turn_on:
       - mqtt.publish:
           topic: "${mqtt_name}/${m7_name}${m7_number_1}/${m7_output_name} 9/state"
@@ -366,8 +374,9 @@ switch:
     icon: "mdi:switch"
     pin:
       pca9554: domix_m7${m7_number_1}_busi2c
-      number: 9
+      number: 1
       mode: OUTPUT
+      inverted: false
     on_turn_on:
       - mqtt.publish:
           topic: "${mqtt_name}/${m7_name}${m7_number_1}/${m7_output_name} 10/state"
@@ -388,8 +397,9 @@ switch:
     icon: "mdi:switch"
     pin:
       pca9554: domix_m7${m7_number_1}_busi2c
-      number: 10
+      number: 2
       mode: OUTPUT
+      inverted: false
     on_turn_on:
       - mqtt.publish:
           topic: "${mqtt_name}/${m7_name}${m7_number_1}/${m7_output_name} 11/state"
@@ -410,8 +420,9 @@ switch:
     icon: "mdi:switch"
     pin:
       pca9554: domix_m7${m7_number_1}_busi2c
-      number: 11
+      number: 3
       mode: OUTPUT
+      inverted: false
     on_turn_on:
       - mqtt.publish:
           topic: "${mqtt_name}/${m7_name}${m7_number_1}/${m7_output_name} 12/state"
@@ -432,8 +443,9 @@ switch:
     icon: "mdi:switch"
     pin:
       pca9554: domix_m7${m7_number_1}_busi2c
-      number: 12
+      number: 4
       mode: OUTPUT
+      inverted: false
     on_turn_on:
       - mqtt.publish:
           topic: "${mqtt_name}/${m7_name}${m7_number_1}/${m7_output_name} 13/state"
@@ -454,8 +466,9 @@ switch:
     icon: "mdi:switch"
     pin:
       pca9554: domix_m7${m7_number_1}_busi2c
-      number: 13
+      number: 5
       mode: OUTPUT
+      inverted: false
     on_turn_on:
       - mqtt.publish:
           topic: "${mqtt_name}/${m7_name}${m7_number_1}/${m7_output_name} 14/state"
@@ -476,8 +489,9 @@ switch:
     icon: "mdi:switch"
     pin:
       pca9554: domix_m7${m7_number_1}_busi2c
-      number: 14
+      number: 6
       mode: OUTPUT
+      inverted: false
     on_turn_on:
       - mqtt.publish:
           topic: "${mqtt_name}/${m7_name}${m7_number_1}/${m7_output_name} 15/state"
@@ -498,8 +512,9 @@ switch:
     icon: "mdi:switch"
     pin:
       pca9554: domix_m7${m7_number_1}_busi2c
-      number: 15
+      number: 7
       mode: OUTPUT
+      inverted: false
     on_turn_on:
       - mqtt.publish:
           topic: "${mqtt_name}/${m7_name}${m7_number_1}/${m7_output_name} 16/state"

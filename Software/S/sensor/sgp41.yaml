@@ -1,9 +1,3 @@
-esphome:
-  build_path: .esphome/build
-  platformio_options:
-    build_flags:
-      - "-DHAS_SGP41"
-
 sensor:
   - platform: sgp4x
     voc:

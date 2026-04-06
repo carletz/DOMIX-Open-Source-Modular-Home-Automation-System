@@ -22,11 +22,11 @@ packages:
   # WARNING: if you use the middle module V1.0 use this package
   # and leave the i2c_switch.yaml package commented, otherwise use the 
   # i2c_switch.yaml package and comment this one
-  # i2c:          !include hardware/i2c.yaml
+  i2c:          !include hardware/i2c.yaml
   # WARNING: if you use the middle module V1.2 use this package
   # and leave the i2c.yaml package commented, otherwise use the 
   # i2c.yaml package and comment this one
-  i2c:          !include hardware/i2c_switch.yaml
+  # i2c:          !include hardware/i2c_switch.yaml
 
   zigbee:       !include hardware/zigbee.yaml           # === System Add-on ===
   restart:      !include hardware/restart.yaml

@@ -603,7 +603,7 @@ binary_sensor:
     name: "Button Up"
     internal: true
     lambda: |-
-      return (id(analog_button).state > 2.5 && id(analog_button).state < 2.9);
+      return (id(analog_button).state > 2.3 && id(analog_button).state < 2.6);
     filters:
       - delayed_on: 20ms
       - delayed_off: 20ms
@@ -660,7 +660,7 @@ binary_sensor:
     name: "Button Down"
     internal: true
     lambda: |-
-      return (id(analog_button).state > 0.4 && id(analog_button).state < 0.65);
+      return (id(analog_button).state > 0.8 && id(analog_button).state < 1);
     filters:
       - delayed_on: 20ms
       - delayed_off: 20ms
@@ -722,7 +722,6 @@ binary_sensor:
     filters:
       - delayed_on: 20ms
       - delayed_off: 20ms
-
     on_press:
       - lambda: |-
           // Record press timestamp
