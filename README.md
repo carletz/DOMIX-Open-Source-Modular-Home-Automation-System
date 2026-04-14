@@ -23,6 +23,7 @@
 ---
 > [!NOTE]
 > **Please read the Full Technical Manual:** [Technical Documentation PDF](/Docs/DOMIX_Technical_Documentation_EN.pdf) to understand the project's full potential and features, below is just a summary of the project's features.
+> 
 > **Oshwlab Stars 2026 Page:** [DOMIX](https://oshwlab.com/carletz.slug/domix-domotic-module-for-smart-home-co)
 ---
 
